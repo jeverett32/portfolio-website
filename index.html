@@ -35,9 +35,25 @@
             width: 100%;
             height: 100%;
         }
+        /* Style for the cursor glow effect */
+        #cursor-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0) 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Allows clicking through the element */
+            z-index: 0; /* Places the glow behind the content */
+            transition: opacity 0.3s;
+            opacity: 0; /* Initially hidden */
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans antialiased">
+<body class="bg-gray-900 text-white font-sans antialiased relative">
+
+    <!-- This div is for the cursor glow effect -->
+    <div id="cursor-glow"></div>
 
     <header id="header" class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-md">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -253,6 +269,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // --- Cursor Glow Logic ---
+            const glow = document.getElementById('cursor-glow');
+            if (glow) {
+                document.body.addEventListener('mousemove', e => {
+                    glow.style.opacity = '1';
+                    // Using clientX/clientY for positioning relative to the viewport
+                    glow.style.left = `${e.clientX}px`;
+                    glow.style.top = `${e.clientY}px`;
+                });
+            }
+
             // --- Mobile Menu Logic ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
