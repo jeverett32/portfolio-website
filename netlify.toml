@@ -4,4 +4,4 @@
 [functions]
   # This line tells Netlify to be sure to include the resume.txt file
   # when it deploys the 'generate-message' function.
-  included_files = ["netlify/functions/resume.txt"]
+  included_files = ["netlify/functions/resume.pdf"]
