@@ -40,7 +40,9 @@
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 14px;
-            width: 220px;
+            max-width: 250px; /* Use max-width to allow wrapping */
+            max-height: 200px; /* Add max-height */
+            overflow-y: auto; /* Add scroll for very long text */
             text-align: center;
             white-space: normal;
             opacity: 0;
@@ -461,7 +463,7 @@
                         skills: skills
                     };
                     const generatedSummary = await callApiFunction(payload);
-                    summonBallAndShowMessage(generatedSummary);
+                    summonBallAndShowMessage(generatedSummary, generateSummaryBtn);
                 } catch (error) {
                     console.error("Error calling backend function:", error);
                     aiError.textContent = `Failed to generate summary: ${error.message}`;
@@ -490,7 +492,7 @@
                         skills: skills
                     };
                     const answer = await callApiFunction(payload);
-                    summonBallAndShowMessage(answer);
+                    summonBallAndShowMessage(answer, askQuestionBtn);
                 } catch (error) {
                     console.error("Error calling backend function:", error);
                     aiError.textContent = `Failed to get answer: ${error.message}`;
@@ -560,6 +562,7 @@
 
             let ballState = 'roaming'; // States: roaming, summoned, speaking
             let targetX, targetY;
+            let lastSummonSide = 'right'; // Start by preferring the left side
 
             const guideMessages = [
                 "Welcome to my portfolio! It's great to have you here.",
@@ -580,23 +583,44 @@
                 }
             }
 
-            function summonBallAndShowMessage(message) {
+            function summonBallAndShowMessage(message, buttonElement) {
                 const aiPanel = document.getElementById('ai-assistant-panel');
-                const rect = aiPanel.getBoundingClientRect();
-                
-                const targetRightX = rect.right + window.scrollX + 40;
-                const targetLeftX = rect.left + window.scrollX - 40 - ballSize;
-                const targetYPos = (window.innerHeight / 2) - (ballSize / 2) + window.scrollY;
+                const panelRect = aiPanel.getBoundingClientRect();
+                const isMobile = window.innerWidth <= 768;
 
-                // Check distance to the primary (right) target
-                const distToRight = Math.sqrt(Math.pow(mouseX - targetRightX, 2) + Math.pow(mouseY - targetYPos, 2));
-
-                if (distToRight < 100) { // If cursor is too close to the right side...
-                    targetX = targetLeftX; // ...go to the left side instead.
+                if (isMobile) {
+                    const btnRect = buttonElement.getBoundingClientRect();
+                    targetX = (btnRect.left > window.innerWidth / 2) 
+                        ? btnRect.left - ballSize - 20 // Go left of button
+                        : btnRect.right + 20; // Go right of button
+                    targetY = btnRect.top + window.scrollY;
                 } else {
-                    targetX = targetRightX; // Otherwise, go to the right.
+                    const targetRightX = panelRect.right + window.scrollX + 40;
+                    const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
+                    const targetYPos = (window.innerHeight / 2) - (ballSize / 2) + window.scrollY;
+
+                    const distToRight = Math.sqrt(Math.pow(mouseX - targetRightX, 2) + Math.pow(mouseY - targetYPos, 2));
+                    const distToLeft = Math.sqrt(Math.pow(mouseX - targetLeftX, 2) + Math.pow(mouseY - targetYPos, 2));
+
+                    if (lastSummonSide === 'right') { // Prefer left side this time
+                        if (distToLeft < 100) { // Is cursor blocking the left?
+                            targetX = targetRightX; // Go right instead
+                            lastSummonSide = 'right';
+                        } else {
+                            targetX = targetLeftX; // Go left
+                            lastSummonSide = 'left';
+                        }
+                    } else { // Prefer right side this time
+                        if (distToRight < 100) { // Is cursor blocking the right?
+                            targetX = targetLeftX; // Go left instead
+                            lastSummonSide = 'left';
+                        } else {
+                            targetX = targetRightX; // Go right
+                            lastSummonSide = 'right';
+                        }
+                    }
+                    targetY = targetYPos;
                 }
-                targetY = targetYPos;
 
                 ballState = 'summoned';
                 clearTimeout(messageTimer);
