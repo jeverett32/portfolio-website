@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>John Everett | Portfolio</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +29,7 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <a href="https://linkedin.com/in/johneverett32/" target = _blank>
-                        <img class="h-10 w-10 rounded-full mr-3" src="professional_photo.png" alt="John Everett Professional Photo" onerror="this.style.display='none'">
+                        <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.style.display='none'">
                     </a>
                     <span class="text-2xl font-bold text-cyan-400">John Everett</span>
                 </div>
@@ -85,16 +85,18 @@
         <section id="about" class="py-20 sm:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
                 <div class="lg:col-span-2">
-                    <img src="hiking.png" alt="John Everett hiking in the mountains" class="rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
+                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
                 </div>
                 <div class="lg:col-span-3 space-y-4">
                     <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400">About Me</h2>
-                    <p class="text-lg text-gray-300">
-                        I am an Information Systems student at BYU's Marriott School of Business with a passion for software, data, and AI. My experience ranges from enhancing campus energy efficiency through software to refining predictive models with Python and R.
-                    </p>
-                    <p class="text-lg text-gray-300">
-                        I thrive in fast-paced environments, quickly learning new technologies to build flexible and user-friendly applications. When I'm not coding or analyzing data, I enjoy volleyball, hiking, and messing around with AI.
-                    </p>
+                    <div id="about-me-content">
+                        <p class="text-lg text-gray-300">
+                            I am an Information Systems student at BYU's Marriott School of Business with a passion for software, data, and AI. My experience ranges from enhancing campus energy efficiency through software to refining predictive models with Python and R.
+                        </p>
+                        <p class="text-lg text-gray-300">
+                            I thrive in fast-paced environments, quickly learning new technologies to build flexible and user-friendly applications. When I'm not coding or analyzing data, I enjoy volleyball, hiking, and messing around with AI.
+                        </p>
+                    </div>
                     <div class="space-y-6 pt-4">
                         <h3 class="text-2xl font-bold text-cyan-400">My Skills</h3>
                         <div id="skills-list" class="flex flex-wrap gap-3">
@@ -124,7 +126,7 @@
                 
                 <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer">
-                        <img src="trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-48 object-cover">
+                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-48 object-cover">
                     </a>
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-white">Trash Bin Cleaning Service Website</h3>
@@ -202,7 +204,7 @@
                             <span class="mx-4 text-gray-400 text-sm">OR</span>
                             <span class="flex-grow bg-gray-700 h-px"></span>
                         </div>
-                        <label for="job-description-file" class="block text-sm font-medium text-gray-300 mb-2">Upload Job Description File</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Upload Job Description File</label>
                         <div class="flex items-center gap-4">
                             <label for="job-description-file" class="cursor-pointer bg-gray-700 text-white font-medium px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
                                 Select a file
@@ -350,6 +352,12 @@
             const aiResponseCard = document.getElementById('ai-response-card');
             const aiResponseTitle = document.getElementById('ai-response-title');
             const aiResponseContent = document.getElementById('ai-response-content');
+            
+            // New: Get static page content for context
+            const aboutMeContent = document.getElementById('about-me-content').textContent.trim();
+            const skillsContainer = document.getElementById('skills-list');
+            const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
+
 
             jobDescFile.addEventListener('change', () => {
                 if (jobDescFile.files.length > 0) {
@@ -384,7 +392,13 @@
                 aiResponseCard.classList.add('hidden');
 
                 try {
-                    const payload = { taskType: 'match', jobDescription: jobDescription };
+                    // Send page content along with the job description
+                    const payload = { 
+                        taskType: 'match', 
+                        jobDescription: jobDescription,
+                        bio: aboutMeContent,
+                        skills: skills
+                    };
                     const generatedSummary = await callApiFunction(payload);
                     aiResponseTitle.textContent = "AI-Powered Skills Summary";
                     aiResponseContent.textContent = generatedSummary;
@@ -412,7 +426,13 @@
                 aiResponseCard.classList.add('hidden');
 
                 try {
-                    const payload = { taskType: 'qa', question: question };
+                     // Send page content along with the question
+                    const payload = { 
+                        taskType: 'qa', 
+                        question: question,
+                        bio: aboutMeContent,
+                        skills: skills
+                    };
                     const answer = await callApiFunction(payload);
                     aiResponseTitle.textContent = "Answer from My Resume";
                     aiResponseContent.textContent = answer;
