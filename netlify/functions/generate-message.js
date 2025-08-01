@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
+
 exports.handler = async function (event) {
   // Only allow POST requests.
   if (event.httpMethod !== 'POST') {
