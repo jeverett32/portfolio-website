@@ -2,6 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
+// Add the pdf-parse library to read your PDF resume
+const pdf = require('pdf-parse');
 
 exports.handler = async function (event) {
   if (event.httpMethod !== 'POST') {
@@ -9,9 +11,12 @@ exports.handler = async function (event) {
   }
 
   try {
-    // Read the static resume file from the repository.
-    const resumePath = path.resolve(__dirname, 'resume.txt');
-    const resumeText = fs.readFileSync(resumePath, 'utf8');
+    // Read the static resume PDF file from the repository.
+    const resumePath = path.resolve(__dirname, 'resume.pdf');
+    const dataBuffer = fs.readFileSync(resumePath);
+    const pdfData = await pdf(dataBuffer);
+    const resumeText = pdfData.text;
+
 
     // Get all the data sent from the website.
     const { taskType, jobDescription, question, bio, skills } = JSON.parse(event.body);
