@@ -566,11 +566,9 @@
             const isMobile = 'ontouchstart' in window;
 
             const guideMessages = [
-                "Welcome to my portfolio! It's great to have you here.",
                 "Curious about my work? Head over to the Projects section!",
                 "Want to know more about me? The About section has the details!",
                 "Have a question? Ask my AI assistant in the Contact section!",
-                isMobile ? "You can 'hit' me with your finger to send me flying!" : "You can 'hit' me with your cursor to send me flying!"
             ];
 
             function showBubbleMessage(text, duration = 5000) {
@@ -655,7 +653,9 @@
                 y = rect.top + window.scrollY + (rect.height / 4);
                 vx = (Math.random() - 0.5) * 4;
                 vy = (Math.random() - 0.5) * 4;
-                showBubbleMessage(guideMessages[0]);
+                
+                const initialMessage = `Welcome! You can hit me with your ${isMobile ? 'finger' : 'cursor'}. You can also ask me questions in the AI section below!`;
+                showBubbleMessage(initialMessage, 10000);
 
                 setInterval(() => {
                     if (ballState === 'roaming') {
