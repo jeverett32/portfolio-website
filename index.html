@@ -225,42 +225,57 @@
 
         <section id="contact" class="py-20 sm:py-32">
             <div class="text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 mb-4">Contact Me</h2>
-                <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-                    I'm actively seeking new opportunities. Feel free to reach out via email, connect on LinkedIn, or use the AI assistant below to draft a message based on a job description.
+                <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 mb-4">Contact & AI Assistant</h2>
+                <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Want to see how my skills fit your needs? Paste a job description below to get a personalized summary. Or, feel free to send me a message directly.
                 </p>
             </div>
-            <div class="max-w-xl mx-auto">
-                <form id="contact-form" class="space-y-6">
-                     <div>
-                        <label for="job-description" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description (Optional)</label>
-                        <textarea id="job-description" rows="4" placeholder="Paste a job description here and let AI draft a message for you..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
+            
+            <div class="max-w-xl mx-auto space-y-12">
+                <!-- AI Assistant Section -->
+                <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+                    <h3 class="text-xl font-bold text-white mb-4">AI-Powered Skills Match</h3>
+                    <div>
+                        <label for="job-description" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description Here</label>
+                        <textarea id="job-description" rows="5" placeholder="Paste the full job description here..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
                     </div>
-                    <div class="text-center">
-                        <button type="button" id="generate-message-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
-                            ✨ Generate with AI
+                    <div class="text-center mt-4">
+                        <button type="button" id="generate-summary-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                            ✨ Generate Summary
                             <div id="ai-loader" class="loader hidden"></div>
                         </button>
                     </div>
-                    <div id="ai-error" class="text-red-400 text-center text-sm mt-2"></div>
+                    <div id="ai-error" class="text-red-400 text-center text-sm mt-4"></div>
+                    
+                    <!-- AI Response Card -->
+                    <div id="ai-response-card" class="hidden mt-6 bg-gray-800 p-6 rounded-lg border border-cyan-500/30">
+                        <h4 class="text-lg font-bold text-cyan-400 mb-3">A Great Fit For Your Team</h4>
+                        <p id="ai-response-content" class="text-gray-300 whitespace-pre-wrap"></p>
+                    </div>
+                </div>
 
-                    <div>
-                        <label for="name" class="sr-only">Name</label>
-                        <input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
-                    </div>
-                    <div>
-                        <label for="email" class="sr-only">Email</label>
-                        <input type="email" name="email" id="email" placeholder="Your Email" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
-                    </div>
-                    <div>
-                        <label for="message" class="sr-only">Message</label>
-                        <textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" id="send-message-btn" class="bg-cyan-500 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">Send Message</button>
-                    </div>
-                </form>
-                <div id="form-status" class="mt-6 text-center"></div>
+                <!-- Contact Form Section -->
+                <div class="pt-8">
+                     <h3 class="text-xl font-bold text-white mb-4 text-center">Or, Send a Direct Message</h3>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="sr-only">Name</label>
+                            <input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="email" name="email" id="email" placeholder="Your Email" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label for="message" class="sr-only">Message</label>
+                            <textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" id="send-message-btn" class="bg-cyan-500 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">Send Message</button>
+                        </div>
+                    </form>
+                    <div id="form-status" class="mt-6 text-center"></div>
+                </div>
             </div>
         </section>
     </main>
@@ -304,12 +319,6 @@
                 });
             }
 
-            // --- Mobile Menu Logic ---
-            // ... (This part is unchanged) ...
-
-            // --- Active navigation link highlighting on scroll ---
-            // ... (This part is unchanged) ...
-
             // --- FormSpree AJAX submission ---
             const form = document.getElementById('contact-form');
             const status = document.getElementById('form-status');
@@ -343,12 +352,13 @@
                 }
             });
 
-            // --- Gemini API Logic ---
-            const generateBtn = document.getElementById('generate-message-btn');
+            // --- Gemini AI Logic ---
+            const generateBtn = document.getElementById('generate-summary-btn');
             const jobDescTextarea = document.getElementById('job-description');
-            const messageTextarea = document.getElementById('message');
             const aiLoader = document.getElementById('ai-loader');
             const aiError = document.getElementById('ai-error');
+            const aiResponseCard = document.getElementById('ai-response-card');
+            const aiResponseContent = document.getElementById('ai-response-content');
 
             generateBtn.addEventListener('click', async () => {
                 const jobDescription = jobDescTextarea.value;
@@ -358,6 +368,7 @@
                 }
 
                 aiError.textContent = '';
+                aiResponseCard.classList.add('hidden'); // Hide previous response
                 aiLoader.classList.remove('hidden');
                 generateBtn.disabled = true;
 
@@ -365,11 +376,9 @@
                 const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
 
                 const prompt = `
-                    My name is John Everett. I am an Information Systems student at BYU's Marriott School of Business.
-                    My skills include: ${skills}.
-                    Based on the following job description, please write a concise and professional introductory message (about 3-4 sentences) for a contact form.
-                    The message should express interest in the role and briefly highlight how my most relevant skills and experience align with the position's requirements.
-                    Do not use placeholders like "[Your Name]". Be friendly but professional.
+                    My name is John Everett. I am an Information Systems student at BYU's Marriott School of Business with these skills: ${skills}.
+                    Based on the following job description, please write a brief, first-person summary (2-3 sentences) explaining why my skills and background make me a great fit for this specific role.
+                    Focus only on the most relevant skills mentioned in the job description.
 
                     Job Description:
                     ---
@@ -378,11 +387,12 @@
                 `;
 
                 try {
-                    const generatedMessage = await callApiFunction(prompt);
-                    messageTextarea.value = generatedMessage;
+                    const generatedSummary = await callApiFunction(prompt);
+                    aiResponseContent.textContent = generatedSummary;
+                    aiResponseCard.classList.remove('hidden');
                 } catch (error) {
                     console.error("Error calling backend function:", error);
-                    aiError.textContent = 'Failed to generate message. Please try again.';
+                    aiError.textContent = 'Failed to generate summary. Please try again.';
                 } finally {
                     aiLoader.classList.add('hidden');
                     generateBtn.disabled = false;
@@ -407,10 +417,7 @@
                 return result.message;
             }
 
-            // --- Video Modal Logic ---
-            // ... (This part is unchanged) ...
-
-            // Re-add the unchanged JS logic here for completeness
+            // --- Mobile Menu Logic & Other Scripts ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const hamburgerIcon = document.getElementById('hamburger-icon');
