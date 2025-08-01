@@ -10,18 +10,90 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .nav-active { background-color: #06b6d4; color: white; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s; opacity: 0; }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Styles for the interactive ball and its components */
+        #ball-container {
+            position: absolute;
+            z-index: 5; /* Lower z-index to go behind content */
+            pointer-events: none;
+            will-change: transform;
+        }
+        #interactive-ball {
+            width: 30px;
+            height: 30px;
+            background-color: #06b6d4;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.7);
+        }
+        #ball-bubble {
+            position: fixed; /* Always fixed to the viewport */
+            z-index: 1002; /* High z-index to appear over everything */
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 220px;
+            text-align: center;
+            white-space: normal;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.2s ease-out;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #ball-bubble.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #ball-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1f2937 transparent transparent transparent;
+        }
+
+        /* Style for the off-screen pointer */
+        #offscreen-pointer {
+            position: fixed;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 16px solid #06b6d4;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1002; /* High z-index */
+            pointer-events: none;
+        }
+        
+        .translucent-panel {
+            background-color: rgba(31, 41, 55, 0.95); /* Slightly more transparent */
+        }
+        .translucent-image {
+            opacity: 0.85; /* More transparent images */
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans antialiased relative">
 
     <div id="cursor-glow"></div>
+    <div id="ball-container">
+        <div id="interactive-ball"></div>
+    </div>
+    <!-- Bubble and Pointer are now outside the container for independent layering -->
+    <div id="ball-bubble"></div>
+    <div id="offscreen-pointer"></div>
 
     <header id="header" class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-md">
         <!-- Header content remains the same -->
@@ -64,7 +136,7 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <!-- Home, About, Projects sections remain the same -->
         <section id="home" class="min-h-screen flex items-center justify-center text-center">
             <div class="space-y-6">
@@ -85,7 +157,7 @@
         <section id="about" class="py-20 sm:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
                 <div class="lg:col-span-2">
-                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
+                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
                 </div>
                 <div class="lg:col-span-3 space-y-4">
                     <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400">About Me</h2>
@@ -124,9 +196,9 @@
             <h2 class="text-3xl sm:text-4xl font-bold text-center text-cyan-400 mb-12">My Projects & Experience</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer">
-                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-48 object-cover">
+                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover">
                     </a>
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-white">Trash Bin Cleaning Service Website</h3>
@@ -141,7 +213,7 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-white">BYU HVAC Systems Enhancement</h3>
                         <p class="text-gray-400 mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
@@ -153,7 +225,7 @@
                         <button data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-white">Stride Scheduling UX & Growth</h3>
                         <p class="text-gray-400 mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
@@ -166,7 +238,7 @@
                         <button data-video-src="https://www.youtube.com/embed/L_LUpnjgPso" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-white">Behavioral Trend Analysis</h3>
                         <p class="text-gray-400 mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
@@ -192,7 +264,7 @@
             
             <div class="max-w-xl mx-auto space-y-12">
                 <!-- AI Assistant Section -->
-                <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700 space-y-6">
+                <div id="ai-assistant-panel" class="bg-gray-800/50 p-6 rounded-lg border border-gray-700 space-y-6">
                     
                     <!-- Skills Match Feature -->
                     <div>
@@ -235,10 +307,6 @@
 
                     <!-- Shared AI Response Area -->
                     <div id="ai-error" class="text-red-400 text-center text-sm"></div>
-                    <div id="ai-response-card" class="hidden mt-4 bg-gray-800 p-6 rounded-lg border border-cyan-500/30">
-                        <h4 id="ai-response-title" class="text-lg font-bold text-cyan-400 mb-3"></h4>
-                        <p id="ai-response-content" class="text-gray-300 whitespace-pre-wrap"></p>
-                    </div>
                 </div>
 
                 <!-- Contact Form Section -->
@@ -267,7 +335,7 @@
         </section>
     </main>
 
-    <footer class="bg-gray-900 border-t border-gray-800">
+    <footer class="bg-gray-900 border-t border-gray-800 relative z-10">
         <!-- Footer content remains the same -->
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center space-x-6 mb-4">
@@ -349,11 +417,7 @@
             const summaryLoader = document.getElementById('summary-loader');
             const qaLoader = document.getElementById('qa-loader');
             const aiError = document.getElementById('ai-error');
-            const aiResponseCard = document.getElementById('ai-response-card');
-            const aiResponseTitle = document.getElementById('ai-response-title');
-            const aiResponseContent = document.getElementById('ai-response-content');
             
-            // New: Get static page content for context
             const aboutMeContent = document.getElementById('about-me-content').textContent.trim();
             const skillsContainer = document.getElementById('skills-list');
             const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
@@ -367,7 +431,6 @@
                 }
             });
 
-            // Handler for the "Generate Summary" button
             generateSummaryBtn.addEventListener('click', async () => {
                 let jobDescription = jobDescTextarea.value.trim();
                 const file = jobDescFile.files[0];
@@ -389,10 +452,8 @@
                 summaryLoader.classList.remove('hidden');
                 generateSummaryBtn.disabled = true;
                 aiError.textContent = '';
-                aiResponseCard.classList.add('hidden');
 
                 try {
-                    // Send page content along with the job description
                     const payload = { 
                         taskType: 'match', 
                         jobDescription: jobDescription,
@@ -400,9 +461,7 @@
                         skills: skills
                     };
                     const generatedSummary = await callApiFunction(payload);
-                    aiResponseTitle.textContent = "AI-Powered Skills Summary";
-                    aiResponseContent.textContent = generatedSummary;
-                    aiResponseCard.classList.remove('hidden');
+                    summonBallAndShowMessage(generatedSummary);
                 } catch (error) {
                     console.error("Error calling backend function:", error);
                     aiError.textContent = `Failed to generate summary: ${error.message}`;
@@ -412,7 +471,6 @@
                 }
             });
 
-            // Handler for the "Ask Question" button
             askQuestionBtn.addEventListener('click', async () => {
                 const question = qaQuestionInput.value.trim();
                 if (!question) {
@@ -423,10 +481,8 @@
                 qaLoader.classList.remove('hidden');
                 askQuestionBtn.disabled = true;
                 aiError.textContent = '';
-                aiResponseCard.classList.add('hidden');
 
                 try {
-                     // Send page content along with the question
                     const payload = { 
                         taskType: 'qa', 
                         question: question,
@@ -434,9 +490,7 @@
                         skills: skills
                     };
                     const answer = await callApiFunction(payload);
-                    aiResponseTitle.textContent = "Answer from My Resume";
-                    aiResponseContent.textContent = answer;
-                    aiResponseCard.classList.remove('hidden');
+                    summonBallAndShowMessage(answer);
                 } catch (error) {
                     console.error("Error calling backend function:", error);
                     aiError.textContent = `Failed to get answer: ${error.message}`;
@@ -446,7 +500,6 @@
                 }
             });
 
-            // Unified function to call the backend
             async function callApiFunction(payload) {
                 const apiUrl = '/.netlify/functions/generate-message';
                 const response = await fetch(apiUrl, {
@@ -464,7 +517,6 @@
                 return result.message;
             }
 
-            // Function to read text content from various file types
             function readFileContent(file) {
                 return new Promise((resolve, reject) => {
                     if (file.type === 'application/pdf') {
@@ -485,7 +537,7 @@
                         };
                         reader.onerror = () => reject(new Error('Failed to read file.'));
                         reader.readAsArrayBuffer(file);
-                    } else { // Handles .txt, .md, etc.
+                    } else {
                         const reader = new FileReader();
                         reader.onload = (event) => resolve(event.target.result);
                         reader.onerror = () => reject(new Error('Failed to read file.'));
@@ -493,6 +545,173 @@
                     }
                 });
             }
+
+            // --- Interactive Ball Logic ---
+            const ballContainer = document.getElementById('ball-container');
+            const ballBubble = document.getElementById('ball-bubble');
+            const offscreenPointer = document.getElementById('offscreen-pointer');
+            const ballSize = 30;
+            let x, y, vx, vy;
+            let mouseX = -200;
+            let mouseY = -200;
+            let lastHitTime = 0;
+            const cooldown = 500;
+            let messageTimer;
+
+            let ballState = 'roaming'; // States: roaming, summoned, speaking
+            let targetX, targetY;
+
+            const guideMessages = [
+                "Welcome to my portfolio! It's great to have you here.",
+                "Curious about my work? Head over to the Projects section!",
+                "Want to know more about me? The About section has the details!",
+                "Have a question? Ask my AI assistant in the Contact section!",
+                "You can 'hit' me with your cursor to send me flying!"
+            ];
+
+            function showBubbleMessage(text, duration = 5000) {
+                ballBubble.textContent = text;
+                ballBubble.classList.add('visible');
+                clearTimeout(messageTimer);
+                if (duration > 0) {
+                    messageTimer = setTimeout(() => {
+                        ballBubble.classList.remove('visible');
+                    }, duration);
+                }
+            }
+
+            function summonBallAndShowMessage(message) {
+                const aiPanel = document.getElementById('ai-assistant-panel');
+                const rect = aiPanel.getBoundingClientRect();
+                targetX = rect.left + window.scrollX + (rect.width / 2) - (ballSize / 2);
+                targetY = rect.top + window.scrollY - 50;
+                ballState = 'summoned';
+                clearTimeout(messageTimer);
+                ballBubble.classList.remove('visible');
+
+                const arrivalCheck = setInterval(() => {
+                    const dx = x - targetX;
+                    const dy = y - targetY;
+                    if (Math.sqrt(dx * dx + dy * dy) < 20) {
+                        clearInterval(arrivalCheck);
+                        ballState = 'speaking';
+                        showBubbleMessage(message, 0);
+                    }
+                }, 100);
+            }
+
+            function initializeBall() {
+                const homeSection = document.getElementById('home');
+                const rect = homeSection.getBoundingClientRect();
+                x = rect.left + window.scrollX + (rect.width / 4);
+                y = rect.top + window.scrollY + (rect.height / 4);
+                vx = (Math.random() - 0.5) * 4;
+                vy = (Math.random() - 0.5) * 4;
+                showBubbleMessage(guideMessages[0]);
+
+                setInterval(() => {
+                    if (ballState === 'roaming') {
+                        const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
+                        showBubbleMessage(randomMsg);
+                    }
+                }, 15000);
+            }
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.pageX;
+                mouseY = e.pageY;
+            });
+
+            function animateBall() {
+                const pageW = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
+                const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                
+                if (ballState === 'roaming' || ballState === 'speaking') {
+                    x += vx;
+                    y += vy;
+
+                    if (x + ballSize > pageW - 5 || x < 5) vx *= -1;
+                    if (y + ballSize > pageH - 5 || y < 5) vy *= -1;
+
+                    const dx = x - mouseX + (ballSize / 2);
+                    const dy = y - mouseY + (ballSize / 2);
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const currentTime = Date.now();
+
+                    if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
+                        if (ballState === 'speaking') {
+                           ballBubble.classList.remove('visible');
+                        }
+                        ballState = 'roaming';
+                        lastHitTime = currentTime;
+                        const angle = Math.atan2(dy, dx);
+                        vx = Math.cos(angle) * 6;
+                        vy = Math.sin(angle) * 6;
+                    }
+                    
+                    vx *= 0.995;
+                    vy *= 0.995;
+                } else if (ballState === 'summoned') {
+                    const dx = targetX - x;
+                    const dy = targetY - y;
+                    const speed = 0.1;
+                    vx = dx * speed;
+                    vy = dy * speed;
+                    x += vx;
+                    y += vy;
+                }
+
+                ballContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                
+                // Off-screen pointer logic
+                const viewTop = window.scrollY;
+                const viewBottom = viewTop + window.innerHeight;
+                const viewLeft = window.scrollX;
+                const viewRight = viewLeft + window.innerWidth;
+
+                const isOffScreen = y < viewTop || y > viewBottom - ballSize || x < viewLeft || x > viewRight - ballSize;
+
+                if (isOffScreen) {
+                    offscreenPointer.style.opacity = '1';
+
+                    const margin = 25;
+                    let pointerX = Math.max(margin, Math.min(x - viewLeft, window.innerWidth - margin));
+                    let pointerY = Math.max(margin, Math.min(y - viewTop, window.innerHeight - margin));
+
+                    offscreenPointer.style.left = `${pointerX}px`;
+                    offscreenPointer.style.top = `${pointerY}px`;
+                    
+                    const angle = Math.atan2((y - viewTop) - pointerY, (x - viewLeft) - pointerX);
+                    offscreenPointer.style.transform = `translate(-50%, -50%) rotate(${angle + Math.PI / 2}rad)`;
+
+                    // Position bubble relative to pointer
+                    ballBubble.style.left = `${pointerX}px`;
+                    ballBubble.style.top = `${pointerY}px`;
+                    
+                    if (pointerY < 60) {
+                        ballBubble.style.transform = 'translateX(-50%) translateY(30px)';
+                    } else if (pointerY > window.innerHeight - 60) {
+                         ballBubble.style.transform = 'translateX(-50%) translateY(-100%) translateY(-30px)';
+                    } else if (pointerX < 60) {
+                         ballBubble.style.transform = 'translateX(-10px) translateY(-50%)';
+                    } else {
+                         ballBubble.style.transform = 'translateX(-100%) translateY(-50%) translateX(10px)';
+                    }
+
+                } else {
+                    offscreenPointer.style.opacity = '0';
+                    // Position bubble relative to ball container
+                    ballBubble.style.left = `${x + (ballSize / 2)}px`;
+                    ballBubble.style.top = `${y - 10}px`;
+                    ballBubble.style.transform = 'translateX(-50%) translateY(-100%)';
+                }
+
+                requestAnimationFrame(animateBall);
+            }
+            
+            initializeBall();
+            animateBall();
+
 
             // --- All other scripts (Glow, Menu, Modal, etc.) ---
             const glow = document.getElementById('cursor-glow');
