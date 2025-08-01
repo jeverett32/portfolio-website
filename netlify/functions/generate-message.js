@@ -1,66 +1,76 @@
 // File location: netlify/functions/generate-message.js
 
-// Built-in Node.js modules to read files from your repository.
 const fs = require('fs');
 const path = require('path');
 
-
 exports.handler = async function (event) {
-  // Only allow POST requests.
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    // --- Step 1: Read your resume file ---
-    // This securely reads the resume.txt file you added to this folder.
+    // Read the static resume file from the repository.
     const resumePath = path.resolve(__dirname, 'resume.txt');
     const resumeText = fs.readFileSync(resumePath, 'utf8');
 
-    // --- Step 2: Determine the task (Skills Match or Q&A) ---
-    const { taskType, jobDescription, question } = JSON.parse(event.body);
+    // Get all the data sent from the website.
+    const { taskType, jobDescription, question, bio, skills } = JSON.parse(event.body);
 
-    // Securely get the API key you stored in Netlify's settings.
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       throw new Error('GEMINI_API_KEY not found in environment variables.');
     }
 
+    // Combine all of John's info into one knowledge base.
+    const fullContext = `
+      My Resume:
+      ---
+      ${resumeText}
+      ---
+      My Bio from my website:
+      ---
+      ${bio}
+      ---
+      My skills from my website:
+      ---
+      ${skills}
+      ---
+    `;
+
     let finalPrompt;
 
     if (taskType === 'match') {
-      // --- Prompt for the Skills Match task ---
+      // Prompt for the Skills Match task, now with the full context.
       finalPrompt = `
         You are an AI assistant for John Everett's portfolio. Your task is to act as John and explain why he is a good fit for a job.
-        Your knowledge is strictly limited to the content of his resume, provided below. Do not invent any information.
-        Based on the resume and the provided job description, write a brief, first-person summary (2-4 sentences) explaining why his skills and background make him a great fit for this specific role.
-        Focus only on the most relevant skills and experiences found in both the resume and the job description.
+        Your knowledge is strictly limited to the content of his resume and the provided bio and skills. Do not invent any information.
+        Based on this complete context about me and the provided job description, write a brief, first-person summary (2-4 sentences) explaining why my skills and background make me a great fit for this specific role.
 
-        My Resume:
+        My Complete Professional Context:
         ---
-        ${resumeText}
+        ${fullContext}
         ---
 
-        Job Description:
+        Job Description to Match Against:
         ---
         ${jobDescription}
         ---
       `;
     } else if (taskType === 'qa') {
-      // --- Prompt for the Q&A task ---
+      // Prompt for the Q&A task, now with the full context.
       finalPrompt = `
-        You are an AI assistant for John Everett's portfolio. Your task is to answer questions about John based ONLY on the information in his resume.
-        Your knowledge is strictly limited to the content of his resume, provided below.
-        If the answer is in the resume, answer it concisely from a first-person perspective (e.g., "I worked on...").
-        If the answer cannot be found in the resume, you MUST respond with: "I don't have that specific information in my resume, but I'd be happy to discuss it further."
-        Do not, under any circumstances, invent or infer information that is not explicitly stated in the resume.
+        You are an AI assistant for John Everett's portfolio. Your task is to answer questions about John based ONLY on the information in his resume, bio, and skills list.
+        Your knowledge is strictly limited to this provided context.
+        If the answer is in the context, answer it concisely from a first-person perspective (e.g., "I worked on...").
+        If the answer cannot be found in the context, you MUST respond with: "I don't have that specific information in my resume or portfolio, but I'd be happy to discuss it further."
+        You are allowed to make inferences to answer questions, but try as hard as you can not to invent information. For example, if someone asks where I am from, you can say Provo, because I go to school at BYU. Or if someone asks when I will graduate, you can make an inference based on my education in my resume
 
-        My Resume:
+        My Complete Professional Context:
         ---
-        ${resumeText}
+        ${fullContext}
         ---
 
-        Question:
+        Question to Answer:
         ---
         ${question}
         ---
