@@ -583,8 +583,9 @@
             function summonBallAndShowMessage(message) {
                 const aiPanel = document.getElementById('ai-assistant-panel');
                 const rect = aiPanel.getBoundingClientRect();
-                targetX = rect.left + window.scrollX + (rect.width / 2) - (ballSize / 2);
-                targetY = rect.top + window.scrollY - 50;
+                // Target is now vertically centered in the viewport, and to the right of the panel
+                targetX = rect.right + window.scrollX + 40; 
+                targetY = (window.innerHeight / 2) - (ballSize / 2) + window.scrollY;
                 ballState = 'summoned';
                 clearTimeout(messageTimer);
                 ballBubble.classList.remove('visible');
@@ -592,9 +593,11 @@
                 const arrivalCheck = setInterval(() => {
                     const dx = x - targetX;
                     const dy = y - targetY;
-                    if (Math.sqrt(dx * dx + dy * dy) < 20) {
+                    if (Math.sqrt(dx * dx + dy * dy) < 5) { // Stricter arrival condition
                         clearInterval(arrivalCheck);
                         ballState = 'speaking';
+                        vx = 0; // Stop the ball completely
+                        vy = 0;
                         showBubbleMessage(message, 0);
                     }
                 }, 100);
@@ -630,8 +633,8 @@
                     x += vx;
                     y += vy;
 
-                    if (x + ballSize > pageW - 5 || x < 5) vx *= -1;
-                    if (y + ballSize > pageH - 5 || y < 5) vy *= -1;
+                    if (x + ballSize > pageW || x < 0) vx *= -1;
+                    if (y + ballSize > pageH || y < 0) vy *= -1;
 
                     const dx = x - mouseX + (ballSize / 2);
                     const dy = y - mouseY + (ballSize / 2);
@@ -649,12 +652,15 @@
                         vy = Math.sin(angle) * 6;
                     }
                     
-                    vx *= 0.995;
-                    vy *= 0.995;
+                    if (ballState === 'roaming') {
+                        vx *= 0.995;
+                        vy *= 0.995;
+                    }
                 } else if (ballState === 'summoned') {
                     const dx = targetX - x;
                     const dy = targetY - y;
-                    const speed = 0.1;
+                    const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
+                    const speed = Math.min(0.1, distanceToTarget / 100); // Slow down as it gets closer
                     vx = dx * speed;
                     vy = dy * speed;
                     x += vx;
@@ -700,9 +706,11 @@
 
                 } else {
                     offscreenPointer.style.opacity = '0';
-                    // Position bubble relative to ball container
-                    ballBubble.style.left = `${x + (ballSize / 2)}px`;
-                    ballBubble.style.top = `${y - 10}px`;
+                    // Position bubble relative to ball container (on-screen)
+                    const ballScreenX = x - viewLeft;
+                    const ballScreenY = y - viewTop;
+                    ballBubble.style.left = `${ballScreenX + (ballSize / 2)}px`;
+                    ballBubble.style.top = `${ballScreenY - 10}px`;
                     ballBubble.style.transform = 'translateX(-50%) translateY(-100%)';
                 }
 
