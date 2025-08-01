@@ -10,65 +10,41 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Use Inter font family */
-        body {
-            font-family: 'Inter', sans-serif;
+        body { font-family: 'Inter', sans-serif; }
+        .nav-active { background-color: #06b6d4; color: white; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s; opacity: 0; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Custom style for file input */
+        .custom-file-input::-webkit-file-upload-button { visibility: hidden; }
+        .custom-file-input::before {
+            content: 'Select a file';
+            display: inline-block;
+            background: #374151; /* gray-700 */
+            border: 1px solid #4b5563; /* gray-600 */
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            outline: none;
+            white-space: nowrap;
+            -webkit-user-select: none;
+            user-select: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
         }
-        /* Style for active nav link */
-        .nav-active {
-            background-color: #06b6d4; /* bg-cyan-500 */
-            color: white;
-        }
-        /* Styles for the video modal aspect ratio */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            overflow: hidden;
-            max-width: 100%;
-            background: #000;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        /* Style for the cursor glow effect */
-        #cursor-glow {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0) 70%);
-            transform: translate(-50%, -50%);
-            pointer-events: none; /* Allows clicking through the element */
-            z-index: 0; /* Places the glow behind the content */
-            transition: opacity 0.3s;
-            opacity: 0; /* Initially hidden */
-        }
-        /* Loading spinner */
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #06b6d4;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .custom-file-input:hover::before { border-color: #6b7280; /* gray-500 */ }
+        .custom-file-input:active::before { background-color: #4b5563; /* gray-600 */ }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans antialiased relative">
 
-    <!-- This div is for the cursor glow effect -->
     <div id="cursor-glow"></div>
 
     <header id="header" class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-md">
+        <!-- Header content remains the same -->
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
@@ -109,6 +85,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Home, About, Projects sections remain the same -->
         <section id="home" class="min-h-screen flex items-center justify-center text-center">
             <div class="space-y-6">
                 <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">
@@ -227,29 +204,52 @@
             <div class="text-center">
                 <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 mb-4">Contact & AI Assistant</h2>
                 <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
-                    Want to see how my skills fit your needs? Paste a job description below to get a personalized summary. Or, feel free to send me a message directly.
+                    Use my AI assistant to see how my skills fit your needs or to ask questions about my experience. Or, feel free to send me a message directly.
                 </p>
             </div>
             
             <div class="max-w-xl mx-auto space-y-12">
                 <!-- AI Assistant Section -->
-                <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-                    <h3 class="text-xl font-bold text-white mb-4">AI-Powered Skills Match</h3>
-                    <div>
-                        <label for="job-description" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description Here</label>
-                        <textarea id="job-description" rows="5" placeholder="Paste the full job description here..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button type="button" id="generate-summary-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
-                            ✨ Generate Summary
-                            <div id="ai-loader" class="loader hidden"></div>
-                        </button>
-                    </div>
-                    <div id="ai-error" class="text-red-400 text-center text-sm mt-4"></div>
+                <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700 space-y-6">
                     
-                    <!-- AI Response Card -->
-                    <div id="ai-response-card" class="hidden mt-6 bg-gray-800 p-6 rounded-lg border border-cyan-500/30">
-                        <h4 class="text-lg font-bold text-cyan-400 mb-3">A Great Fit For Your Team</h4>
+                    <!-- Skills Match Feature -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">1. AI-Powered Skills Match</h3>
+                        <label for="job-description-text" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description</label>
+                        <textarea id="job-description-text" rows="5" placeholder="Paste the full job description here..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
+                        <div class="flex items-center justify-center my-4">
+                            <span class="flex-grow bg-gray-700 h-px"></span>
+                            <span class="mx-4 text-gray-400 text-sm">OR</span>
+                            <span class="flex-grow bg-gray-700 h-px"></span>
+                        </div>
+                        <label for="job-description-file" class="block text-sm font-medium text-gray-300 mb-2">Upload Job Description File</label>
+                        <input type="file" id="job-description-file" class="custom-file-input text-gray-400" accept=".txt,.md,.pdf">
+                        <p id="file-name-display" class="text-xs text-gray-500 mt-1"></p>
+                        <div class="text-center mt-4">
+                            <button type="button" id="generate-summary-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                                ✨ Generate Summary
+                                <div id="summary-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Q&A Feature -->
+                    <div class="border-t border-gray-700 pt-6">
+                        <h3 class="text-xl font-bold text-white mb-4">2. Ask a Question About Me</h3>
+                        <label for="qa-question" class="block text-sm font-medium text-gray-300 mb-2">Your Question</label>
+                        <input type="text" id="qa-question" placeholder="e.g., 'What was your role at BYU?'" class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
+                        <div class="text-center mt-4">
+                            <button type="button" id="ask-question-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                                💬 Ask Question
+                                <div id="qa-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shared AI Response Area -->
+                    <div id="ai-error" class="text-red-400 text-center text-sm"></div>
+                    <div id="ai-response-card" class="hidden mt-4 bg-gray-800 p-6 rounded-lg border border-cyan-500/30">
+                        <h4 id="ai-response-title" class="text-lg font-bold text-cyan-400 mb-3"></h4>
                         <p id="ai-response-content" class="text-gray-300 whitespace-pre-wrap"></p>
                     </div>
                 </div>
@@ -281,6 +281,7 @@
     </main>
 
     <footer class="bg-gray-900 border-t border-gray-800">
+        <!-- Footer content remains the same -->
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center space-x-6 mb-4">
                 <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
@@ -298,6 +299,7 @@
     </footer>
 
     <div id="video-modal" class="hidden fixed inset-0 z-50 items-center justify-center">
+        <!-- Video modal content remains the same -->
         <div id="video-modal-overlay" class="absolute inset-0 bg-black bg-opacity-75"></div>
         <div id="video-modal-content" class="relative bg-gray-900 rounded-lg shadow-xl w-11/12 max-w-4xl p-4">
              <button id="video-modal-close" class="absolute z-10 -top-3 -right-3 h-10 w-10 bg-white rounded-full text-gray-800 flex items-center justify-center text-2xl font-bold">×</button>
@@ -306,19 +308,16 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- PDF.js library for reading PDF files in the browser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // --- Cursor Glow Logic ---
-            const glow = document.getElementById('cursor-glow');
-            if (glow) {
-                document.body.addEventListener('mousemove', e => {
-                    glow.style.opacity = '1';
-                    glow.style.left = `${e.clientX}px`;
-                    glow.style.top = `${e.clientY}px`;
-                });
-            }
+        // Required for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js`;
 
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- All other scripts (Glow, Menu, Modal, etc.) remain the same ---
+            
             // --- FormSpree AJAX submission ---
             const form = document.getElementById('contact-form');
             const status = document.getElementById('form-status');
@@ -353,59 +352,105 @@
             });
 
             // --- Gemini AI Logic ---
-            const generateBtn = document.getElementById('generate-summary-btn');
-            const jobDescTextarea = document.getElementById('job-description');
-            const aiLoader = document.getElementById('ai-loader');
+            const generateSummaryBtn = document.getElementById('generate-summary-btn');
+            const askQuestionBtn = document.getElementById('ask-question-btn');
+            
+            const jobDescTextarea = document.getElementById('job-description-text');
+            const jobDescFile = document.getElementById('job-description-file');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const qaQuestionInput = document.getElementById('qa-question');
+            
+            const summaryLoader = document.getElementById('summary-loader');
+            const qaLoader = document.getElementById('qa-loader');
             const aiError = document.getElementById('ai-error');
             const aiResponseCard = document.getElementById('ai-response-card');
+            const aiResponseTitle = document.getElementById('ai-response-title');
             const aiResponseContent = document.getElementById('ai-response-content');
 
-            generateBtn.addEventListener('click', async () => {
-                const jobDescription = jobDescTextarea.value;
-                if (!jobDescription.trim()) {
-                    aiError.textContent = 'Please paste a job description first.';
+            jobDescFile.addEventListener('change', () => {
+                if (jobDescFile.files.length > 0) {
+                    fileNameDisplay.textContent = `Selected: ${jobDescFile.files[0].name}`;
+                } else {
+                    fileNameDisplay.textContent = '';
+                }
+            });
+
+            // Handler for the "Generate Summary" button
+            generateSummaryBtn.addEventListener('click', async () => {
+                let jobDescription = jobDescTextarea.value.trim();
+                const file = jobDescFile.files[0];
+
+                // If a file is selected, read it. It takes precedence.
+                if (file) {
+                    try {
+                        jobDescription = await readFileContent(file);
+                    } catch (error) {
+                        aiError.textContent = `Error reading file: ${error.message}`;
+                        return;
+                    }
+                }
+
+                if (!jobDescription) {
+                    aiError.textContent = 'Please paste or upload a job description first.';
                     return;
                 }
 
+                // Show loader and disable button
+                summaryLoader.classList.remove('hidden');
+                generateSummaryBtn.disabled = true;
                 aiError.textContent = '';
-                aiResponseCard.classList.add('hidden'); // Hide previous response
-                aiLoader.classList.remove('hidden');
-                generateBtn.disabled = true;
-
-                const skillsContainer = document.getElementById('skills-list');
-                const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
-
-                const prompt = `
-                    My name is John Everett. I am an Information Systems student at BYU's Marriott School of Business with these skills: ${skills}.
-                    Based on the following job description, please write a brief, first-person summary (2-3 sentences) explaining why my skills and background make me a great fit for this specific role.
-                    Focus only on the most relevant skills mentioned in the job description.
-
-                    Job Description:
-                    ---
-                    ${jobDescription}
-                    ---
-                `;
+                aiResponseCard.classList.add('hidden');
 
                 try {
-                    const generatedSummary = await callApiFunction(prompt);
+                    const payload = { taskType: 'match', jobDescription: jobDescription };
+                    const generatedSummary = await callApiFunction(payload);
+                    aiResponseTitle.textContent = "AI-Powered Skills Summary";
                     aiResponseContent.textContent = generatedSummary;
                     aiResponseCard.classList.remove('hidden');
                 } catch (error) {
                     console.error("Error calling backend function:", error);
-                    aiError.textContent = 'Failed to generate summary. Please try again.';
+                    aiError.textContent = `Failed to generate summary: ${error.message}`;
                 } finally {
-                    aiLoader.classList.add('hidden');
-                    generateBtn.disabled = false;
+                    summaryLoader.classList.add('hidden');
+                    generateSummaryBtn.disabled = false;
                 }
             });
-            
-            async function callApiFunction(prompt) {
-                const apiUrl = '/.netlify/functions/generate-message';
+
+            // Handler for the "Ask Question" button
+            askQuestionBtn.addEventListener('click', async () => {
+                const question = qaQuestionInput.value.trim();
+                if (!question) {
+                    aiError.textContent = 'Please enter a question first.';
+                    return;
+                }
                 
+                qaLoader.classList.remove('hidden');
+                askQuestionBtn.disabled = true;
+                aiError.textContent = '';
+                aiResponseCard.classList.add('hidden');
+
+                try {
+                    const payload = { taskType: 'qa', question: question };
+                    const answer = await callApiFunction(payload);
+                    aiResponseTitle.textContent = "Answer from My Resume";
+                    aiResponseContent.textContent = answer;
+                    aiResponseCard.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error calling backend function:", error);
+                    aiError.textContent = `Failed to get answer: ${error.message}`;
+                } finally {
+                    qaLoader.classList.add('hidden');
+                    askQuestionBtn.disabled = false;
+                }
+            });
+
+            // Unified function to call the backend
+            async function callApiFunction(payload) {
+                const apiUrl = '/.netlify/functions/generate-message';
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
+                    body: JSON.stringify(payload)
                 });
 
                 if (!response.ok) {
@@ -417,7 +462,45 @@
                 return result.message;
             }
 
-            // --- Mobile Menu Logic & Other Scripts ---
+            // Function to read text content from various file types
+            function readFileContent(file) {
+                return new Promise((resolve, reject) => {
+                    if (file.type === 'application/pdf') {
+                        const reader = new FileReader();
+                        reader.onload = async (event) => {
+                            try {
+                                const pdf = await pdfjsLib.getDocument(event.target.result).promise;
+                                let text = '';
+                                for (let i = 1; i <= pdf.numPages; i++) {
+                                    const page = await pdf.getPage(i);
+                                    const content = await page.getTextContent();
+                                    text += content.items.map(item => item.str).join(' ');
+                                }
+                                resolve(text);
+                            } catch (error) {
+                                reject(new Error('Could not parse PDF file.'));
+                            }
+                        };
+                        reader.onerror = () => reject(new Error('Failed to read file.'));
+                        reader.readAsArrayBuffer(file);
+                    } else { // Handles .txt, .md, etc.
+                        const reader = new FileReader();
+                        reader.onload = (event) => resolve(event.target.result);
+                        reader.onerror = () => reject(new Error('Failed to read file.'));
+                        reader.readAsText(file);
+                    }
+                });
+            }
+
+            // --- All other scripts (Glow, Menu, Modal, etc.) ---
+            const glow = document.getElementById('cursor-glow');
+            if (glow) {
+                document.body.addEventListener('mousemove', e => {
+                    glow.style.opacity = '1';
+                    glow.style.left = `${e.clientX}px`;
+                    glow.style.top = `${e.clientY}px`;
+                });
+            }
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const hamburgerIcon = document.getElementById('hamburger-icon');
