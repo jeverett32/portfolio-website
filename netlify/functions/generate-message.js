@@ -1,5 +1,6 @@
 // File location: netlify/functions/generate-message.js
 
+
 const fs = require('fs');
 const path = require('path');
 // Add the pdf-parse library to read your PDF resume
