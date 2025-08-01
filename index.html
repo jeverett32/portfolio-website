@@ -48,6 +48,19 @@
             transition: opacity 0.3s;
             opacity: 0; /* Initially hidden */
         }
+        /* Loading spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #06b6d4;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans antialiased relative">
@@ -127,7 +140,7 @@
                     </p>
                     <div class="space-y-6 pt-4">
                         <h3 class="text-2xl font-bold text-cyan-400">My Skills</h3>
-                        <div class="flex flex-wrap gap-3">
+                        <div id="skills-list" class="flex flex-wrap gap-3">
                             <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Python</span>
                             <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
                             <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">GCL+</span>
@@ -153,7 +166,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
                 <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <a href="https://johnreverett.com/trashbins/" target="_blank" rel="noopener noreferrer">
+                    <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer">
                         <img src="trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-48 object-cover">
                     </a>
                     <div class="p-6 flex flex-col flex-grow">
@@ -165,7 +178,7 @@
                             <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Square API</span>
                             <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">JavaScript</span>
                         </div>
-                        <a href="https://johnreverett.com/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">View Live Site →</a>
+                        <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">View Live Site →</a>
                     </div>
                 </div>
 
@@ -214,11 +227,23 @@
             <div class="text-center">
                 <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 mb-4">Contact Me</h2>
                 <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-                    I'm actively seeking new opportunities and collaborations. Feel free to reach out via email or connect with me on LinkedIn.
+                    I'm actively seeking new opportunities. Feel free to reach out via email, connect on LinkedIn, or use the AI assistant below to draft a message based on a job description.
                 </p>
             </div>
             <div class="max-w-xl mx-auto">
-                <form id="contact-form" action="https://formspree.io/f/mldljzql" method="POST" class="space-y-6">
+                <form id="contact-form" class="space-y-6">
+                     <div>
+                        <label for="job-description" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description (Optional)</label>
+                        <textarea id="job-description" rows="4" placeholder="Paste a job description here and let AI draft a message for you..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" id="generate-message-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                            ✨ Generate with AI
+                            <div id="ai-loader" class="loader hidden"></div>
+                        </button>
+                    </div>
+                    <div id="ai-error" class="text-red-400 text-center text-sm mt-2"></div>
+
                     <div>
                         <label for="name" class="sr-only">Name</label>
                         <input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
@@ -232,7 +257,7 @@
                         <textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="bg-cyan-500 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">Send Message</button>
+                        <button type="submit" id="send-message-btn" class="bg-cyan-500 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">Send Message</button>
                     </div>
                 </form>
                 <div id="form-status" class="mt-6 text-center"></div>
@@ -274,13 +299,118 @@
             if (glow) {
                 document.body.addEventListener('mousemove', e => {
                     glow.style.opacity = '1';
-                    // Using clientX/clientY for positioning relative to the viewport
                     glow.style.left = `${e.clientX}px`;
                     glow.style.top = `${e.clientY}px`;
                 });
             }
 
             // --- Mobile Menu Logic ---
+            // ... (This part is unchanged) ...
+
+            // --- Active navigation link highlighting on scroll ---
+            // ... (This part is unchanged) ...
+
+            // --- FormSpree AJAX submission ---
+            const form = document.getElementById('contact-form');
+            const status = document.getElementById('form-status');
+            
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+                const data = new FormData(event.target);
+                const formspreeAction = "https://formspree.io/f/mldljzql";
+
+                try {
+                    const response = await fetch(formspreeAction, {
+                        method: 'POST',
+                        body: data,
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (response.ok) {
+                        status.innerHTML = "Thanks for your submission!";
+                        status.classList.add('text-green-400');
+                        status.classList.remove('text-red-400');
+                        form.reset();
+                    } else {
+                        const responseData = await response.json();
+                        status.innerHTML = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Oops! There was a problem.";
+                        status.classList.add('text-red-400');
+                        status.classList.remove('text-green-400');
+                    }
+                } catch (error) {
+                    status.innerHTML = "Oops! There was a problem submitting your form.";
+                    status.classList.add('text-red-400');
+                    status.classList.remove('text-green-400');
+                }
+            });
+
+            // --- Gemini API Logic ---
+            const generateBtn = document.getElementById('generate-message-btn');
+            const jobDescTextarea = document.getElementById('job-description');
+            const messageTextarea = document.getElementById('message');
+            const aiLoader = document.getElementById('ai-loader');
+            const aiError = document.getElementById('ai-error');
+
+            generateBtn.addEventListener('click', async () => {
+                const jobDescription = jobDescTextarea.value;
+                if (!jobDescription.trim()) {
+                    aiError.textContent = 'Please paste a job description first.';
+                    return;
+                }
+
+                aiError.textContent = '';
+                aiLoader.classList.remove('hidden');
+                generateBtn.disabled = true;
+
+                const skillsContainer = document.getElementById('skills-list');
+                const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
+
+                const prompt = `
+                    My name is John Everett. I am an Information Systems student at BYU's Marriott School of Business.
+                    My skills include: ${skills}.
+                    Based on the following job description, please write a concise and professional introductory message (about 3-4 sentences) for a contact form.
+                    The message should express interest in the role and briefly highlight how my most relevant skills and experience align with the position's requirements.
+                    Do not use placeholders like "[Your Name]". Be friendly but professional.
+
+                    Job Description:
+                    ---
+                    ${jobDescription}
+                    ---
+                `;
+
+                try {
+                    const generatedMessage = await callApiFunction(prompt);
+                    messageTextarea.value = generatedMessage;
+                } catch (error) {
+                    console.error("Error calling backend function:", error);
+                    aiError.textContent = 'Failed to generate message. Please try again.';
+                } finally {
+                    aiLoader.classList.add('hidden');
+                    generateBtn.disabled = false;
+                }
+            });
+            
+            async function callApiFunction(prompt) {
+                const apiUrl = '/.netlify/functions/generate-message';
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result.message;
+            }
+
+            // --- Video Modal Logic ---
+            // ... (This part is unchanged) ...
+
+            // Re-add the unchanged JS logic here for completeness
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const hamburgerIcon = document.getElementById('hamburger-icon');
@@ -302,7 +432,6 @@
                 });
             });
 
-            // --- Active navigation link highlighting on scroll ---
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
             const headerHeight = document.getElementById('header').offsetHeight;
@@ -321,36 +450,6 @@
             }, observerOptions);
             sections.forEach(section => observer.observe(section));
 
-            // --- AJAX form submission ---
-            const form = document.getElementById('contact-form');
-            const status = document.getElementById('form-status');
-            async function handleSubmit(event) {
-                event.preventDefault();
-                const data = new FormData(event.target);
-                try {
-                    const response = await fetch(event.target.action, {
-                        method: form.method,
-                        body: data,
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    if (response.ok) {
-                        status.innerHTML = "Thanks for your submission!";
-                        status.classList.add('text-green-400');
-                        form.reset();
-                        form.style.display = 'none';
-                    } else {
-                        const responseData = await response.json();
-                        status.innerHTML = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Oops! There was a problem.";
-                        status.classList.add('text-red-400');
-                    }
-                } catch (error) {
-                    status.innerHTML = "Oops! There was a problem submitting your form.";
-                    status.classList.add('text-red-400');
-                }
-            }
-            form.addEventListener("submit", handleSubmit);
-
-            // --- Video Modal Logic ---
             const videoModal = document.getElementById('video-modal');
             const videoModalOverlay = document.getElementById('video-modal-overlay');
             const videoIframe = document.getElementById('video-iframe');
