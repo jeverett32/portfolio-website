@@ -1,0 +1,7 @@
+# File location: /netlify.toml (at the root of your project)
+
+# This section configures your serverless functions.
+[functions]
+  # This line tells Netlify to be sure to include the resume.txt file
+  # when it deploys the 'generate-message' function.
+  included_files = ["netlify/functions/resume.txt"]
