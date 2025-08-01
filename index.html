@@ -40,9 +40,9 @@
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 14px;
-            max-width: 250px; /* Use max-width to allow wrapping */
-            max-height: 200px; /* Add max-height */
-            overflow-y: auto; /* Add scroll for very long text */
+            max-width: 250px;
+            max-height: 200px;
+            overflow-y: hidden; /* Scrollbar is now handled by JS */
             text-align: center;
             white-space: normal;
             opacity: 0;
@@ -80,10 +80,10 @@
         }
         
         .translucent-panel {
-            background-color: rgba(31, 41, 55, 0.95); /* Slightly more transparent */
+            background-color: rgba(31, 41, 55, 0.95);
         }
         .translucent-image {
-            opacity: 0.85; /* More transparent images */
+            opacity: 0.85;
         }
     </style>
 </head>
@@ -563,18 +563,28 @@
             let ballState = 'roaming'; // States: roaming, summoned, speaking
             let targetX, targetY;
             let lastSummonSide = 'right'; // Start by preferring the left side
+            const isMobile = 'ontouchstart' in window;
 
             const guideMessages = [
                 "Welcome to my portfolio! It's great to have you here.",
                 "Curious about my work? Head over to the Projects section!",
                 "Want to know more about me? The About section has the details!",
                 "Have a question? Ask my AI assistant in the Contact section!",
-                "You can 'hit' me with your cursor to send me flying!"
+                isMobile ? "You can 'hit' me with your finger to send me flying!" : "You can 'hit' me with your cursor to send me flying!"
             ];
 
             function showBubbleMessage(text, duration = 5000) {
                 ballBubble.textContent = text;
                 ballBubble.classList.add('visible');
+                
+                setTimeout(() => {
+                    if (ballBubble.scrollHeight > 200) {
+                        ballBubble.style.overflowY = 'auto';
+                    } else {
+                        ballBubble.style.overflowY = 'hidden';
+                    }
+                }, 0);
+
                 clearTimeout(messageTimer);
                 if (duration > 0) {
                     messageTimer = setTimeout(() => {
@@ -586,7 +596,6 @@
             function summonBallAndShowMessage(message, buttonElement) {
                 const aiPanel = document.getElementById('ai-assistant-panel');
                 const panelRect = aiPanel.getBoundingClientRect();
-                const isMobile = window.innerWidth <= 768;
 
                 if (isMobile) {
                     const btnRect = buttonElement.getBoundingClientRect();
@@ -684,8 +693,8 @@
                     if (x + ballSize > pageW || x < 0) vx *= -1;
                     if (y + ballSize > pageH || y < 0) vy *= -1;
 
-                    const interactionX = ('ontouchstart' in window) ? touchX : mouseX;
-                    const interactionY = ('ontouchstart' in window) ? touchY : mouseY;
+                    const interactionX = isMobile ? touchX : mouseX;
+                    const interactionY = isMobile ? touchY : mouseY;
 
                     const dx = x - interactionX + (ballSize / 2);
                     const dy = y - interactionY + (ballSize / 2);
@@ -762,7 +771,24 @@
                     const ballScreenY = y - viewTop;
                     ballBubble.style.left = `${ballScreenX + (ballSize / 2)}px`;
                     ballBubble.style.top = `${ballScreenY - 10}px`;
-                    ballBubble.style.transform = 'translateX(-50%) translateY(-100%)';
+                    
+                    // New logic to keep bubble on screen
+                    const bubbleWidth = ballBubble.offsetWidth;
+                    const bubbleHeight = ballBubble.offsetHeight;
+                    let translateX = -bubbleWidth / 2;
+                    let translateY = -100; // Percentage
+
+                    const bubbleLeftEdge = ballScreenX + (ballSize / 2) - (bubbleWidth / 2);
+                    const bubbleRightEdge = ballScreenX + (ballSize / 2) + (bubbleWidth / 2);
+
+                    if (bubbleRightEdge > window.innerWidth) {
+                        translateX = -bubbleWidth + (window.innerWidth - ballScreenX) - (ballSize / 2) - 10; // 10px margin
+                    }
+                    if (bubbleLeftEdge < 0) {
+                        translateX = -(ballScreenX + (ballSize / 2)) + 10;
+                    }
+                    
+                    ballBubble.style.transform = `translateX(${translateX}px) translateY(${translateY}%)`;
                 }
 
                 requestAnimationFrame(animateBall);
@@ -774,7 +800,7 @@
 
             // --- All other scripts (Glow, Menu, Modal, etc.) ---
             const glow = document.getElementById('cursor-glow');
-            if (glow && !('ontouchstart' in window)) { // Disable glow on touch devices
+            if (glow && !isMobile) { // Disable glow on touch devices
                 document.body.addEventListener('mousemove', e => {
                     glow.style.opacity = '1';
                     glow.style.left = `${e.clientX}px`;
