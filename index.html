@@ -18,9 +18,10 @@
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
+        /* Styles for the interactive ball and its components */
         #ball-container {
             position: absolute;
-            z-index: 5;
+            z-index: 5; /* Lower z-index to go behind content */
             pointer-events: none;
             will-change: transform;
         }
@@ -32,8 +33,8 @@
             box-shadow: 0 0 15px rgba(6, 182, 212, 0.7);
         }
         #ball-bubble {
-            position: fixed;
-            z-index: 1002;
+            position: fixed; /* Always fixed to the viewport */
+            z-index: 1002; /* High z-index to appear over everything */
             background-color: #1f2937;
             color: #d1d5db;
             padding: 10px 12px;
@@ -66,6 +67,7 @@
             border-color: #1f2937 transparent transparent transparent;
         }
 
+        /* Style for the off-screen pointer */
         #offscreen-pointer {
             position: fixed;
             width: 0;
@@ -93,10 +95,12 @@
     <div id="ball-container">
         <div id="interactive-ball"></div>
     </div>
+    <!-- Bubble and Pointer are now outside the container for independent layering -->
     <div id="ball-bubble"></div>
     <div id="offscreen-pointer"></div>
 
     <header id="header" class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-md">
+        <!-- Header content remains the same -->
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
@@ -137,13 +141,14 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Home, About, Projects sections remain the same -->
         <section id="home" class="min-h-screen flex items-center justify-center text-center">
             <div class="space-y-6">
                 <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">
                     <span class="block">Welcome to My Portfolio</span>
                 </h1>
                 <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
-                    I use data and AI to create technology-driven business solutions.
+                    I'm John and I use data and AI to create technology-driven business solutions.
                 </p>
                 <div>
                     <a href="#contact" class="inline-block bg-cyan-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">
@@ -893,3 +898,4 @@
 
 </body>
 </html>
+what did you chan
