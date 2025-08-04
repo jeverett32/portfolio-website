@@ -42,7 +42,7 @@
             font-size: 14px;
             max-width: 250px;
             max-height: 200px;
-            overflow-y: hidden; /* Scrollbar is now handled by JS */
+            overflow-y: auto; /* Enable scrollbar only when needed */
             text-align: center;
             white-space: normal;
             opacity: 0;
@@ -575,8 +575,9 @@
                 ballBubble.textContent = text;
                 ballBubble.classList.add('visible');
                 
+                // Check for overflow and add scrollbar if needed
                 setTimeout(() => {
-                    if (ballBubble.scrollHeight > 200) {
+                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
                         ballBubble.style.overflowY = 'auto';
                     } else {
                         ballBubble.style.overflowY = 'hidden';
@@ -702,8 +703,10 @@
                     const currentTime = Date.now();
 
                     if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
-                        if (ballState === 'speaking') {
-                           ballBubble.classList.remove('visible');
+                        const wasSpeaking = ballState === 'speaking';
+                        if (wasSpeaking) {
+                            // Keep the current message visible for 5 more seconds
+                            showBubbleMessage(ballBubble.textContent, 5000);
                         }
                         ballState = 'roaming';
                         lastHitTime = currentTime;
@@ -774,7 +777,6 @@
                     
                     // New logic to keep bubble on screen
                     const bubbleWidth = ballBubble.offsetWidth;
-                    const bubbleHeight = ballBubble.offsetHeight;
                     let translateX = -bubbleWidth / 2;
                     let translateY = -100; // Percentage
 
