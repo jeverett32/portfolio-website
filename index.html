@@ -44,7 +44,6 @@
             max-width: 250px;
             max-height: 240px; 
             box-sizing: border-box;
-            /* SCROLLBAR FIX: Default to hidden. JS will manage visibility. */
             overflow-y: hidden;
             text-align: center;
             white-space: normal;
@@ -149,7 +148,7 @@
                     <span class="block">Welcome to My Portfolio</span>
                 </h1>
                 <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
-                    I build technology-driven business solutions through data and AI.
+                    I am a software engineer and data analyst.
                 </p>
                 <div>
                     <a href="#contact" class="inline-block bg-cyan-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">
@@ -507,14 +506,20 @@
 
             
             async function callApiFunction(payload) {
-                console.log("Simulating API call with payload:", payload);
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-                
-                if (payload.taskType === 'match') {
-                    return `Based on the job description, my skills in ${skills.split(',').slice(0,3).join(', ')} seem like a strong match. My experience with web development and data analysis aligns well with the requirements. I'm particularly excited about the opportunity to apply my knowledge of Python and SQL to this role.`;
-                } else {
-                    return `That's a great question! Regarding "${payload.question}", my experience at BYU involved enhancing HVAC systems, which improved campus energy efficiency. I primarily used my skills in Web Development and SQL to achieve this.`;
+                const apiUrl = '/.netlify/functions/generate-message';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
                 }
+
+                const result = await response.json();
+                return result.message;
             }
 
 
