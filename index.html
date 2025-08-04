@@ -149,7 +149,7 @@
                     <span class="block">Welcome to My Portfolio</span>
                 </h1>
                 <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
-                    I am a software engineer and data analyst.
+                    I build technology-driven business solutions through data and AI.
                 </p>
                 <div>
                     <a href="#contact" class="inline-block bg-cyan-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">
@@ -579,7 +579,7 @@
                 // It resets the state first, then checks for overflow after the content is rendered.
                 ballBubble.style.overflowY = 'hidden';
                 setTimeout(() => {
-                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
+                    if (ballBubble.scrollHeight > ballBubble.clientHeight + 10) {
                         ballBubble.style.overflowY = 'auto';
                     }
                 }, 10);
