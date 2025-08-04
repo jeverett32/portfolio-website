@@ -575,7 +575,7 @@
                 
                 // Defer check to allow rendering
                 setTimeout(() => {
-                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
+                    if (ballBubble.scrollHeight > ballBubble.clientHeight + 10) {
                         ballBubble.style.overflowY = 'auto';
                     } else {
                         ballBubble.style.overflowY = 'hidden';
