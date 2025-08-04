@@ -1,120 +1,908 @@
-// File location: netlify/functions/generate-message.js
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John Everett | Portfolio</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .nav-active { background-color: #06b6d4; color: white; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s; opacity: 0; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Styles for the interactive ball and its components */
+        #ball-container {
+            position: absolute;
+            z-index: 5; /* Lower z-index to go behind content */
+            pointer-events: none;
+            will-change: transform;
+        }
+        #interactive-ball {
+            width: 30px;
+            height: 30px;
+            background-color: #06b6d4;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.7);
+        }
+        #ball-bubble {
+            position: fixed; /* Always fixed to the viewport */
+            z-index: 1002; /* High z-index to appear over everything */
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 250px;
+            max-height: 200px;
+            overflow-y: hidden; /* Default to hidden; JS will manage this. */
+            text-align: center;
+            white-space: normal;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.2s ease-out;
+            visibility: hidden;
+            pointer-events: auto; /* Allow interaction with the bubble for scrolling */
+        }
+        #ball-bubble.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #ball-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1f2937 transparent transparent transparent;
+        }
+
+        /* Style for the off-screen pointer */
+        #offscreen-pointer {
+            position: fixed;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 16px solid #06b6d4;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1002; /* High z-index */
+            pointer-events: none;
+        }
+        
+        .translucent-panel {
+            background-color: rgba(31, 41, 55, 0.95);
+        }
+        .translucent-image {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans antialiased relative">
+
+    <div id="cursor-glow"></div>
+    <div id="ball-container">
+        <div id="interactive-ball"></div>
+    </div>
+    <!-- Bubble and Pointer are now outside the container for independent layering -->
+    <div id="ball-bubble"></div>
+    <div id="offscreen-pointer"></div>
+
+    <header id="header" class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-md">
+        <!-- Header content remains the same -->
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="https://linkedin.com/in/johneverett32/" target = _blank>
+                        <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.src='https://placehold.co/40x40/111827/7dd3fc?text=JE'">
+                    </a>
+                    <span class="text-2xl font-bold text-cyan-400">John Everett</span>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>Home</span></a>
+                        <a href="#about" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>About</span></a>
+                        <a href="#projects" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>Projects</span></a>
+                        <a href="#contact" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>Contact</span></a>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg id="hamburger-icon" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                        <svg id="close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Home</a>
+                <a href="#about" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">About</a>
+                <a href="#projects" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Projects</a>
+                <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Home, About, Projects sections remain the same -->
+        <section id="home" class="min-h-screen flex items-center justify-center text-center">
+            <div class="space-y-6">
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">
+                    <span class="block">Welcome to My Portfolio</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
+                    I build efficient, user-focused solutions and analyze data to drive insights. Let's create something impactful together.
+                </p>
+                <div>
+                    <a href="#contact" class="inline-block bg-cyan-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">
+                        Get In Touch
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 sm:py-32">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+                <div class="lg:col-span-2">
+                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
+                </div>
+                <div class="lg:col-span-3 space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400">About Me</h2>
+                    <div id="about-me-content">
+                        <p class="text-lg text-gray-300">
+                            I am an Information Systems student at BYU's Marriott School of Business with a passion for software, data, and AI. My experience ranges from enhancing campus energy efficiency through software to refining predictive models with Python and R.
+                        </p>
+                        <p class="text-lg text-gray-300">
+                            I thrive in fast-paced environments, quickly learning new technologies to build flexible and user-friendly applications. When I'm not coding or analyzing data, I enjoy volleyball, hiking, and messing around with AI.
+                        </p>
+                    </div>
+                    <div class="space-y-6 pt-4">
+                        <h3 class="text-2xl font-bold text-cyan-400">My Skills</h3>
+                        <div id="skills-list" class="flex flex-wrap gap-3">
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Python</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">GCL+</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">SQL</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">VBA</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">R</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">SAS</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">pandas</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Excel</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Tableau</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Power BI</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Figma</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Tridium Niagara 4</span>
+                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">enteliWEB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-20 sm:py-32">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center text-cyan-400 mb-12">My Projects & Experience</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer">
+                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'">
+                    </a>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-white">Trash Bin Cleaning Service Website</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Developed a fully functional e-commerce site for a local service, featuring online scheduling and secure payment processing via the Square API, all connected to a Firebase backend.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Web Development</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Firebase</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Square API</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">JavaScript</span>
+                        </div>
+                        <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">View Live Site →</a>
+                    </div>
+                </div>
+
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-white">BYU HVAC Systems Enhancement</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Web Development</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">UI/UX</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">SQL</span>
+                        </div>
+                        <button data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
+                    </div>
+                </div>
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-white">Stride Scheduling UX & Growth</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">UX Testing</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">CRM</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Figma</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">AI</span>
+                        </div>
+                        <button data-video-src="https://www.youtube.com/embed/L_LUpnjgPso" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
+                    </div>
+                </div>
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-white">Behavioral Trend Analysis</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Data Analysis</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Python</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">R</span>
+                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Predictive Modeling</span>
+                        </div>
+                        <button data-video-src="https://www.youtube.com/embed/3h0_v2cdH1s" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 sm:py-32">
+            <div class="text-center">
+                <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 mb-4">Contact & AI Assistant</h2>
+                <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Use my AI assistant to see how my skills fit your needs or to ask questions about my experience. Or, feel free to send me a message directly.
+                </p>
+            </div>
+            
+            <div class="max-w-xl mx-auto space-y-12">
+                <!-- AI Assistant Section -->
+                <div id="ai-assistant-panel" class="bg-gray-800/50 p-6 rounded-lg border border-gray-700 space-y-6">
+                    
+                    <!-- Skills Match Feature -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">1. AI-Powered Skills Match</h3>
+                        <label for="job-description-text" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description</label>
+                        <textarea id="job-description-text" rows="5" placeholder="Paste the full job description here..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
+                        <div class="flex items-center justify-center my-4">
+                            <span class="flex-grow bg-gray-700 h-px"></span>
+                            <span class="mx-4 text-gray-400 text-sm">OR</span>
+                            <span class="flex-grow bg-gray-700 h-px"></span>
+                        </div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Upload Job Description File</label>
+                        <div class="flex items-center gap-4">
+                            <label for="job-description-file" class="cursor-pointer bg-gray-700 text-white font-medium px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
+                                Select a file
+                            </label>
+                            <input type="file" id="job-description-file" class="hidden" accept=".txt,.md,.pdf">
+                            <p id="file-name-display" class="text-sm text-gray-400 truncate">No file chosen</p>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="button" id="generate-summary-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                                ✨ Generate Summary
+                                <div id="summary-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Q&A Feature -->
+                    <div class="border-t border-gray-700 pt-6">
+                        <h3 class="text-xl font-bold text-white mb-4">2. Ask a Question About Me</h3>
+                        <label for="qa-question" class="block text-sm font-medium text-gray-300 mb-2">Your Question</label>
+                        <input type="text" id="qa-question" placeholder="e.g., 'What was your role at BYU?'" class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
+                        <div class="text-center mt-4">
+                            <button type="button" id="ask-question-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                                💬 Ask Question
+                                <div id="qa-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shared AI Response Area -->
+                    <div id="ai-error" class="text-red-400 text-center text-sm"></div>
+                </div>
+
+                <!-- Contact Form Section -->
+                <div class="pt-8">
+                     <h3 class="text-xl font-bold text-white mb-4 text-center">Or, Send a Direct Message</h3>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="sr-only">Name</label>
+                            <input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="email" name="email" id="email" placeholder="Your Email" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
+                        </div>
+                        <div>
+                            <label for="message" class="sr-only">Message</label>
+                            <textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" id="send-message-btn" class="bg-cyan-500 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">Send Message</button>
+                        </div>
+                    </form>
+                    <div id="form-status" class="mt-6 text-center"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 border-t border-gray-800 relative z-10">
+        <!-- Footer content remains the same -->
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                </a>
+                <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                <a href="mailto:john.everett32@gmail.com" class="text-gray-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </a>
+            </div>
+            <p class="text-gray-500">© 2025 John Everett. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="video-modal" class="hidden fixed inset-0 z-50 items-center justify-center">
+        <!-- Video modal content remains the same -->
+        <div id="video-modal-overlay" class="absolute inset-0 bg-black bg-opacity-75"></div>
+        <div id="video-modal-content" class="relative bg-gray-900 rounded-lg shadow-xl w-11/12 max-w-4xl p-4">
+             <button id="video-modal-close" class="absolute z-10 -top-3 -right-3 h-10 w-10 bg-white rounded-full text-gray-800 flex items-center justify-center text-2xl font-bold">×</button>
+            <div class="video-container">
+                <iframe id="video-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PDF.js library for reading PDF files in the browser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script>
+        // Required for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js`;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- FormSpree AJAX submission ---
+            const form = document.getElementById('contact-form');
+            const status = document.getElementById('form-status');
+            
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+                const data = new FormData(event.target);
+                const formspreeAction = "https://formspree.io/f/mldljzql";
+
+                try {
+                    const response = await fetch(formspreeAction, {
+                        method: 'POST',
+                        body: data,
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (response.ok) {
+                        status.innerHTML = "Thanks for your submission!";
+                        status.classList.add('text-green-400');
+                        status.classList.remove('text-red-400');
+                        form.reset();
+                    } else {
+                        const responseData = await response.json();
+                        status.innerHTML = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Oops! There was a problem.";
+                        status.classList.add('text-red-400');
+                        status.classList.remove('text-green-400');
+                    }
+                } catch (error) {
+                    status.innerHTML = "Oops! There was a problem submitting your form.";
+                    status.classList.add('text-red-400');
+                    status.classList.remove('text-green-400');
+                }
+            });
+
+            // --- Gemini AI Logic ---
+            const generateSummaryBtn = document.getElementById('generate-summary-btn');
+            const askQuestionBtn = document.getElementById('ask-question-btn');
+            
+            const jobDescTextarea = document.getElementById('job-description-text');
+            const jobDescFile = document.getElementById('job-description-file');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const qaQuestionInput = document.getElementById('qa-question');
+            
+            const summaryLoader = document.getElementById('summary-loader');
+            const qaLoader = document.getElementById('qa-loader');
+            const aiError = document.getElementById('ai-error');
+            
+            const aboutMeContent = document.getElementById('about-me-content').textContent.trim();
+            const skillsContainer = document.getElementById('skills-list');
+            const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
 
 
-const fs = require('fs');
-const path = require('path');
-// Add the pdf-parse library to read your PDF resume
-const pdf = require('pdf-parse');
+            jobDescFile.addEventListener('change', () => {
+                if (jobDescFile.files.length > 0) {
+                    fileNameDisplay.textContent = `${jobDescFile.files[0].name}`;
+                } else {
+                    fileNameDisplay.textContent = 'No file chosen';
+                }
+            });
 
-exports.handler = async function (event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
+            generateSummaryBtn.addEventListener('click', async () => {
+                let jobDescription = jobDescTextarea.value.trim();
+                const file = jobDescFile.files[0];
 
-  try {
-    // Read the static resume PDF file from the repository.
-    const resumePath = path.resolve(__dirname, 'resume.pdf');
-    const dataBuffer = fs.readFileSync(resumePath);
-    const pdfData = await pdf(dataBuffer);
-    const resumeText = pdfData.text;
+                if (file) {
+                    try {
+                        jobDescription = await readFileContent(file);
+                    } catch (error) {
+                        aiError.textContent = `Error reading file: ${error.message}`;
+                        return;
+                    }
+                }
+
+                if (!jobDescription) {
+                    aiError.textContent = 'Please paste or upload a job description first.';
+                    return;
+                }
+
+                summaryLoader.classList.remove('hidden');
+                generateSummaryBtn.disabled = true;
+                aiError.textContent = '';
+
+                try {
+                    const payload = { 
+                        taskType: 'match', 
+                        jobDescription: jobDescription,
+                        bio: aboutMeContent,
+                        skills: skills
+                    };
+                    const generatedSummary = await callApiFunction(payload);
+                    summonBallAndShowMessage(generatedSummary, generateSummaryBtn);
+                } catch (error) {
+                    console.error("Error calling backend function:", error);
+                    aiError.textContent = `Failed to generate summary: ${error.message}`;
+                } finally {
+                    summaryLoader.classList.add('hidden');
+                    generateSummaryBtn.disabled = false;
+                }
+            });
+
+            askQuestionBtn.addEventListener('click', async () => {
+                const question = qaQuestionInput.value.trim();
+                if (!question) {
+                    aiError.textContent = 'Please enter a question first.';
+                    return;
+                }
+                
+                qaLoader.classList.remove('hidden');
+                askQuestionBtn.disabled = true;
+                aiError.textContent = '';
+
+                try {
+                    const payload = { 
+                        taskType: 'qa', 
+                        question: question,
+                        bio: aboutMeContent,
+                        skills: skills
+                    };
+                    const answer = await callApiFunction(payload);
+                    summonBallAndShowMessage(answer, askQuestionBtn);
+                } catch (error) {
+                    console.error("Error calling backend function:", error);
+                    aiError.textContent = `Failed to get answer: ${error.message}`;
+                } finally {
+                    qaLoader.classList.add('hidden');
+                    askQuestionBtn.disabled = false;
+                }
+            });
+
+            /**
+             * BACKEND FIX: This function no longer uses a mock response.
+             * It now makes a real 'fetch' request to your Netlify serverless function,
+             * sending the payload and handling the response or any errors.
+             */
+            async function callApiFunction(payload) {
+                const apiUrl = '/.netlify/functions/generate-message';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result.message;
+            }
+
+            function readFileContent(file) {
+                return new Promise((resolve, reject) => {
+                    if (file.type === 'application/pdf') {
+                        const reader = new FileReader();
+                        reader.onload = async (event) => {
+                            try {
+                                const pdf = await pdfjsLib.getDocument(event.target.result).promise;
+                                let text = '';
+                                for (let i = 1; i <= pdf.numPages; i++) {
+                                    const page = await pdf.getPage(i);
+                                    const content = await page.getTextContent();
+                                    text += content.items.map(item => item.str).join(' ');
+                                }
+                                resolve(text);
+                            } catch (error) {
+                                reject(new Error('Could not parse PDF file.'));
+                            }
+                        };
+                        reader.onerror = () => reject(new Error('Failed to read file.'));
+                        reader.readAsArrayBuffer(file);
+                    } else {
+                        const reader = new FileReader();
+                        reader.onload = (event) => resolve(event.target.result);
+                        reader.onerror = () => reject(new Error('Failed to read file.'));
+                        reader.readAsText(file);
+                    }
+                });
+            }
+
+            // --- Interactive Ball Logic ---
+            const ballContainer = document.getElementById('ball-container');
+            const ballBubble = document.getElementById('ball-bubble');
+            const offscreenPointer = document.getElementById('offscreen-pointer');
+            const ballSize = 30;
+            let x, y, vx, vy;
+            let mouseX = -200;
+            let mouseY = -200;
+            let lastHitTime = 0;
+            const cooldown = 500;
+            let messageTimer;
+            let guideMessageTimeout;
+
+            let ballState = 'roaming'; // States: roaming, summoned, speaking
+            let targetX, targetY;
+            let lastSummonSide = 'right'; 
+            const isMobile = 'ontouchstart' in window;
+
+            const guideMessages = [
+                "Curious about my work? Head over to the Projects section!",
+                "Want to know more about me? The About section has the details!",
+                "Have a question? Ask my AI assistant in the Contact section!",
+            ];
+
+            function showBubbleMessage(text, duration = 5000) {
+                ballBubble.textContent = text;
+                ballBubble.style.overflowY = 'hidden';
+                ballBubble.classList.add('visible');
+
+                setTimeout(() => {
+                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
+                        ballBubble.style.overflowY = 'auto';
+                    }
+                }, 10);
+
+                clearTimeout(messageTimer);
+                if (duration > 0) {
+                    messageTimer = setTimeout(() => {
+                        ballBubble.classList.remove('visible');
+                    }, duration);
+                }
+            }
+
+            function summonBallAndShowMessage(message, buttonElement) {
+                const aiPanel = document.getElementById('ai-assistant-panel');
+                const panelRect = aiPanel.getBoundingClientRect();
+
+                if (isMobile) {
+                    const btnRect = buttonElement.getBoundingClientRect();
+                    targetX = (btnRect.left > window.innerWidth / 2) 
+                        ? btnRect.left - ballSize - 20 // Go left of button
+                        : btnRect.right + 20; // Go right of button
+                    targetY = btnRect.top + window.scrollY;
+                } else {
+                    const targetRightX = panelRect.right + window.scrollX + 40;
+                    const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
+                    const targetYPos = (window.innerHeight / 2) - (ballSize / 2) + window.scrollY;
+
+                    const distToRight = Math.sqrt(Math.pow(mouseX - targetRightX, 2) + Math.pow(mouseY - targetYPos, 2));
+                    const distToLeft = Math.sqrt(Math.pow(mouseX - targetLeftX, 2) + Math.pow(mouseY - targetYPos, 2));
+
+                    if (lastSummonSide === 'right') {
+                        if (distToLeft < 100) {
+                            targetX = targetRightX;
+                            lastSummonSide = 'right';
+                        } else {
+                            targetX = targetLeftX;
+                            lastSummonSide = 'left';
+                        }
+                    } else {
+                        if (distToRight < 100) {
+                            targetX = targetLeftX;
+                            lastSummonSide = 'left';
+                        } else {
+                            targetX = targetRightX;
+                            lastSummonSide = 'right';
+                        }
+                    }
+                    targetY = targetYPos;
+                }
+
+                ballState = 'summoned';
+                clearTimeout(guideMessageTimeout);
+                clearTimeout(messageTimer);
+                ballBubble.classList.remove('visible');
+
+                const arrivalCheck = setInterval(() => {
+                    const dx = x - targetX;
+                    const dy = y - targetY;
+                    if (Math.sqrt(dx * dx + dy * dy) < 5) {
+                        clearInterval(arrivalCheck);
+                        ballState = 'speaking';
+                        vx = 0;
+                        vy = 0;
+                        showBubbleMessage(message, 0); // Show message indefinitely until hit
+                    }
+                }, 100);
+            }
+            
+            function scheduleNextGuideMessage() {
+                clearTimeout(guideMessageTimeout);
+                guideMessageTimeout = setTimeout(() => {
+                    if (ballState === 'roaming') {
+                        const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
+                        showBubbleMessage(randomMsg, 8000); // Show guide message for 8 seconds
+                        // Schedule the next one after this one disappears
+                        setTimeout(scheduleNextGuideMessage, 23000); // 8s display + 15s wait
+                    }
+                }, 15000); // 15 seconds initial wait
+            }
+
+            function initializeBall() {
+                const homeSection = document.getElementById('home');
+                const rect = homeSection.getBoundingClientRect();
+                x = rect.left + window.scrollX + (rect.width / 4);
+                y = rect.top + window.scrollY + (rect.height / 4);
+                vx = (Math.random() - 0.5) * 4;
+                vy = (Math.random() - 0.5) * 4;
+                
+                const initialMessage = `Welcome! You can hit me with your ${isMobile ? 'finger' : 'cursor'}. You can also ask me questions in the AI section below!`;
+                showBubbleMessage(initialMessage, 10000);
+
+                scheduleNextGuideMessage();
+            }
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.pageX;
+                mouseY = e.pageY;
+            });
+            
+            let touchX = -1000;
+            let touchY = -1000;
+            const resetTouch = () => {
+                touchX = -1000;
+                touchY = -1000;
+            };
+            document.addEventListener('touchstart', (e) => {
+                touchX = e.touches[0].pageX;
+                touchY = e.touches[0].pageY;
+            });
+            document.addEventListener('touchmove', (e) => {
+                touchX = e.touches[0].pageX;
+                touchY = e.touches[0].pageY;
+            });
+            // MOBILE GLITCH FIX: Reset touch coordinates on both 'touchend' and 'touchcancel'
+            document.addEventListener('touchend', resetTouch);
+            document.addEventListener('touchcancel', resetTouch);
+
+            function animateBall() {
+                const pageW = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
+                const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                
+                if (ballState === 'roaming' || ballState === 'speaking') {
+                    x += vx;
+                    y += vy;
+
+                    if (x + ballSize > pageW || x < 0) vx *= -1;
+                    if (y + ballSize > pageH || y < 0) vy *= -1;
+
+                    const interactionX = isMobile ? touchX : mouseX;
+                    const interactionY = isMobile ? touchY : mouseY;
+
+                    const dx = x - interactionX + (ballSize / 2);
+                    const dy = y - interactionY + (ballSize / 2);
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const currentTime = Date.now();
+
+                    if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
+                        const wasSpeaking = ballState === 'speaking';
+                        
+                        // Always hide bubble and go to roaming on hit
+                        ballBubble.classList.remove('visible');
+                        clearTimeout(messageTimer);
+                        ballState = 'roaming';
+                        
+                        // Apply bounce physics
+                        lastHitTime = currentTime;
+                        const angle = Math.atan2(dy, dx);
+                        vx = Math.cos(angle) * 6;
+                        vy = Math.sin(angle) * 6;
+                        
+                        // TEXT GLITCH FIX: Always clear the guide message timer on hit.
+                        // A new one will be scheduled automatically by the main timer loop.
+                        clearTimeout(guideMessageTimeout);
+                        scheduleNextGuideMessage();
+                    }
+                    
+                    if (ballState === 'roaming') {
+                        vx *= 0.995; // friction
+                        vy *= 0.995;
+                    }
+
+                } else if (ballState === 'summoned') {
+                    const dx = targetX - x;
+                    const dy = targetY - y;
+                    const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
+                    const speed = Math.min(0.1, distanceToTarget / 100);
+                    vx = dx * speed;
+                    vy = dy * speed;
+                    x += vx;
+                    y += vy;
+                }
+
+                ballContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                
+                // Off-screen pointer logic
+                const viewTop = window.scrollY;
+                const viewBottom = viewTop + window.innerHeight;
+                const viewLeft = window.scrollX;
+                const viewRight = viewLeft + window.innerWidth;
+
+                const isOffScreen = y < viewTop || y > viewBottom - ballSize || x < viewLeft || x > viewRight - ballSize;
+
+                if (isOffScreen) {
+                    offscreenPointer.style.opacity = '1';
+
+                    const margin = 25;
+                    let pointerX = Math.max(margin, Math.min(x - viewLeft, window.innerWidth - margin));
+                    let pointerY = Math.max(margin, Math.min(y - viewTop, window.innerHeight - margin));
+
+                    offscreenPointer.style.left = `${pointerX}px`;
+                    offscreenPointer.style.top = `${pointerY}px`;
+                    
+                    const angle = Math.atan2((y - viewTop) - pointerY, (x - viewLeft) - pointerX);
+                    offscreenPointer.style.transform = `translate(-50%, -50%) rotate(${angle + Math.PI / 2}rad)`;
+
+                    // Position bubble relative to pointer
+                    ballBubble.style.left = `${pointerX}px`;
+                    ballBubble.style.top = `${pointerY}px`;
+                    
+                    if (pointerY < 60) {
+                        ballBubble.style.transform = 'translateX(-50%) translateY(30px)';
+                    } else if (pointerY > window.innerHeight - 60) {
+                         ballBubble.style.transform = 'translateX(-50%) translateY(-100%) translateY(-30px)';
+                    } else if (pointerX < 60) {
+                         ballBubble.style.transform = 'translateX(-10px) translateY(-50%)';
+                    } else {
+                         ballBubble.style.transform = 'translateX(-100%) translateY(-50%) translateX(10px)';
+                    }
+
+                } else {
+                    offscreenPointer.style.opacity = '0';
+                    // Position bubble relative to ball container (on-screen)
+                    const ballScreenX = x - viewLeft;
+                    const ballScreenY = y - viewTop;
+                    ballBubble.style.left = `${ballScreenX + (ballSize / 2)}px`;
+                    ballBubble.style.top = `${ballScreenY - 10}px`;
+                    
+                    // New logic to keep bubble on screen
+                    const bubbleWidth = ballBubble.offsetWidth;
+                    let translateX = -bubbleWidth / 2;
+                    let translateY = -100; // Percentage
+
+                    const bubbleLeftEdge = ballScreenX + (ballSize / 2) - (bubbleWidth / 2);
+                    const bubbleRightEdge = ballScreenX + (ballSize / 2) + (bubbleWidth / 2);
+
+                    if (bubbleRightEdge > window.innerWidth) {
+                        translateX = -bubbleWidth + (window.innerWidth - ballScreenX) - (ballSize / 2) - 10; // 10px margin
+                    }
+                    if (bubbleLeftEdge < 0) {
+                        translateX = -(ballScreenX + (ballSize / 2)) + 10;
+                    }
+                    
+                    ballBubble.style.transform = `translateX(${translateX}px) translateY(${translateY}%)`;
+                }
+
+                requestAnimationFrame(animateBall);
+            }
+            
+            initializeBall();
+            animateBall();
 
 
-    // Get all the data sent from the website.
-    const { taskType, jobDescription, question, bio, skills } = JSON.parse(event.body);
+            // --- All other scripts (Glow, Menu, Modal, etc.) ---
+            const glow = document.getElementById('cursor-glow');
+            if (glow && !isMobile) { // Disable glow on touch devices
+                document.body.addEventListener('mousemove', e => {
+                    glow.style.opacity = '1';
+                    glow.style.left = `${e.clientX}px`;
+                    glow.style.top = `${e.clientY}px`;
+                });
+            }
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error('GEMINI_API_KEY not found in environment variables.');
-    }
+            function toggleMenu() {
+                mobileMenu.classList.toggle('hidden');
+                hamburgerIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+            }
 
-    // Combine all of John's info into one knowledge base.
-    const fullContext = `
-      My Resume:
-      ---
-      ${resumeText}
-      ---
-      My Bio from my website:
-      ---
-      ${bio}
-      ---
-      My skills from my website:
-      ---
-      ${skills}
-      ---
-    `;
+            mobileMenuButton.addEventListener('click', toggleMenu);
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMenu();
+                    }
+                });
+            });
 
-    let finalPrompt;
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const headerHeight = document.getElementById('header').offsetHeight;
+            const observerOptions = { root: null, rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0.4 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => link.classList.remove('nav-active'));
+                        const id = entry.target.getAttribute('id');
+                        const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('nav-active');
+                        }
+                    }
+                });
+            }, observerOptions);
+            sections.forEach(section => observer.observe(section));
 
-    if (taskType === 'match') {
-      // Prompt for the Skills Match task, now with the full context.
-      finalPrompt = `
-        You are an AI assistant for John Everett's portfolio. Your task is to act as John and explain why he is a good fit for a job.
-        Your knowledge is strictly limited to the content of his resume and the provided bio and skills. Do not invent any information.
-        Based on this complete context about me and the provided job description, write a brief, first-person summary (2-4 sentences) explaining why my skills and background make me a great fit for this specific role.
+            const videoModal = document.getElementById('video-modal');
+            const videoModalOverlay = document.getElementById('video-modal-overlay');
+            const videoIframe = document.getElementById('video-iframe');
+            const videoModalClose = document.getElementById('video-modal-close');
+            const videoTriggers = document.querySelectorAll('.video-modal-trigger');
 
-        My Complete Professional Context:
-        ---
-        ${fullContext}
-        ---
+            function openModal(videoSrc) {
+                videoIframe.src = videoSrc;
+                videoModal.classList.remove('hidden');
+                videoModal.classList.add('flex');
+            }
 
-        Job Description to Match Against:
-        ---
-        ${jobDescription}
-        ---
-      `;
-    } else if (taskType === 'qa') {
-      // Prompt for the Q&A task, now with the full context.
-      finalPrompt = `
-        You are an AI assistant for John Everett's portfolio. Your task is to answer questions about John based ONLY on the information in his resume, bio, and skills list.
-        Your knowledge is strictly limited to this provided context.
-        If the answer is in the context, answer it concisely from a first-person perspective (e.g., "I worked on...").
-        If the answer cannot be found in the context, you MUST respond with: "I don't have that specific information in my resume or portfolio, but I'd be happy to discuss it further."
-        You are allowed to make inferences to answer questions, but try as hard as you can not to invent information. For example, if someone asks where I am from, you can say Provo, because I go to school at BYU. Or if someone asks when I will graduate, you can make an inference based on my education in my resume
+            function closeModal() {
+                videoIframe.src = ""; // Stop the video
+                videoModal.classList.add('hidden');
+                videoModal.classList.remove('flex');
+            }
 
-        My Complete Professional Context:
-        ---
-        ${fullContext}
-        ---
+            videoTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const videoSrc = trigger.getAttribute('data-video-src');
+                    openModal(videoSrc);
+                });
+            });
 
-        Question to Answer:
-        ---
-        ${question}
-        ---
-      `;
-    } else {
-      throw new Error('Invalid task type specified.');
-    }
+            videoModalClose.addEventListener('click', closeModal);
+            videoModalOverlay.addEventListener('click', closeModal);
+        });
+    </script>
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-    const payload = {
-      contents: [{ role: 'user', parts: [{ text: finalPrompt }] }],
-    };
-
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error('Gemini API Error:', errorBody);
-      throw new Error(`Gemini API request failed with status ${response.status}`);
-    }
-
-    const result = await response.json();
-    const text = result.candidates[0].content.parts[0].text;
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: text }),
-    };
-
-  } catch (error) {
-    console.error('Error in Netlify function:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
-  }
-};
+</body>
+</html>
