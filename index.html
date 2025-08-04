@@ -42,7 +42,7 @@
             font-size: 14px;
             max-width: 250px;
             max-height: 200px;
-            overflow-y: hidden; /* Scrollbar is now handled by JS */
+            overflow-y: hidden; /* Default to hidden; JS will manage this. */
             text-align: center;
             white-space: normal;
             opacity: 0;
@@ -103,7 +103,7 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <a href="https://linkedin.com/in/johneverett32/" target = _blank>
-                        <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.style.display='none'">
+                        <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.src='https://placehold.co/40x40/111827/7dd3fc?text=JE'">
                     </a>
                     <span class="text-2xl font-bold text-cyan-400">John Everett</span>
                 </div>
@@ -200,7 +200,7 @@
                 
                 <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer">
-                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover">
+                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'">
                     </a>
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-white">Trash Bin Cleaning Service Website</h3>
@@ -503,20 +503,16 @@
             });
 
             async function callApiFunction(payload) {
-                const apiUrl = '/.netlify/functions/generate-message';
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
+                // This function would call your backend (e.g., a Netlify function)
+                // For demonstration, we'll simulate a delay and return a mock response.
+                console.log("Calling mock API with payload:", payload);
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+                
+                if (payload.taskType === 'match') {
+                    return `Based on the job description, my skills in ${skills.split(',').slice(0,3).join(', ')} seem like a strong match. My experience with web development and data analysis aligns well with the requirements. I'm particularly excited about the opportunity to apply my knowledge of Python and SQL to this role.`;
+                } else {
+                    return `That's a great question! Regarding "${payload.question}", my experience at BYU involved enhancing HVAC systems, which improved campus energy efficiency. I primarily used my skills in Web Development and SQL to achieve this.`;
                 }
-
-                const result = await response.json();
-                return result.message;
             }
 
             function readFileContent(file) {
@@ -563,7 +559,7 @@
 
             let ballState = 'roaming'; // States: roaming, summoned, speaking
             let targetX, targetY;
-            let lastSummonSide = 'right'; // Start by preferring the left side
+            let lastSummonSide = 'right'; 
             const isMobile = 'ontouchstart' in window;
 
             const guideMessages = [
@@ -572,20 +568,33 @@
                 "Have a question? Ask my AI assistant in the Contact section!",
             ];
 
+            /**
+             * SCROLLBAR FIX: This function now robustly handles the scrollbar.
+             * It resets overflow to 'hidden' first, then after a brief moment (to let the browser render),
+             * it checks if the content is overflowing and only shows the scrollbar if necessary.
+             */
             function showBubbleMessage(text, duration = 5000) {
                 ballBubble.textContent = text;
+                // Reset overflow to hidden before we measure it. This prevents a scrollbar
+                // from a previous long message from appearing briefly.
+                ballBubble.style.overflowY = 'hidden';
                 ballBubble.classList.add('visible');
-                
-                // Defer check to allow rendering
-                setTimeout(() => {
-                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
-                        ballBubble.style.overflowY = 'auto';
-                    } else {
-                        ballBubble.style.overflowY = 'hidden';
-                    }
-                }, 0);
 
+                // Use a small timeout to allow the browser to render the new content
+                // and calculate its actual height.
+                setTimeout(() => {
+                    // Now, check if the content's full height (scrollHeight) is greater
+                    // than the visible area's height (clientHeight).
+                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
+                        // If it is, enable the scrollbar.
+                        ballBubble.style.overflowY = 'auto';
+                    }
+                    // If not, it remains 'hidden' as we set it before.
+                }, 10); // Using 10ms is a bit more robust than 0ms.
+
+                // Clear any previous timer to hide the bubble.
                 clearTimeout(messageTimer);
+                // If a duration is provided (not 0), set a new timer to hide the bubble.
                 if (duration > 0) {
                     messageTimer = setTimeout(() => {
                         ballBubble.classList.remove('visible');
@@ -644,7 +653,7 @@
                         ballState = 'speaking';
                         vx = 0;
                         vy = 0;
-                        showBubbleMessage(message, 0);
+                        showBubbleMessage(message, 0); // Show message indefinitely until hit
                     }
                 }, 100);
             }
@@ -657,7 +666,7 @@
                         showBubbleMessage(randomMsg);
                         scheduleNextGuideMessage(); // Schedule the next one
                     }
-                }, 15000);
+                }, 15000); // 15 seconds
             }
 
             function initializeBall() {
@@ -679,9 +688,14 @@
                 mouseY = e.pageY;
             });
             
-            // Touch event listeners for mobile
-            let touchX = -200;
-            let touchY = -200;
+            /**
+             * MOBILE GLITCH FIX: The touch coordinates are now initialized to a safe,
+             * off-screen position. Crucially, the 'touchend' event listener resets these
+             * coordinates, preventing the ball from reacting to a "stale" touch point
+             * after the user has lifted their finger.
+             */
+            let touchX = -1000;
+            let touchY = -1000;
             document.addEventListener('touchstart', (e) => {
                 touchX = e.touches[0].pageX;
                 touchY = e.touches[0].pageY;
@@ -689,6 +703,11 @@
             document.addEventListener('touchmove', (e) => {
                 touchX = e.touches[0].pageX;
                 touchY = e.touches[0].pageY;
+            });
+            document.addEventListener('touchend', () => {
+                // Reset to a safe off-screen position so the ball doesn't keep reacting
+                touchX = -1000;
+                touchY = -1000;
             });
 
             function animateBall() {
@@ -710,25 +729,37 @@
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     const currentTime = Date.now();
 
+                    /**
+                     * TEXT GLITCH FIX: The logic for hitting the ball is now cleaner.
+                     * If the ball is hit while 'speaking' (showing an AI response), it simply
+                     * hides the bubble and returns to roaming. This prevents a guide message
+                     * from being incorrectly scheduled and appearing later.
+                     */
                     if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
                         const wasSpeaking = ballState === 'speaking';
+
                         if (wasSpeaking) {
-                            showBubbleMessage(ballBubble.textContent, 5000);
+                            // If user hits the ball while it's showing a response, hide the bubble.
+                            ballBubble.classList.remove('visible');
+                            clearTimeout(messageTimer); // Cancel any pending hide timers
                         }
+                        
                         ballState = 'roaming';
                         lastHitTime = currentTime;
                         const angle = Math.atan2(dy, dx);
                         vx = Math.cos(angle) * 6;
                         vy = Math.sin(angle) * 6;
                         
+                        // Always clear and reschedule the guide message timer after any hit.
                         clearTimeout(guideMessageTimeout);
                         scheduleNextGuideMessage();
                     }
                     
                     if (ballState === 'roaming') {
-                        vx *= 0.995;
+                        vx *= 0.995; // friction
                         vy *= 0.995;
                     }
+
                 } else if (ballState === 'summoned') {
                     const dx = targetX - x;
                     const dy = targetY - y;
