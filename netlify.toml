@@ -2,12 +2,4 @@
 
 [functions]
   included_files = ["netlify/functions/resume.pdf"]
-```json
-// File location: /package.json (at the root of your project)
-{
-  "name": "john-everett-portfolio",
-  "version": "1.0.0",
-  "dependencies": {
-    "pdf-parse": "^1.1.1"
-  }
-}
+
