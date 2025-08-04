@@ -42,13 +42,13 @@
             font-size: 14px;
             max-width: 250px;
             max-height: 200px;
-            overflow-y: auto; /* Enable scrollbar only when needed */
+            overflow-y: hidden; /* Scrollbar is now handled by JS */
             text-align: center;
             white-space: normal;
             opacity: 0;
             transition: opacity 0.3s ease-in-out, transform 0.2s ease-out;
             visibility: hidden;
-            pointer-events: none;
+            pointer-events: auto; /* Allow interaction with the bubble for scrolling */
         }
         #ball-bubble.visible {
             opacity: 1;
@@ -559,6 +559,7 @@
             let lastHitTime = 0;
             const cooldown = 500;
             let messageTimer;
+            let guideMessageTimeout;
 
             let ballState = 'roaming'; // States: roaming, summoned, speaking
             let targetX, targetY;
@@ -575,7 +576,7 @@
                 ballBubble.textContent = text;
                 ballBubble.classList.add('visible');
                 
-                // Check for overflow and add scrollbar if needed
+                // Defer check to allow rendering
                 setTimeout(() => {
                     if (ballBubble.scrollHeight > ballBubble.clientHeight) {
                         ballBubble.style.overflowY = 'auto';
@@ -631,6 +632,7 @@
                 }
 
                 ballState = 'summoned';
+                clearTimeout(guideMessageTimeout);
                 clearTimeout(messageTimer);
                 ballBubble.classList.remove('visible');
 
@@ -646,6 +648,17 @@
                     }
                 }, 100);
             }
+            
+            function scheduleNextGuideMessage() {
+                clearTimeout(guideMessageTimeout);
+                guideMessageTimeout = setTimeout(() => {
+                    if (ballState === 'roaming') {
+                        const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
+                        showBubbleMessage(randomMsg);
+                        scheduleNextGuideMessage(); // Schedule the next one
+                    }
+                }, 15000);
+            }
 
             function initializeBall() {
                 const homeSection = document.getElementById('home');
@@ -658,12 +671,7 @@
                 const initialMessage = `Welcome! You can hit me with your ${isMobile ? 'finger' : 'cursor'}. You can also ask me questions in the AI section below!`;
                 showBubbleMessage(initialMessage, 10000);
 
-                setInterval(() => {
-                    if (ballState === 'roaming') {
-                        const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
-                        showBubbleMessage(randomMsg);
-                    }
-                }, 15000);
+                scheduleNextGuideMessage();
             }
             
             document.addEventListener('mousemove', (e) => {
@@ -705,7 +713,6 @@
                     if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
                         const wasSpeaking = ballState === 'speaking';
                         if (wasSpeaking) {
-                            // Keep the current message visible for 5 more seconds
                             showBubbleMessage(ballBubble.textContent, 5000);
                         }
                         ballState = 'roaming';
@@ -713,6 +720,9 @@
                         const angle = Math.atan2(dy, dx);
                         vx = Math.cos(angle) * 6;
                         vy = Math.sin(angle) * 6;
+                        
+                        clearTimeout(guideMessageTimeout);
+                        scheduleNextGuideMessage();
                     }
                     
                     if (ballState === 'roaming') {
