@@ -379,7 +379,7 @@
                 generateThemeBtn.disabled = true;
                 aiError.textContent = '';
                 try {
-                    const payload = { taskType: 'theme', description };
+                    const payload = { taskType: 'theme', description, bio: aboutMeContent, skills };
                     const colors = await callApiFunction(payload);
                     applyTheme(colors);
                     summonBallAndShowMessage("Theme updated! How does it look?", generateThemeBtn);
@@ -392,68 +392,31 @@
             });
 
             async function callApiFunction(payload) {
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                let prompt = '';
-                let apiPayload = {};
+                const apiUrl = '/.netlify/functions/generate-message';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-                if (payload.taskType === 'match') {
-                    prompt = `You are an expert career assistant for John Everett. Your task is to analyze the provided job description and determine how well John's skills and experience match the role.
-                    **John's Information:**\n* **About Me:** ${payload.bio}\n* **Skills:** ${payload.skills}
-                    **Job Description:**\n${payload.jobDescription}
-                    **Your Task:** Generate a concise, professional summary (2-4 sentences) highlighting the key areas where John is a strong fit for this role. Focus on direct connections between his skills/experience and the job requirements. Be positive and confident.`;
-                    apiPayload = { contents: [{ parts: [{ text: prompt }] }] };
-
-                } else if (payload.taskType === 'qa') {
-                    prompt = `You are John Everett's personal AI assistant. Answer questions based *only* on the information provided below. If the answer isn't in the provided text, politely state that you don't have that information.
-                    **John's Info:**\n* **About:** ${payload.bio}\n* **Skills:** ${payload.skills}\n* **Projects:** Details on projects involving a Trash Bin Cleaning Website (Web Dev, Firebase, Square API), BYU HVAC Systems Enhancement (Web Dev, UI/UX, SQL), Stride Scheduling UX & Growth (UX Testing, CRM, Figma, AI), and Behavioral Trend Analysis (Data Analysis, Python, R, Predictive Modeling).
-                    **User's Question:** "${payload.question}"\n**Your Answer:**`;
-                    apiPayload = { contents: [{ parts: [{ text: prompt }] }] };
-
-                } else if (payload.taskType === 'theme') {
-                    prompt = `You are a creative web designer AI. A user wants to change the color theme of their portfolio from its default dark, tech-focused aesthetic. Based on their description, generate a color palette as a JSON object. Maintain good contrast and readability.
-                    **User's description:** "${payload.description}"
-                    **Your Task:** Provide a JSON object with specific HEX color values for the keys defined in the schema.`;
-                    const schema = {
-                        type: "OBJECT",
-                        properties: {
-                            "bgColor": { "type": "STRING", "description": "A dark background color." },
-                            "headerBgColor": { "type": "STRING", "description": "Background for the sticky header, can have transparency." },
-                            "textColor": { "type": "STRING", "description": "A light, readable text color." },
-                            "textMutedColor": { "type": "STRING", "description": "A slightly dimmer text color for paragraphs." },
-                            "textMutedDarkerColor": { "type": "STRING", "description": "An even dimmer text color for things like tags." },
-                            "primaryColor": { "type": "STRING", "description": "The main accent color for headings and links." },
-                            "secondaryColor": { "type": "STRING", "description": "A button background color." },
-                            "secondaryHoverColor": { "type": "STRING", "description": "A slightly darker version of the secondaryColor for button hovers." },
-                            "panelBgColor": { "type": "STRING", "description": "Background for project cards, can have transparency." },
-                            "panelBorderColor": { "type": "STRING", "description": "Border color for panels." },
-                            "inputBgColor": { "type": "STRING", "description": "Background color for input fields." },
-                            "inputBorderColor": { "type": "STRING", "description": "Border color for input fields." },
-                            "inputFocusBorderColor": { "type": "STRING", "description": "Border color for focused input fields." },
-                            "buttonSecondaryBgColor": { "type": "STRING", "description": "Background for secondary buttons." },
-                            "buttonSecondaryHoverBgColor": { "type": "STRING", "description": "Hover background for secondary buttons." },
-                            "tagBgColor": { "type": "STRING", "description": "Background for project tags." },
-                            "tagTextColor": { "type": "STRING", "description": "Text color for project tags." },
-                            "skillBgColor": { "type": "STRING", "description": "Background for skill tags." },
-                            "skillTextColor": { "type": "STRING", "description": "Text color for skill tags." },
-                            "interactiveBallColor": { "type": "STRING", "description": "Color for the floating interactive ball." }
-                        },
-                        required: ["bgColor", "headerBgColor", "textColor", "textMutedColor", "textMutedDarkerColor", "primaryColor", "secondaryColor", "secondaryHoverColor", "panelBgColor", "panelBorderColor", "inputBgColor", "inputBorderColor", "inputFocusBorderColor", "buttonSecondaryBgColor", "buttonSecondaryHoverBgColor", "tagBgColor", "tagTextColor", "skillBgColor", "skillTextColor", "interactiveBallColor"]
-                    };
-                    apiPayload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
                 }
 
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(apiPayload) });
-                if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.error?.message || `API request failed`); }
-                
                 const result = await response.json();
-                const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!responseText) { throw new Error("Received an invalid response from the AI."); }
-
+                
                 if (payload.taskType === 'theme') {
-                    try { return JSON.parse(responseText); } catch (e) { throw new Error("AI returned invalid theme format."); }
+                    // The backend function should return a 'colors' object for the theme task
+                    if (result.colors) {
+                        return result.colors;
+                    } else {
+                        throw new Error("Backend did not return a valid color theme.");
+                    }
                 }
-                return responseText;
+                
+                // For other tasks, it returns a 'message' string
+                return result.message;
             }
 
             function applyTheme(colors) {
