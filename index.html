@@ -718,7 +718,7 @@
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     const currentTime = Date.now();
 
-                    if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
+                    if (distance < 30 && (currentTime - lastHitTime > cooldown)) {
                         const wasSpeaking = ballState === 'speaking';
                         if (wasSpeaking) {
                             showBubbleMessage(ballBubble.textContent, 5000);
