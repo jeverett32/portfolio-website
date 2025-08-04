@@ -44,7 +44,6 @@
             max-width: 250px;
             max-height: 240px; 
             box-sizing: border-box;
-            /* SCROLLBAR FIX: Default to hidden. JS will manage visibility. */
             overflow-y: hidden;
             text-align: center;
             white-space: normal;
@@ -575,6 +574,16 @@
                 ballBubble.textContent = text;
                 ballBubble.classList.add('visible');
 
+                // SCROLLBAR FIX: This logic now correctly shows the scrollbar only when needed.
+                // It resets the state first, then checks for overflow after the content is rendered.
+                ballBubble.style.overflowY = 'hidden';
+                setTimeout(() => {
+                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
+                        ballBubble.style.overflowY = 'auto';
+                    }
+                }, 10);
+
+
                 clearTimeout(messageTimer);
                 if (duration > 0) {
                     messageTimer = setTimeout(() => {
@@ -641,14 +650,15 @@
             
             function scheduleNextGuideMessage() {
                 clearTimeout(guideMessageTimeout);
+                // MESSAGE FREQUENCY FIX: Reduced the timeout values to make messages appear more often.
                 guideMessageTimeout = setTimeout(() => {
                     if (ballState === 'roaming') {
                         const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
-                        showBubbleMessage(randomMsg, 8000); // Show guide message for 8 seconds
+                        showBubbleMessage(randomMsg, 7000); // Show guide message for 7 seconds
                         // Schedule the next one after this one disappears
-                        setTimeout(scheduleNextGuideMessage, 23000); // 8s display + 15s wait
+                        setTimeout(scheduleNextGuideMessage, 15000); // 7s display + 8s wait
                     }
-                }, 15000); // 15 seconds initial wait
+                }, 10000); // 10 seconds initial wait
             }
 
             function initializeBall() {
@@ -717,8 +727,6 @@
                         const wasSpeaking = ballState === 'speaking';
                         
                         if (wasSpeaking) {
-                            // AI RESPONSE PERSISTENCE FIX: Instead of hiding the bubble immediately,
-                            // this call re-shows the same message but with a 5-second timer.
                             showBubbleMessage(ballBubble.textContent, 5000);
                         }
                         
