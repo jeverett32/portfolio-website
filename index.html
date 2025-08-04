@@ -37,7 +37,6 @@
             z-index: 1002; /* High z-index to appear over everything */
             background-color: #1f2937;
             color: #d1d5db;
-            /* SCROLLBAR FIX: Increased vertical padding slightly to give text more room */
             padding: 10px 12px;
             border-radius: 8px;
             font-size: 14px;
@@ -45,7 +44,8 @@
             max-width: 250px;
             max-height: 240px; 
             box-sizing: border-box;
-            overflow-y: auto;
+            /* SCROLLBAR FIX: Default to hidden. JS will manage visibility. */
+            overflow-y: hidden;
             text-align: center;
             white-space: normal;
             opacity: 0;
@@ -506,14 +506,6 @@
             });
 
             
-            /**
-             * API CONNECTION FIX: Reverted to a simulated API call as requested.
-             * This function now mimics a real API by waiting for 1.5 seconds
-             * and then returning a pre-written response. This ensures the UI
-             * appears to be working without relying on a live backend connection.
-             * To connect to your real Netlify function, replace the contents
-             * of this function with the 'fetch' call from the previous version.
-             */
             async function callApiFunction(payload) {
                 console.log("Simulating API call with payload:", payload);
                 await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
@@ -708,10 +700,6 @@
                         vx *= -1;
                     }
                     
-                    // MOBILE STICKING FIX: Reverted to a simple top/bottom boundary check.
-                    // The ball will now bounce off the absolute top (y=0) and bottom of the page.
-                    // Since the header has a z-index of 50 and the ball has a z-index of 5,
-                    // the ball will correctly appear to travel *behind* the sticky header.
                     if (y + ballSize > pageH || y < 0) {
                         vy *= -1;
                     }
@@ -728,11 +716,10 @@
                     if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
                         const wasSpeaking = ballState === 'speaking';
                         
-                        // MESSAGE DISMISSAL FIX: Only hide the bubble if it was an AI response ('speaking').
-                        // Guide messages (during 'roaming') will no longer be dismissed on hit.
                         if (wasSpeaking) {
-                            ballBubble.classList.remove('visible');
-                            clearTimeout(messageTimer);
+                            // AI RESPONSE PERSISTENCE FIX: Instead of hiding the bubble immediately,
+                            // this call re-shows the same message but with a 5-second timer.
+                            showBubbleMessage(ballBubble.textContent, 5000);
                         }
                         
                         ballState = 'roaming';
@@ -914,5 +901,3 @@
 
 </body>
 </html>
-"
-The ball is still getting stuck at the top and the scrollbar still appears when it shouldn't. Please fix these iss
