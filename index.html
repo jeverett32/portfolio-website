@@ -10,186 +10,134 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .nav-active { background-color: #06b6d4; color: white; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s; opacity: 0; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Styles for the interactive ball and its components */
-        #ball-container {
-            position: absolute;
-            z-index: 5; /* Lower z-index to go behind content */
-            pointer-events: none;
-            will-change: transform;
-        }
-        #interactive-ball {
-            width: 30px;
-            height: 30px;
-            background-color: #06b6d4;
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.7);
-        }
-        #ball-bubble {
-            position: fixed; /* Always fixed to the viewport */
-            z-index: 1002; /* High z-index to appear over everything */
-            background-color: #1f2937;
-            color: #d1d5db;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            width: 250px;
-            max-width: 250px;
-            max-height: 240px; 
-            box-sizing: border-box;
-            overflow-y: hidden;
-            text-align: center;
-            white-space: normal;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, transform 0.2s ease-out;
-            visibility: hidden;
-            pointer-events: auto;
-        }
-        #ball-bubble.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        #ball-bubble::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #1f2937 transparent transparent transparent;
+        :root {
+            --bg-color: #111827;
+            --header-bg-color: rgba(17, 24, 39, 0.8);
+            --text-color: #f9fafb;
+            --text-muted-color: #d1d5db;
+            --text-muted-darker-color: #9ca3af;
+            --primary-color: #22d3ee;
+            --secondary-color: #06b6d4;
+            --secondary-hover-color: #0891b2;
+            --panel-bg-color: rgba(31, 41, 55, 0.95);
+            --panel-border-color: #374151;
+            --input-bg-color: #1f2937;
+            --input-border-color: #374151;
+            --input-focus-border-color: #06b6d4;
+            --button-secondary-bg-color: #374151;
+            --button-secondary-hover-bg-color: #4b5563;
+            --tag-bg-color: #0e7490;
+            --tag-text-color: #a5f3fc;
+            --skill-bg-color: #1f2937;
+            --skill-text-color: #67e8f9;
+            --interactive-ball-color: #06b6d4;
         }
 
-        /* Style for the off-screen pointer */
-        #offscreen-pointer {
-            position: fixed;
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 16px solid #06b6d4;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 1002;
-            pointer-events: none;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
+        .nav-active { background-color: var(--secondary-color); color: white; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, var(--primary-color-glow, rgba(6, 182, 212, 0.1)) 0%, rgba(6, 182, 212, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s, background 0.5s; opacity: 0; }
+        .loader { border: 4px solid #4b5563; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .translucent-panel {
-            background-color: rgba(31, 41, 55, 0.95);
-        }
-        .translucent-image {
-            opacity: 0.85;
-        }
+        #ball-container { position: absolute; z-index: 5; pointer-events: none; will-change: transform; }
+        #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s; }
+        #ball-bubble { position: fixed; z-index: 1002; background-color: var(--input-bg-color); color: var(--text-muted-color); padding: 10px 12px; border-radius: 8px; font-size: 14px; width: 250px; max-width: 250px; max-height: 240px; box-sizing: border-box; overflow-y: hidden; text-align: center; white-space: normal; opacity: 0; transition: opacity 0.3s ease-in-out, transform 0.2s ease-out, background-color 0.5s; visibility: hidden; pointer-events: auto; }
+        #ball-bubble.visible { opacity: 1; visibility: visible; }
+        #ball-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--input-bg-color) transparent transparent transparent; transition: border-color 0.5s;}
+
+        #offscreen-pointer { position: fixed; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid var(--interactive-ball-color); opacity: 0; transition: opacity 0.3s, border-color 0.5s; z-index: 1002; pointer-events: none; }
+        
+        .translucent-panel { background-color: var(--panel-bg-color); }
+        .translucent-image { opacity: 0.85; }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans antialiased relative">
+<body class="antialiased relative">
 
     <div id="cursor-glow"></div>
     <div id="ball-container">
         <div id="interactive-ball"></div>
     </div>
-    <!-- Bubble and Pointer are now outside the container for independent layering -->
     <div id="ball-bubble"></div>
     <div id="offscreen-pointer"></div>
 
-    <header id="header" class="sticky top-0 z-50 bg-gray-900 bg-opacity-80 backdrop-blur-md">
-        <!-- Header content remains the same -->
+    <header id="header" class="sticky top-0 z-50 bg-[var(--header-bg-color)] backdrop-blur-md">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="https://linkedin.com/in/johneverett32/" target = _blank>
+                    <a href="https://linkedin.com/in/johneverett32/" target="_blank">
                         <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.src='https://placehold.co/40x40/111827/7dd3fc?text=JE'">
                     </a>
-                    <span class="text-2xl font-bold text-cyan-400">John Everett</span>
+                    <span class="text-2xl font-bold text-[var(--primary-color)]">John Everett</span>
                 </div>
                 <div class="hidden md:block">
                     <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
-                        <a href="#home" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>Home</span></a>
-                        <a href="#about" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>About</span></a>
-                        <a href="#projects" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>Projects</span></a>
-                        <a href="#contact" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-gray-300 hover:bg-gray-700 hover:text-white"><span>Contact</span></a>
+                        <a href="#home" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Home</span></a>
+                        <a href="#about" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>About</span></a>
+                        <a href="#projects" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Projects</span></a>
+                        <a href="#contact" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Contact</span></a>
                     </div>
                 </div>
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span class="sr-only">Open main menu</span>
-                        <svg id="hamburger-icon" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                        <svg id="close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <svg id="hamburger-icon" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                        <svg id="close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
             </div>
         </nav>
         <div id="mobile-menu" class="hidden md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Home</a>
-                <a href="#about" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">About</a>
-                <a href="#projects" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Projects</a>
-                <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Contact</a>
+                <a href="#home" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">Home</a>
+                <a href="#about" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">About</a>
+                <a href="#projects" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">Projects</a>
+                <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">Contact</a>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <!-- Home, About, Projects sections remain the same -->
         <section id="home" class="min-h-screen flex items-center justify-center text-center">
             <div class="space-y-6">
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">
-                    <span class="block">Welcome to My Portfolio</span>
-                </h1>
-                <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
-                    I'm John and I use data and AI to create technology-driven business solutions.
-                </p>
-                <div>
-                    <a href="#contact" class="inline-block bg-cyan-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">
-                        Get In Touch
-                    </a>
-                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight"><span class="block">Welcome to My Portfolio</span></h1>
+                <p class="max-w-2xl mx-auto text-lg md:text-xl text-[var(--text-muted-color)]">I'm John and I use data and AI to create technology-driven business solutions.</p>
+                <div><a href="#contact" class="inline-block bg-[var(--secondary-color)] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] transition-transform transform hover:scale-105 duration-300">Get In Touch</a></div>
             </div>
         </section>
 
         <section id="about" class="py-20 sm:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-                <div class="lg:col-span-2">
-                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
-                </div>
+                <div class="lg:col-span-2"><img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'"></div>
                 <div class="lg:col-span-3 space-y-4">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400">About Me</h2>
-                    <div id="about-me-content">
-                        <p class="text-lg text-gray-300">
-                            I am an Information Systems student at BYU's Marriott School of Business with a passion for software, data, and AI. My experience ranges from enhancing campus energy efficiency through software to refining predictive models with Python and R.
-                        </p>
-                        <p class="text-lg text-gray-300">
-                            I thrive in fast-paced environments, quickly learning new technologies to build flexible and user-friendly applications. When I'm not coding or analyzing data, I enjoy volleyball, hiking, and messing around with AI.
-                        </p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)]">About Me</h2>
+                    <div id="about-me-content" class="space-y-4 text-[var(--text-muted-color)]">
+                        <p class="text-lg">I am an Information Systems student at BYU's Marriott School of Business with a passion for software, data, and AI. My experience ranges from enhancing campus energy efficiency through software to refining predictive models with Python and R.</p>
+                        <p class="text-lg">I thrive in fast-paced environments, quickly learning new technologies to build flexible and user-friendly applications. When I'm not coding or analyzing data, I enjoy volleyball, hiking, and messing around with AI.</p>
                     </div>
                     <div class="space-y-6 pt-4">
-                        <h3 class="text-2xl font-bold text-cyan-400">My Skills</h3>
+                        <h3 class="text-2xl font-bold text-[var(--primary-color)]">My Skills</h3>
                         <div id="skills-list" class="flex flex-wrap gap-3">
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Python</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">GCL+</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">SQL</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">VBA</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">R</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">SAS</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">pandas</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Excel</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Tableau</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Power BI</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Figma</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">Tridium Niagara 4</span>
-                            <span class="bg-gray-800 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium">enteliWEB</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Python</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">GCL+</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">SQL</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">VBA</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">R</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">SAS</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">pandas</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Excel</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tableau</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Power BI</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Figma</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tridium Niagara 4</span>
+                            <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">enteliWEB</span>
                         </div>
                     </div>
                 </div>
@@ -197,62 +145,58 @@
         </section>
 
         <section id="projects" class="py-20 sm:py-32">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center text-cyan-400 mb-12">My Projects & Experience</h2>
+            <h2 class="text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Projects & Experience</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
                 <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer">
-                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'">
-                    </a>
+                    <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer"><img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'"></a>
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-white">Trash Bin Cleaning Service Website</h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Developed a fully functional e-commerce site for a local service, featuring online scheduling and secure payment processing via the Square API, all connected to a Firebase backend.</p>
+                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Trash Bin Cleaning Service Website</h3>
+                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Developed a fully functional e-commerce site for a local service, featuring online scheduling and secure payment processing via the Square API, all connected to a Firebase backend.</p>
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Web Development</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Firebase</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Square API</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">JavaScript</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Web Development</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Firebase</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Square API</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">JavaScript</span>
                         </div>
-                        <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">View Live Site →</a>
-                    </div>
-                </div>
-
-                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-white">BYU HVAC Systems Enhancement</h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Web Development</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">UI/UX</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">SQL</span>
-                        </div>
-                        <button data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
+                        <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">View Live Site →</a>
                     </div>
                 </div>
                 <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-white">Stride Scheduling UX & Growth</h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
+                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">BYU HVAC Systems Enhancement</h3>
+                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">UX Testing</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">CRM</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Figma</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">AI</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Web Development</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">UI/UX</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">SQL</span>
                         </div>
-                        <button data-video-src="https://www.youtube.com/embed/L_LUpnjgPso" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
+                        <button data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
                 <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-white">Behavioral Trend Analysis</h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
+                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Stride Scheduling UX & Growth</h3>
+                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Data Analysis</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Python</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">R</span>
-                            <span class="text-xs font-semibold bg-cyan-900 text-cyan-300 px-2 py-1 rounded-full">Predictive Modeling</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">UX Testing</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">CRM</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Figma</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">AI</span>
                         </div>
-                        <button data-video-src="https://www.youtube.com/embed/3h0_v2cdH1s" class="video-modal-trigger mt-auto inline-block text-cyan-400 font-semibold hover:text-cyan-300 transition-colors text-left">Learn More →</button>
+                        <button data-video-src="https://www.youtube.com/embed/L_LUpnjgPso" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
+                    </div>
+                </div>
+                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Behavioral Trend Analysis</h3>
+                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Data Analysis</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Python</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">R</span>
+                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Predictive Modeling</span>
+                        </div>
+                        <button data-video-src="https://www.youtube.com/embed/3h0_v2cdH1s" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
             </div>
@@ -260,78 +204,55 @@
 
         <section id="contact" class="py-20 sm:py-32">
             <div class="text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 mb-4">Contact & AI Assistant</h2>
-                <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
-                    Use my AI assistant to see how my skills fit your needs or to ask questions about my experience. Or, feel free to send me a message directly.
-                </p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)] mb-4">Contact & AI Assistant</h2>
+                <p class="text-lg text-[var(--text-muted-color)] mb-8 max-w-3xl mx-auto">Use my AI assistant to see how my skills fit your needs or to ask questions about my experience. Or, feel free to send me a message directly.</p>
             </div>
             
             <div class="max-w-xl mx-auto space-y-12">
-                <!-- AI Assistant Section -->
-                <div id="ai-assistant-panel" class="bg-gray-800/50 p-6 rounded-lg border border-gray-700 space-y-6">
-                    
-                    <!-- Skills Match Feature -->
+                <div id="ai-assistant-panel" class="bg-[var(--panel-bg-color)] p-6 rounded-lg border border-[var(--panel-border-color)] space-y-6">
                     <div>
-                        <h3 class="text-xl font-bold text-white mb-4">1. AI-Powered Skills Match</h3>
-                        <label for="job-description-text" class="block text-sm font-medium text-gray-300 mb-2">Paste Job Description</label>
-                        <textarea id="job-description-text" rows="5" placeholder="Paste the full job description here..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
-                        <div class="flex items-center justify-center my-4">
-                            <span class="flex-grow bg-gray-700 h-px"></span>
-                            <span class="mx-4 text-gray-400 text-sm">OR</span>
-                            <span class="flex-grow bg-gray-700 h-px"></span>
-                        </div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Upload Job Description File</label>
+                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">1. AI-Powered Skills Match</h3>
+                        <label for="job-description-text" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Paste Job Description</label>
+                        <textarea id="job-description-text" rows="5" placeholder="Paste the full job description here..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors"></textarea>
+                        <div class="flex items-center justify-center my-4"><span class="flex-grow bg-[var(--input-border-color)] h-px"></span><span class="mx-4 text-[var(--text-muted-darker-color)] text-sm">OR</span><span class="flex-grow bg-[var(--input-border-color)] h-px"></span></div>
+                        <label class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Upload Job Description File</label>
                         <div class="flex items-center gap-4">
-                            <label for="job-description-file" class="cursor-pointer bg-gray-700 text-white font-medium px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
-                                Select a file
-                            </label>
+                            <label for="job-description-file" class="cursor-pointer bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-medium px-4 py-2 rounded-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-colors">Select a file</label>
                             <input type="file" id="job-description-file" class="hidden" accept=".txt,.md,.pdf">
-                            <p id="file-name-display" class="text-sm text-gray-400 truncate">No file chosen</p>
+                            <p id="file-name-display" class="text-sm text-[var(--text-muted-darker-color)] truncate">No file chosen</p>
                         </div>
-                        <div class="text-center mt-4">
-                            <button type="button" id="generate-summary-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
-                                ✨ Generate Summary
-                                <div id="summary-loader" class="loader hidden"></div>
-                            </button>
-                        </div>
+                        <div class="text-center mt-4"><button type="button" id="generate-summary-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">✨ Generate Summary<div id="summary-loader" class="loader hidden"></div></button></div>
+                    </div>
+                    
+                    <div class="border-t border-[var(--panel-border-color)] pt-6">
+                         <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">2. AI-Powered Theme Customization</h3>
+                         <label for="theme-description" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Describe a theme (e.g., "ocean sunset", "hacker green")</label>
+                         <input type="text" id="theme-description" placeholder="Enter theme description..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
+                         <div class="text-center mt-4">
+                             <button type="button" id="generate-theme-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                                 🎨 Generate Theme
+                                 <div id="theme-loader" class="loader hidden"></div>
+                             </button>
+                         </div>
                     </div>
 
-                    <!-- Q&A Feature -->
-                    <div class="border-t border-gray-700 pt-6">
-                        <h3 class="text-xl font-bold text-white mb-4">2. Ask a Question About Me</h3>
-                        <label for="qa-question" class="block text-sm font-medium text-gray-300 mb-2">Your Question</label>
-                        <input type="text" id="qa-question" placeholder="e.g., 'What was your role at BYU?'" class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
-                        <div class="text-center mt-4">
-                            <button type="button" id="ask-question-btn" class="bg-gray-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-600 transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
-                                💬 Ask Question
-                                <div id="qa-loader" class="loader hidden"></div>
-                            </button>
-                        </div>
+                    <div class="border-t border-[var(--panel-border-color)] pt-6">
+                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">3. Ask a Question About Me</h3>
+                        <label for="qa-question" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Your Question</label>
+                        <input type="text" id="qa-question" placeholder="e.g., 'What was your role at BYU?'" class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
+                        <div class="text-center mt-4"><button type="button" id="ask-question-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">💬 Ask Question<div id="qa-loader" class="loader hidden"></div></button></div>
                     </div>
 
-                    <!-- Shared AI Response Area -->
                     <div id="ai-error" class="text-red-400 text-center text-sm"></div>
                 </div>
 
-                <!-- Contact Form Section -->
                 <div class="pt-8">
-                     <h3 class="text-xl font-bold text-white mb-4 text-center">Or, Send a Direct Message</h3>
+                     <h3 class="text-xl font-bold text-[var(--text-color)] mb-4 text-center">Or, Send a Direct Message</h3>
                     <form id="contact-form" class="space-y-6">
-                        <div>
-                            <label for="name" class="sr-only">Name</label>
-                            <input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
-                        </div>
-                        <div>
-                            <label for="email" class="sr-only">Email</label>
-                            <input type="email" name="email" id="email" placeholder="Your Email" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors" />
-                        </div>
-                        <div>
-                            <label for="message" class="sr-only">Message</label>
-                            <textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-gray-800 border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" id="send-message-btn" class="bg-cyan-500 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-cyan-600 transition-transform transform hover:scale-105 duration-300">Send Message</button>
-                        </div>
+                        <div><label for="name" class="sr-only">Name</label><input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" /></div>
+                        <div><label for="email" class="sr-only">Email</label><input type="email" name="email" id="email" placeholder="Your Email" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" /></div>
+                        <div><label for="message" class="sr-only">Message</label><textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors"></textarea></div>
+                        <div class="text-center"><button type="submit" id="send-message-btn" class="bg-[var(--secondary-color)] text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] transition-transform transform hover:scale-105 duration-300">Send Message</button></div>
                     </form>
                     <div id="form-status" class="mt-6 text-center"></div>
                 </div>
@@ -339,58 +260,38 @@
         </section>
     </main>
 
-    <footer class="bg-gray-900 border-t border-gray-800 relative z-10">
-        <!-- Footer content remains the same -->
+    <footer class="bg-[var(--bg-color)] border-t border-[var(--panel-border-color)] relative z-10">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center space-x-6 mb-4">
-                <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-                </a>
-                <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
-                <a href="mailto:john.everett32@gmail.com" class="text-gray-400 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                </a>
+                <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+                <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                <a href="mailto:john.everett32@gmail.com" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
             </div>
             <p class="text-gray-500">© 2025 John Everett. All rights reserved.</p>
         </div>
     </footer>
 
     <div id="video-modal" class="hidden fixed inset-0 z-50 items-center justify-center">
-        <!-- Video modal content remains the same -->
         <div id="video-modal-overlay" class="absolute inset-0 bg-black bg-opacity-75"></div>
-        <div id="video-modal-content" class="relative bg-gray-900 rounded-lg shadow-xl w-11/12 max-w-4xl p-4">
+        <div id="video-modal-content" class="relative bg-[var(--bg-color)] rounded-lg shadow-xl w-11/12 max-w-4xl p-4">
              <button id="video-modal-close" class="absolute z-10 -top-3 -right-3 h-10 w-10 bg-white rounded-full text-gray-800 flex items-center justify-center text-2xl font-bold">×</button>
-            <div class="video-container">
-                <iframe id="video-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+            <div class="video-container"><iframe id="video-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
         </div>
     </div>
     
-    <!-- PDF.js library for reading PDF files in the browser -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script>
-        // Required for PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js`;
 
         document.addEventListener('DOMContentLoaded', function () {
             
-            // --- FormSpree AJAX submission ---
             const form = document.getElementById('contact-form');
             const status = document.getElementById('form-status');
-            
             form.addEventListener("submit", async function(event) {
                 event.preventDefault();
                 const data = new FormData(event.target);
-                const formspreeAction = "https://formspree.io/f/mldljzql";
-
                 try {
-                    const response = await fetch(formspreeAction, {
-                        method: 'POST',
-                        body: data,
-                        headers: { 'Accept': 'application/json' }
-                    });
+                    const response = await fetch("https://formspree.io/f/mldljzql", { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
                     if (response.ok) {
                         status.innerHTML = "Thanks for your submission!";
                         status.classList.add('text-green-400');
@@ -400,74 +301,50 @@
                         const responseData = await response.json();
                         status.innerHTML = responseData.errors ? responseData.errors.map(e => e.message).join(", ") : "Oops! There was a problem.";
                         status.classList.add('text-red-400');
-                        status.classList.remove('text-green-400');
                     }
                 } catch (error) {
                     status.innerHTML = "Oops! There was a problem submitting your form.";
                     status.classList.add('text-red-400');
-                    status.classList.remove('text-green-400');
                 }
             });
 
             // --- Gemini AI Logic ---
             const generateSummaryBtn = document.getElementById('generate-summary-btn');
             const askQuestionBtn = document.getElementById('ask-question-btn');
+            const generateThemeBtn = document.getElementById('generate-theme-btn');
             
             const jobDescTextarea = document.getElementById('job-description-text');
             const jobDescFile = document.getElementById('job-description-file');
             const fileNameDisplay = document.getElementById('file-name-display');
             const qaQuestionInput = document.getElementById('qa-question');
+            const themeDescriptionInput = document.getElementById('theme-description');
             
             const summaryLoader = document.getElementById('summary-loader');
             const qaLoader = document.getElementById('qa-loader');
+            const themeLoader = document.getElementById('theme-loader');
             const aiError = document.getElementById('ai-error');
             
-            const aboutMeContent = document.getElementById('about-me-content').textContent.trim();
-            const skillsContainer = document.getElementById('skills-list');
-            const skills = Array.from(skillsContainer.querySelectorAll('span')).map(span => span.textContent).join(', ');
-
+            const aboutMeContent = document.getElementById('about-me-content').innerText.trim();
+            const skills = Array.from(document.querySelectorAll('#skills-list span')).map(span => span.textContent).join(', ');
 
             jobDescFile.addEventListener('change', () => {
-                if (jobDescFile.files.length > 0) {
-                    fileNameDisplay.textContent = `${jobDescFile.files[0].name}`;
-                } else {
-                    fileNameDisplay.textContent = 'No file chosen';
-                }
+                fileNameDisplay.textContent = jobDescFile.files.length > 0 ? `${jobDescFile.files[0].name}` : 'No file chosen';
             });
 
             generateSummaryBtn.addEventListener('click', async () => {
                 let jobDescription = jobDescTextarea.value.trim();
                 const file = jobDescFile.files[0];
-
-                if (file) {
-                    try {
-                        jobDescription = await readFileContent(file);
-                    } catch (error) {
-                        aiError.textContent = `Error reading file: ${error.message}`;
-                        return;
-                    }
-                }
-
-                if (!jobDescription) {
-                    aiError.textContent = 'Please paste or upload a job description first.';
-                    return;
-                }
-
+                if (file) { try { jobDescription = await readFileContent(file); } catch (error) { aiError.textContent = `Error reading file: ${error.message}`; return; } }
+                if (!jobDescription) { aiError.textContent = 'Please paste or upload a job description first.'; return; }
+                
                 summaryLoader.classList.remove('hidden');
                 generateSummaryBtn.disabled = true;
                 aiError.textContent = '';
-
                 try {
-                    const payload = { 
-                        taskType: 'match', 
-                        jobDescription: jobDescription,
-                        bio: aboutMeContent,
-                        skills: skills
-                    };
+                    const payload = { taskType: 'match', jobDescription, bio: aboutMeContent, skills };
                     const generatedSummary = await callApiFunction(payload);
                     summonBallAndShowMessage(generatedSummary, generateSummaryBtn);
                 } catch (error) {
-                    console.error("Error calling backend function:", error);
                     aiError.textContent = `Failed to generate summary: ${error.message}`;
                 } finally {
                     summaryLoader.classList.add('hidden');
@@ -477,26 +354,16 @@
 
             askQuestionBtn.addEventListener('click', async () => {
                 const question = qaQuestionInput.value.trim();
-                if (!question) {
-                    aiError.textContent = 'Please enter a question first.';
-                    return;
-                }
+                if (!question) { aiError.textContent = 'Please enter a question first.'; return; }
                 
                 qaLoader.classList.remove('hidden');
                 askQuestionBtn.disabled = true;
                 aiError.textContent = '';
-
                 try {
-                    const payload = { 
-                        taskType: 'qa', 
-                        question: question,
-                        bio: aboutMeContent,
-                        skills: skills
-                    };
+                    const payload = { taskType: 'qa', question, bio: aboutMeContent, skills };
                     const answer = await callApiFunction(payload);
                     summonBallAndShowMessage(answer, askQuestionBtn);
                 } catch (error) {
-                    console.error("Error calling backend function:", error);
                     aiError.textContent = `Failed to get answer: ${error.message}`;
                 } finally {
                     qaLoader.classList.add('hidden');
@@ -504,21 +371,103 @@
                 }
             });
 
-            async function callApiFunction(payload) {
-                const apiUrl = '/.netlify/functions/generate-message';
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+            generateThemeBtn.addEventListener('click', async () => {
+                const description = themeDescriptionInput.value.trim();
+                if (!description) { aiError.textContent = 'Please describe a theme first.'; return; }
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
+                themeLoader.classList.remove('hidden');
+                generateThemeBtn.disabled = true;
+                aiError.textContent = '';
+                try {
+                    const payload = { taskType: 'theme', description };
+                    const colors = await callApiFunction(payload);
+                    applyTheme(colors);
+                    summonBallAndShowMessage("Theme updated! How does it look?", generateThemeBtn);
+                } catch (error) {
+                    aiError.textContent = `Failed to generate theme: ${error.message}`;
+                } finally {
+                    themeLoader.classList.add('hidden');
+                    generateThemeBtn.disabled = false;
+                }
+            });
+
+            async function callApiFunction(payload) {
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                let prompt = '';
+                let apiPayload = {};
+
+                if (payload.taskType === 'match') {
+                    prompt = `You are an expert career assistant for John Everett. Your task is to analyze the provided job description and determine how well John's skills and experience match the role.
+                    **John's Information:**\n* **About Me:** ${payload.bio}\n* **Skills:** ${payload.skills}
+                    **Job Description:**\n${payload.jobDescription}
+                    **Your Task:** Generate a concise, professional summary (2-4 sentences) highlighting the key areas where John is a strong fit for this role. Focus on direct connections between his skills/experience and the job requirements. Be positive and confident.`;
+                    apiPayload = { contents: [{ parts: [{ text: prompt }] }] };
+
+                } else if (payload.taskType === 'qa') {
+                    prompt = `You are John Everett's personal AI assistant. Answer questions based *only* on the information provided below. If the answer isn't in the provided text, politely state that you don't have that information.
+                    **John's Info:**\n* **About:** ${payload.bio}\n* **Skills:** ${payload.skills}\n* **Projects:** Details on projects involving a Trash Bin Cleaning Website (Web Dev, Firebase, Square API), BYU HVAC Systems Enhancement (Web Dev, UI/UX, SQL), Stride Scheduling UX & Growth (UX Testing, CRM, Figma, AI), and Behavioral Trend Analysis (Data Analysis, Python, R, Predictive Modeling).
+                    **User's Question:** "${payload.question}"\n**Your Answer:**`;
+                    apiPayload = { contents: [{ parts: [{ text: prompt }] }] };
+
+                } else if (payload.taskType === 'theme') {
+                    prompt = `You are a creative web designer AI. A user wants to change the color theme of their portfolio from its default dark, tech-focused aesthetic. Based on their description, generate a color palette as a JSON object. Maintain good contrast and readability.
+                    **User's description:** "${payload.description}"
+                    **Your Task:** Provide a JSON object with specific HEX color values for the keys defined in the schema.`;
+                    const schema = {
+                        type: "OBJECT",
+                        properties: {
+                            "bgColor": { "type": "STRING", "description": "A dark background color." },
+                            "headerBgColor": { "type": "STRING", "description": "Background for the sticky header, can have transparency." },
+                            "textColor": { "type": "STRING", "description": "A light, readable text color." },
+                            "textMutedColor": { "type": "STRING", "description": "A slightly dimmer text color for paragraphs." },
+                            "textMutedDarkerColor": { "type": "STRING", "description": "An even dimmer text color for things like tags." },
+                            "primaryColor": { "type": "STRING", "description": "The main accent color for headings and links." },
+                            "secondaryColor": { "type": "STRING", "description": "A button background color." },
+                            "secondaryHoverColor": { "type": "STRING", "description": "A slightly darker version of the secondaryColor for button hovers." },
+                            "panelBgColor": { "type": "STRING", "description": "Background for project cards, can have transparency." },
+                            "panelBorderColor": { "type": "STRING", "description": "Border color for panels." },
+                            "inputBgColor": { "type": "STRING", "description": "Background color for input fields." },
+                            "inputBorderColor": { "type": "STRING", "description": "Border color for input fields." },
+                            "inputFocusBorderColor": { "type": "STRING", "description": "Border color for focused input fields." },
+                            "buttonSecondaryBgColor": { "type": "STRING", "description": "Background for secondary buttons." },
+                            "buttonSecondaryHoverBgColor": { "type": "STRING", "description": "Hover background for secondary buttons." },
+                            "tagBgColor": { "type": "STRING", "description": "Background for project tags." },
+                            "tagTextColor": { "type": "STRING", "description": "Text color for project tags." },
+                            "skillBgColor": { "type": "STRING", "description": "Background for skill tags." },
+                            "skillTextColor": { "type": "STRING", "description": "Text color for skill tags." },
+                            "interactiveBallColor": { "type": "STRING", "description": "Color for the floating interactive ball." }
+                        },
+                        required: ["bgColor", "headerBgColor", "textColor", "textMutedColor", "textMutedDarkerColor", "primaryColor", "secondaryColor", "secondaryHoverColor", "panelBgColor", "panelBorderColor", "inputBgColor", "inputBorderColor", "inputFocusBorderColor", "buttonSecondaryBgColor", "buttonSecondaryHoverBgColor", "tagBgColor", "tagTextColor", "skillBgColor", "skillTextColor", "interactiveBallColor"]
+                    };
+                    apiPayload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
                 }
 
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(apiPayload) });
+                if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.error?.message || `API request failed`); }
+                
                 const result = await response.json();
-                return result.message;
+                const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!responseText) { throw new Error("Received an invalid response from the AI."); }
+
+                if (payload.taskType === 'theme') {
+                    try { return JSON.parse(responseText); } catch (e) { throw new Error("AI returned invalid theme format."); }
+                }
+                return responseText;
+            }
+
+            function applyTheme(colors) {
+                const root = document.documentElement;
+                for (const [key, value] of Object.entries(colors)) {
+                    const cssVar = '--' + key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+                    root.style.setProperty(cssVar, value);
+                }
+                // Special case for the glow, which needs an rgba value derived from the primary color
+                const hex = colors.primaryColor.startsWith('#') ? colors.primaryColor.substring(1) : colors.primaryColor;
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                root.style.setProperty('--primary-color-glow', `rgba(${r}, ${g}, ${b}, 0.1)`);
             }
 
             function readFileContent(file) {
@@ -535,9 +484,7 @@
                                     text += content.items.map(item => item.str).join(' ');
                                 }
                                 resolve(text);
-                            } catch (error) {
-                                reject(new Error('Could not parse PDF file.'));
-                            }
+                            } catch (error) { reject(new Error('Could not parse PDF file.')); }
                         };
                         reader.onerror = () => reject(new Error('Failed to read file.'));
                         reader.readAsArrayBuffer(file);
@@ -556,96 +503,53 @@
             const offscreenPointer = document.getElementById('offscreen-pointer');
             const ballSize = 30;
             let x, y, vx, vy;
-            let mouseX = -200;
-            let mouseY = -200;
+            let mouseX = -200, mouseY = -200;
             let lastHitTime = 0;
             const cooldown = 500;
-            let messageTimer;
-            let guideMessageTimeout;
-
-            let ballState = 'roaming'; // States: roaming, summoned, speaking
-            let targetX, targetY;
-            let lastSummonSide = 'right'; // Start by preferring the left side
+            let messageTimer, guideMessageTimeout;
+            let ballState = 'roaming', targetX, targetY;
+            let lastSummonSide = 'right';
             const isMobile = 'ontouchstart' in window;
-
-            const guideMessages = [
-                "Curious about my work? Head over to the Projects section!",
-                "Want to know more about me? The About section has the details!",
-                "Have a question? Ask my AI assistant in the Contact section!",
-            ];
+            const guideMessages = ["Curious about my work? Head to the Projects section!", "Want to know more? The About section has details!", "Have a question? Ask my AI assistant below!"];
 
             function showBubbleMessage(text, duration = 5000) {
                 ballBubble.textContent = text;
                 ballBubble.classList.add('visible');
-                
-                // Defer check to allow rendering
-                setTimeout(() => {
-                    if (ballBubble.scrollHeight > ballBubble.clientHeight + 10) {
-                        ballBubble.style.overflowY = 'auto';
-                    } else {
-                        ballBubble.style.overflowY = 'hidden';
-                    }
-                }, 0);
-
+                setTimeout(() => { ballBubble.style.overflowY = (ballBubble.scrollHeight > ballBubble.clientHeight + 10) ? 'auto' : 'hidden'; }, 0);
                 clearTimeout(messageTimer);
-                if (duration > 0) {
-                    messageTimer = setTimeout(() => {
-                        ballBubble.classList.remove('visible');
-                    }, duration);
-                }
+                if (duration > 0) { messageTimer = setTimeout(() => ballBubble.classList.remove('visible'), duration); }
             }
 
             function summonBallAndShowMessage(message, buttonElement) {
-                const aiPanel = document.getElementById('ai-assistant-panel');
-                const panelRect = aiPanel.getBoundingClientRect();
-
+                const panelRect = document.getElementById('ai-assistant-panel').getBoundingClientRect();
                 if (isMobile) {
                     const btnRect = buttonElement.getBoundingClientRect();
-                    targetX = (btnRect.left > window.innerWidth / 2) 
-                        ? btnRect.left - ballSize - 20 // Go left of button
-                        : btnRect.right + 20; // Go right of button
+                    targetX = (btnRect.left > window.innerWidth / 2) ? btnRect.left - ballSize - 20 : btnRect.right + 20;
                     targetY = btnRect.top + window.scrollY;
                 } else {
                     const targetRightX = panelRect.right + window.scrollX + 40;
                     const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
                     const targetYPos = (window.innerHeight / 2) - (ballSize / 2) + window.scrollY;
-
-                    const distToRight = Math.sqrt(Math.pow(mouseX - targetRightX, 2) + Math.pow(mouseY - targetYPos, 2));
-                    const distToLeft = Math.sqrt(Math.pow(mouseX - targetLeftX, 2) + Math.pow(mouseY - targetYPos, 2));
-
-                    if (lastSummonSide === 'right') { // Prefer left side this time
-                        if (distToLeft < 100) { // Is cursor blocking the left?
-                            targetX = targetRightX; // Go right instead
-                            lastSummonSide = 'right';
-                        } else {
-                            targetX = targetLeftX; // Go left
-                            lastSummonSide = 'left';
-                        }
-                    } else { // Prefer right side this time
-                        if (distToRight < 100) { // Is cursor blocking the right?
-                            targetX = targetLeftX; // Go left instead
-                            lastSummonSide = 'left';
-                        } else {
-                            targetX = targetRightX; // Go right
-                            lastSummonSide = 'right';
-                        }
+                    const distToRight = Math.hypot(mouseX - targetRightX, mouseY - targetYPos);
+                    const distToLeft = Math.hypot(mouseX - targetLeftX, mouseY - targetYPos);
+                    if (lastSummonSide === 'right') {
+                        targetX = (distToLeft < 100) ? targetRightX : targetLeftX;
+                        lastSummonSide = (distToLeft < 100) ? 'right' : 'left';
+                    } else {
+                        targetX = (distToRight < 100) ? targetLeftX : targetRightX;
+                        lastSummonSide = (distToRight < 100) ? 'left' : 'right';
                     }
                     targetY = targetYPos;
                 }
-
                 ballState = 'summoned';
                 clearTimeout(guideMessageTimeout);
                 clearTimeout(messageTimer);
                 ballBubble.classList.remove('visible');
-
                 const arrivalCheck = setInterval(() => {
-                    const dx = x - targetX;
-                    const dy = y - targetY;
-                    if (Math.sqrt(dx * dx + dy * dy) < 5) {
+                    if (Math.hypot(x - targetX, y - targetY) < 5) {
                         clearInterval(arrivalCheck);
                         ballState = 'speaking';
-                        vx = 0;
-                        vy = 0;
+                        vx = 0; vy = 0;
                         showBubbleMessage(message, 0);
                     }
                 }, 100);
@@ -655,246 +559,114 @@
                 clearTimeout(guideMessageTimeout);
                 guideMessageTimeout = setTimeout(() => {
                     if (ballState === 'roaming') {
-                        const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
-                        showBubbleMessage(randomMsg);
-                        scheduleNextGuideMessage(); // Schedule the next one
+                        showBubbleMessage(guideMessages[Math.floor(Math.random() * guideMessages.length)]);
+                        scheduleNextGuideMessage();
                     }
                 }, 15000);
             }
 
             function initializeBall() {
-                const homeSection = document.getElementById('home');
-                const rect = homeSection.getBoundingClientRect();
+                const rect = document.getElementById('home').getBoundingClientRect();
                 x = rect.left + window.scrollX + (rect.width / 4);
                 y = rect.top + window.scrollY + (rect.height / 4);
                 vx = (Math.random() - 0.5) * 4;
                 vy = (Math.random() - 0.5) * 4;
-                
-                const initialMessage = `Welcome! You can hit me with your ${isMobile ? 'finger' : 'cursor'}. You can also ask me questions in the AI section below!`;
-                showBubbleMessage(initialMessage, 10000);
-
+                showBubbleMessage(`Welcome! You can hit me with your ${isMobile ? 'finger' : 'cursor'}. You can also ask me questions or change the theme in the AI section below!`, 10000);
                 scheduleNextGuideMessage();
             }
             
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.pageX;
-                mouseY = e.pageY;
-            });
-            
-            // Touch event listeners for mobile
-            let touchX = -1000;
-            let touchY = -1000;
-            const resetTouch = () => {
-                touchX = -1000;
-                touchY = -1000;
-            };
-            document.addEventListener('touchstart', (e) => {
-                touchX = e.touches[0].pageX;
-                touchY = e.touches[0].pageY;
-            });
-            document.addEventListener('touchmove', (e) => {
-                touchX = e.touches[0].pageX;
-                touchY = e.touches[0].pageY;
-            });
+            document.addEventListener('mousemove', (e) => { mouseX = e.pageX; mouseY = e.pageY; });
+            let touchX = -1000, touchY = -1000;
+            const resetTouch = () => { touchX = -1000; touchY = -1000; };
+            document.addEventListener('touchstart', (e) => { touchX = e.touches[0].pageX; touchY = e.touches[0].pageY; });
+            document.addEventListener('touchmove', (e) => { touchX = e.touches[0].pageX; touchY = e.touches[0].pageY; });
             document.addEventListener('touchend', resetTouch);
             document.addEventListener('touchcancel', resetTouch);
 
             function animateBall() {
                 const pageW = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
                 const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-                
                 if (ballState === 'roaming' || ballState === 'speaking') {
-                    x += vx;
-                    y += vy;
-
+                    x += vx; y += vy;
                     if (x + ballSize > pageW || x < 0) vx *= -1;
                     if (y + ballSize > pageH || y < 0) vy *= -1;
-
                     const interactionX = isMobile ? touchX : mouseX;
                     const interactionY = isMobile ? touchY : mouseY;
-
-                    const dx = x - interactionX + (ballSize / 2);
-                    const dy = y - interactionY + (ballSize / 2);
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const distance = Math.hypot(x - interactionX + (ballSize / 2), y - interactionY + (ballSize / 2));
                     const currentTime = Date.now();
-
                     if (distance < 50 && (currentTime - lastHitTime > cooldown)) {
-                        const wasSpeaking = ballState === 'speaking';
-                        if (wasSpeaking) {
-                            showBubbleMessage(ballBubble.textContent, 5000);
-                        }
+                        if (ballState === 'speaking') { showBubbleMessage(ballBubble.textContent, 5000); }
                         ballState = 'roaming';
                         lastHitTime = currentTime;
-                        const angle = Math.atan2(dy, dx);
-                        vx = Math.cos(angle) * 6;
-                        vy = Math.sin(angle) * 6;
-                        
-                        clearTimeout(guideMessageTimeout);
+                        const angle = Math.atan2(y - interactionY + (ballSize / 2), x - interactionX + (ballSize / 2));
+                        vx = Math.cos(angle) * 6; vy = Math.sin(angle) * 6;
                         scheduleNextGuideMessage();
                     }
-                    
-                    if (ballState === 'roaming') {
-                        vx *= 0.995;
-                        vy *= 0.995;
-                    }
+                    if (ballState === 'roaming') { vx *= 0.995; vy *= 0.995; }
                 } else if (ballState === 'summoned') {
-                    const dx = targetX - x;
-                    const dy = targetY - y;
-                    const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
-                    const speed = Math.min(0.1, distanceToTarget / 100);
-                    vx = dx * speed;
-                    vy = dy * speed;
-                    x += vx;
-                    y += vy;
+                    const dx = targetX - x, dy = targetY - y;
+                    const speed = Math.min(0.1, Math.hypot(dx, dy) / 100);
+                    x += dx * speed; y += dy * speed;
                 }
-
                 ballContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-                
-                // Off-screen pointer logic
-                const viewTop = window.scrollY;
-                const viewBottom = viewTop + window.innerHeight;
-                const viewLeft = window.scrollX;
-                const viewRight = viewLeft + window.innerWidth;
-
+                const viewTop = window.scrollY, viewBottom = viewTop + window.innerHeight, viewLeft = window.scrollX, viewRight = viewLeft + window.innerWidth;
                 const isOffScreen = y < viewTop || y > viewBottom - ballSize || x < viewLeft || x > viewRight - ballSize;
-
                 if (isOffScreen) {
                     offscreenPointer.style.opacity = '1';
-
                     const margin = 25;
                     let pointerX = Math.max(margin, Math.min(x - viewLeft, window.innerWidth - margin));
                     let pointerY = Math.max(margin, Math.min(y - viewTop, window.innerHeight - margin));
-
                     offscreenPointer.style.left = `${pointerX}px`;
                     offscreenPointer.style.top = `${pointerY}px`;
-                    
                     const angle = Math.atan2((y - viewTop) - pointerY, (x - viewLeft) - pointerX);
                     offscreenPointer.style.transform = `translate(-50%, -50%) rotate(${angle + Math.PI / 2}rad)`;
-
-                    // Position bubble relative to pointer
                     ballBubble.style.left = `${pointerX}px`;
                     ballBubble.style.top = `${pointerY}px`;
-                    
-                    if (pointerY < 60) {
-                        ballBubble.style.transform = 'translateX(-50%) translateY(30px)';
-                    } else if (pointerY > window.innerHeight - 60) {
-                         ballBubble.style.transform = 'translateX(-50%) translateY(-100%) translateY(-30px)';
-                    } else if (pointerX < 60) {
-                         ballBubble.style.transform = 'translateX(-10px) translateY(-50%)';
-                    } else {
-                         ballBubble.style.transform = 'translateX(-100%) translateY(-50%) translateX(10px)';
-                    }
-
+                    if (pointerY < 60) { ballBubble.style.transform = 'translateX(-50%) translateY(30px)'; } 
+                    else if (pointerY > window.innerHeight - 60) { ballBubble.style.transform = 'translateX(-50%) translateY(-100%) translateY(-30px)';} 
+                    else if (pointerX < 60) { ballBubble.style.transform = 'translateX(-10px) translateY(-50%)'; } 
+                    else { ballBubble.style.transform = 'translateX(-100%) translateY(-50%) translateX(10px)'; }
                 } else {
                     offscreenPointer.style.opacity = '0';
-                    // Position bubble relative to ball container (on-screen)
-                    const ballScreenX = x - viewLeft;
-                    const ballScreenY = y - viewTop;
+                    const ballScreenX = x - viewLeft, ballScreenY = y - viewTop;
                     ballBubble.style.left = `${ballScreenX + (ballSize / 2)}px`;
                     ballBubble.style.top = `${ballScreenY - 10}px`;
-                    
-                    // New logic to keep bubble on screen
                     const bubbleWidth = ballBubble.offsetWidth;
                     let translateX = -bubbleWidth / 2;
-                    let translateY = -100; // Percentage
-
-                    const bubbleLeftEdge = ballScreenX + (ballSize / 2) - (bubbleWidth / 2);
-                    const bubbleRightEdge = ballScreenX + (ballSize / 2) + (bubbleWidth / 2);
-
-                    if (bubbleRightEdge > window.innerWidth) {
-                        translateX = -bubbleWidth + (window.innerWidth - ballScreenX) - (ballSize / 2) - 10; // 10px margin
-                    }
-                    if (bubbleLeftEdge < 0) {
-                        translateX = -(ballScreenX + (ballSize / 2)) + 10;
-                    }
-                    
-                    ballBubble.style.transform = `translateX(${translateX}px) translateY(${translateY}%)`;
+                    if (ballScreenX + (ballSize / 2) + (bubbleWidth / 2) > window.innerWidth) { translateX = -bubbleWidth + (window.innerWidth - ballScreenX) - (ballSize / 2) - 10; }
+                    if (ballScreenX + (ballSize / 2) - (bubbleWidth / 2) < 0) { translateX = -(ballScreenX + (ballSize / 2)) + 10; }
+                    ballBubble.style.transform = `translateX(${translateX}px) translateY(-100%)`;
                 }
-
                 requestAnimationFrame(animateBall);
             }
             
             initializeBall();
             animateBall();
 
-
-            // --- All other scripts (Glow, Menu, Modal, etc.) ---
+            // --- Other Scripts (Glow, Menu, Modal, etc.) ---
             const glow = document.getElementById('cursor-glow');
-            if (glow && !isMobile) { // Disable glow on touch devices
-                document.body.addEventListener('mousemove', e => {
-                    glow.style.opacity = '1';
-                    glow.style.left = `${e.clientX}px`;
-                    glow.style.top = `${e.clientY}px`;
-                });
-            }
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const hamburgerIcon = document.getElementById('hamburger-icon');
-            const closeIcon = document.getElementById('close-icon');
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-
-            function toggleMenu() {
-                mobileMenu.classList.toggle('hidden');
-                hamburgerIcon.classList.toggle('hidden');
-                closeIcon.classList.toggle('hidden');
-            }
-
+            if (glow && !isMobile) { document.body.addEventListener('mousemove', e => { glow.style.opacity = '1'; glow.style.left = `${e.clientX}px`; glow.style.top = `${e.clientY}px`; }); }
+            const mobileMenuButton = document.getElementById('mobile-menu-button'), mobileMenu = document.getElementById('mobile-menu'), hamburgerIcon = document.getElementById('hamburger-icon'), closeIcon = document.getElementById('close-icon');
+            const toggleMenu = () => { mobileMenu.classList.toggle('hidden'); hamburgerIcon.classList.toggle('hidden'); closeIcon.classList.toggle('hidden'); };
             mobileMenuButton.addEventListener('click', toggleMenu);
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        toggleMenu();
-                    }
-                });
-            });
-
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const headerHeight = document.getElementById('header').offsetHeight;
-            const observerOptions = { root: null, rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0.4 };
-            const observer = new IntersectionObserver((entries, observer) => {
+            document.querySelectorAll('.mobile-nav-link').forEach(link => { link.addEventListener('click', () => { if (!mobileMenu.classList.contains('hidden')) { toggleMenu(); } }); });
+            const sections = document.querySelectorAll('section'), navLinks = document.querySelectorAll('.nav-link'), headerHeight = document.getElementById('header').offsetHeight;
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         navLinks.forEach(link => link.classList.remove('nav-active'));
-                        const id = entry.target.getAttribute('id');
-                        const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
-                        if (activeLink) {
-                            activeLink.classList.add('nav-active');
-                        }
+                        const activeLink = document.querySelector(`.nav-link[href="#${entry.target.getAttribute('id')}"]`);
+                        if (activeLink) { activeLink.classList.add('nav-active'); }
                     }
                 });
-            }, observerOptions);
+            }, { root: null, rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0.4 });
             sections.forEach(section => observer.observe(section));
-
-            const videoModal = document.getElementById('video-modal');
-            const videoModalOverlay = document.getElementById('video-modal-overlay');
-            const videoIframe = document.getElementById('video-iframe');
-            const videoModalClose = document.getElementById('video-modal-close');
-            const videoTriggers = document.querySelectorAll('.video-modal-trigger');
-
-            function openModal(videoSrc) {
-                videoIframe.src = videoSrc;
-                videoModal.classList.remove('hidden');
-                videoModal.classList.add('flex');
-            }
-
-            function closeModal() {
-                videoIframe.src = ""; // Stop the video
-                videoModal.classList.add('hidden');
-                videoModal.classList.remove('flex');
-            }
-
-            videoTriggers.forEach(trigger => {
-                trigger.addEventListener('click', () => {
-                    const videoSrc = trigger.getAttribute('data-video-src');
-                    openModal(videoSrc);
-                });
-            });
-
-            videoModalClose.addEventListener('click', closeModal);
-            videoModalOverlay.addEventListener('click', closeModal);
+            const videoModal = document.getElementById('video-modal'), videoIframe = document.getElementById('video-iframe');
+            const closeModal = () => { videoIframe.src = ""; videoModal.classList.add('hidden'); videoModal.classList.remove('flex'); };
+            document.querySelectorAll('.video-modal-trigger').forEach(trigger => { trigger.addEventListener('click', () => { videoIframe.src = trigger.getAttribute('data-video-src'); videoModal.classList.remove('hidden'); videoModal.classList.add('flex'); }); });
+            document.getElementById('video-modal-close').addEventListener('click', closeModal);
+            document.getElementById('video-modal-overlay').addEventListener('click', closeModal);
         });
     </script>
-
 </body>
 </html>
