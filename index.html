@@ -40,8 +40,12 @@
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 14px;
+            /* FIX: Set a fixed width to prevent text reflow ("glitching") and stabilize height calculations for the scrollbar. */
+            width: 250px;
             max-width: 250px;
             max-height: 200px;
+            /* FIX: Use border-box for more predictable sizing. */
+            box-sizing: border-box;
             overflow-y: hidden; /* Default to hidden; JS will manage this. */
             text-align: center;
             white-space: normal;
@@ -502,17 +506,22 @@
                 }
             });
 
+            
             async function callApiFunction(payload) {
-                // This function would call your backend (e.g., a Netlify function)
-                // For demonstration, we'll simulate a delay and return a mock response.
-                console.log("Calling mock API with payload:", payload);
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-                
-                if (payload.taskType === 'match') {
-                    return `Based on the job description, my skills in ${skills.split(',').slice(0,3).join(', ')} seem like a strong match. My experience with web development and data analysis aligns well with the requirements. I'm particularly excited about the opportunity to apply my knowledge of Python and SQL to this role.`;
-                } else {
-                    return `That's a great question! Regarding "${payload.question}", my experience at BYU involved enhancing HVAC systems, which improved campus energy efficiency. I primarily used my skills in Web Development and SQL to achieve this.`;
+                const apiUrl = '/.netlify/functions/generate-message';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
                 }
+
+                const result = await response.json();
+                return result.message;
             }
 
             function readFileContent(file) {
@@ -568,20 +577,14 @@
                 "Have a question? Ask my AI assistant in the Contact section!",
             ];
 
-            /**
-             * SCROLLBAR FIX: This function now robustly handles the scrollbar.
-             * It resets overflow to 'hidden' first, then after a brief moment (to let the browser render),
-             * it checks if the content is overflowing and only shows the scrollbar if necessary.
-             */
             function showBubbleMessage(text, duration = 5000) {
                 ballBubble.textContent = text;
-                // Reset overflow to hidden before we measure it. This prevents a scrollbar
-                // from a previous long message from appearing briefly.
+                // Always reset to hidden first. This is critical for the scrollbar logic.
                 ballBubble.style.overflowY = 'hidden';
                 ballBubble.classList.add('visible');
 
                 // Use a small timeout to allow the browser to render the new content
-                // and calculate its actual height.
+                // and calculate its actual height within the now-fixed width.
                 setTimeout(() => {
                     // Now, check if the content's full height (scrollHeight) is greater
                     // than the visible area's height (clientHeight).
@@ -589,12 +592,10 @@
                         // If it is, enable the scrollbar.
                         ballBubble.style.overflowY = 'auto';
                     }
-                    // If not, it remains 'hidden' as we set it before.
-                }, 10); // Using 10ms is a bit more robust than 0ms.
+                    // If not, it correctly remains 'hidden' as set above.
+                }, 10);
 
-                // Clear any previous timer to hide the bubble.
                 clearTimeout(messageTimer);
-                // If a duration is provided (not 0), set a new timer to hide the bubble.
                 if (duration > 0) {
                     messageTimer = setTimeout(() => {
                         ballBubble.classList.remove('visible');
@@ -620,20 +621,20 @@
                     const distToRight = Math.sqrt(Math.pow(mouseX - targetRightX, 2) + Math.pow(mouseY - targetYPos, 2));
                     const distToLeft = Math.sqrt(Math.pow(mouseX - targetLeftX, 2) + Math.pow(mouseY - targetYPos, 2));
 
-                    if (lastSummonSide === 'right') { // Prefer left side this time
-                        if (distToLeft < 100) { // Is cursor blocking the left?
-                            targetX = targetRightX; // Go right instead
+                    if (lastSummonSide === 'right') {
+                        if (distToLeft < 100) {
+                            targetX = targetRightX;
                             lastSummonSide = 'right';
                         } else {
-                            targetX = targetLeftX; // Go left
+                            targetX = targetLeftX;
                             lastSummonSide = 'left';
                         }
-                    } else { // Prefer right side this time
-                        if (distToRight < 100) { // Is cursor blocking the right?
-                            targetX = targetLeftX; // Go left instead
+                    } else {
+                        if (distToRight < 100) {
+                            targetX = targetLeftX;
                             lastSummonSide = 'left';
                         } else {
-                            targetX = targetRightX; // Go right
+                            targetX = targetRightX;
                             lastSummonSide = 'right';
                         }
                     }
@@ -663,10 +664,11 @@
                 guideMessageTimeout = setTimeout(() => {
                     if (ballState === 'roaming') {
                         const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
-                        showBubbleMessage(randomMsg);
-                        scheduleNextGuideMessage(); // Schedule the next one
+                        showBubbleMessage(randomMsg, 8000); // Show guide message for 8 seconds
+                        // Schedule the next one after this one disappears
+                        setTimeout(scheduleNextGuideMessage, 23000); // 8s display + 15s wait
                     }
-                }, 15000); // 15 seconds
+                }, 15000); // 15 seconds initial wait
             }
 
             function initializeBall() {
@@ -688,14 +690,12 @@
                 mouseY = e.pageY;
             });
             
-            /**
-             * MOBILE GLITCH FIX: The touch coordinates are now initialized to a safe,
-             * off-screen position. Crucially, the 'touchend' event listener resets these
-             * coordinates, preventing the ball from reacting to a "stale" touch point
-             * after the user has lifted their finger.
-             */
             let touchX = -1000;
             let touchY = -1000;
+            const resetTouch = () => {
+                touchX = -1000;
+                touchY = -1000;
+            };
             document.addEventListener('touchstart', (e) => {
                 touchX = e.touches[0].pageX;
                 touchY = e.touches[0].pageY;
@@ -704,11 +704,9 @@
                 touchX = e.touches[0].pageX;
                 touchY = e.touches[0].pageY;
             });
-            document.addEventListener('touchend', () => {
-                // Reset to a safe off-screen position so the ball doesn't keep reacting
-                touchX = -1000;
-                touchY = -1000;
-            });
+            // MOBILE GLITCH FIX: Reset touch coordinates on both 'touchend' and 'touchcancel'
+            document.addEventListener('touchend', resetTouch);
+            document.addEventListener('touchcancel', resetTouch);
 
             function animateBall() {
                 const pageW = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
@@ -729,28 +727,21 @@
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     const currentTime = Date.now();
 
-                    /**
-                     * TEXT GLITCH FIX: The logic for hitting the ball is now cleaner.
-                     * If the ball is hit while 'speaking' (showing an AI response), it simply
-                     * hides the bubble and returns to roaming. This prevents a guide message
-                     * from being incorrectly scheduled and appearing later.
-                     */
                     if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
                         const wasSpeaking = ballState === 'speaking';
-
-                        if (wasSpeaking) {
-                            // If user hits the ball while it's showing a response, hide the bubble.
-                            ballBubble.classList.remove('visible');
-                            clearTimeout(messageTimer); // Cancel any pending hide timers
-                        }
                         
+                        // Always hide bubble and go to roaming on hit
+                        ballBubble.classList.remove('visible');
+                        clearTimeout(messageTimer);
                         ballState = 'roaming';
+                        
+                        // Apply bounce physics
                         lastHitTime = currentTime;
                         const angle = Math.atan2(dy, dx);
                         vx = Math.cos(angle) * 6;
                         vy = Math.sin(angle) * 6;
                         
-                        // Always clear and reschedule the guide message timer after any hit.
+                        // Always clear the guide message timer on hit.
                         clearTimeout(guideMessageTimeout);
                         scheduleNextGuideMessage();
                     }
