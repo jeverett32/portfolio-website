@@ -657,7 +657,7 @@
                         const randomMsg = guideMessages[Math.floor(Math.random() * guideMessages.length)];
                         showBubbleMessage(randomMsg, 7000); // Show guide message for 7 seconds
                         // Schedule the next one after this one disappears
-                        setTimeout(scheduleNextGuideMessage, 15000); // 7s display + 8s wait
+                        setTimeout(scheduleNextGuideMessage, 12000); // 7s display + 8s wait
                     }
                 }, 10000); // 10 seconds initial wait
             }
