@@ -40,13 +40,11 @@
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 14px;
-            /* FIX: Set a fixed width to prevent text reflow ("glitching") and stabilize height calculations for the scrollbar. */
             width: 250px;
             max-width: 250px;
-            max-height: 200px;
-            /* FIX: Use border-box for more predictable sizing. */
+            max-height: 240px; 
             box-sizing: border-box;
-            overflow-y: hidden; /* Default to hidden; JS will manage this. */
+            overflow-y: auto;
             text-align: center;
             white-space: normal;
             opacity: 0;
@@ -507,22 +505,25 @@
             });
 
             
+            /**
+             * API CONNECTION FIX: Reverted to a simulated API call as requested.
+             * This function now mimics a real API by waiting for 1.5 seconds
+             * and then returning a pre-written response. This ensures the UI
+             * appears to be working without relying on a live backend connection.
+             * To connect to your real Netlify function, replace the contents
+             * of this function with the 'fetch' call from the previous version.
+             */
             async function callApiFunction(payload) {
-                const apiUrl = '/.netlify/functions/generate-message';
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
+                console.log("Simulating API call with payload:", payload);
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+                
+                if (payload.taskType === 'match') {
+                    return `Based on the job description, my skills in ${skills.split(',').slice(0,3).join(', ')} seem like a strong match. My experience with web development and data analysis aligns well with the requirements. I'm particularly excited about the opportunity to apply my knowledge of Python and SQL to this role.`;
+                } else {
+                    return `That's a great question! Regarding "${payload.question}", my experience at BYU involved enhancing HVAC systems, which improved campus energy efficiency. I primarily used my skills in Web Development and SQL to achieve this.`;
                 }
-
-                const result = await response.json();
-                return result.message;
             }
+
 
             function readFileContent(file) {
                 return new Promise((resolve, reject) => {
@@ -579,21 +580,7 @@
 
             function showBubbleMessage(text, duration = 5000) {
                 ballBubble.textContent = text;
-                // Always reset to hidden first. This is critical for the scrollbar logic.
-                ballBubble.style.overflowY = 'hidden';
                 ballBubble.classList.add('visible');
-
-                // Use a small timeout to allow the browser to render the new content
-                // and calculate its actual height within the now-fixed width.
-                setTimeout(() => {
-                    // Now, check if the content's full height (scrollHeight) is greater
-                    // than the visible area's height (clientHeight).
-                    if (ballBubble.scrollHeight > ballBubble.clientHeight) {
-                        // If it is, enable the scrollbar.
-                        ballBubble.style.overflowY = 'auto';
-                    }
-                    // If not, it correctly remains 'hidden' as set above.
-                }, 10);
 
                 clearTimeout(messageTimer);
                 if (duration > 0) {
@@ -704,20 +691,32 @@
                 touchX = e.touches[0].pageX;
                 touchY = e.touches[0].pageY;
             });
-            // MOBILE GLITCH FIX: Reset touch coordinates on both 'touchend' and 'touchcancel'
             document.addEventListener('touchend', resetTouch);
             document.addEventListener('touchcancel', resetTouch);
 
             function animateBall() {
                 const pageW = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
                 const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                // MOBILE STICKING FIX: Get header height to use as the top boundary.
+                const header = document.getElementById('header');
+                const headerHeight = header ? header.offsetHeight : 0;
                 
                 if (ballState === 'roaming' || ballState === 'speaking') {
                     x += vx;
                     y += vy;
 
+                    // Wall collision
                     if (x + ballSize > pageW || x < 0) vx *= -1;
-                    if (y + ballSize > pageH || y < 0) vy *= -1;
+                    
+                    // MOBILE STICKING FIX: Check for bottom and top (header) collision separately.
+                    if (y + ballSize > pageH) { // Bottom of page
+                        y = pageH - ballSize;
+                        vy *= -1;
+                    } else if (y < headerHeight) { // Bottom of header
+                        y = headerHeight;
+                        vy *= -1;
+                    }
+
 
                     const interactionX = isMobile ? touchX : mouseX;
                     const interactionY = isMobile ? touchY : mouseY;
@@ -730,9 +729,13 @@
                     if (distance < 80 && (currentTime - lastHitTime > cooldown)) {
                         const wasSpeaking = ballState === 'speaking';
                         
-                        // Always hide bubble and go to roaming on hit
-                        ballBubble.classList.remove('visible');
-                        clearTimeout(messageTimer);
+                        // MESSAGE DISMISSAL FIX: Only hide the bubble if it was an AI response ('speaking').
+                        // Guide messages (during 'roaming') will no longer be dismissed on hit.
+                        if (wasSpeaking) {
+                            ballBubble.classList.remove('visible');
+                            clearTimeout(messageTimer);
+                        }
+                        
                         ballState = 'roaming';
                         
                         // Apply bounce physics
@@ -741,7 +744,7 @@
                         vx = Math.cos(angle) * 6;
                         vy = Math.sin(angle) * 6;
                         
-                        // Always clear the guide message timer on hit.
+                        // Always clear the guide message timer on hit and reschedule.
                         clearTimeout(guideMessageTimeout);
                         scheduleNextGuideMessage();
                     }
