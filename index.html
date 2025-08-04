@@ -147,7 +147,7 @@
         <section id="projects" class="py-20 sm:py-32">
             <h2 class="text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Projects & Experience</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="I built a full e-commerce and scheduling site for a local business using Firebase and the Square API.">
                     <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer"><img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'"></a>
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Trash Bin Cleaning Service Website</h3>
@@ -161,7 +161,7 @@
                         <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">View Live Site →</a>
                     </div>
                 </div>
-                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="I enhanced campus energy efficiency by overhauling BYU's HVAC history, alarm, and air quality systems.">
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">BYU HVAC Systems Enhancement</h3>
                         <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
@@ -173,7 +173,7 @@
                         <button data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
-                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="I boosted growth for a startup by identifying UX issues, building a lead list with AI, and designing a social media calendar.">
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Stride Scheduling UX & Growth</h3>
                         <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
@@ -186,7 +186,7 @@
                         <button data-video-src="https://www.youtube.com/embed/L_LUpnjgPso" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
-                <div class="translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="Using Python and R, I analyzed survey data to build predictive models for behavioral trends, presenting my findings at a conference.">
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Behavioral Trend Analysis</h3>
                         <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
@@ -407,7 +407,6 @@
                 const result = await response.json();
                 
                 if (payload.taskType === 'theme') {
-                    // The backend function should return a 'colors' object for the theme task
                     if (result.colors) {
                         return result.colors;
                     } else {
@@ -415,7 +414,6 @@
                     }
                 }
                 
-                // For other tasks, it returns a 'message' string
                 return result.message;
             }
 
@@ -425,7 +423,6 @@
                     const cssVar = '--' + key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
                     root.style.setProperty(cssVar, value);
                 }
-                // Special case for the glow, which needs an rgba value derived from the primary color
                 const hex = colors.primaryColor.startsWith('#') ? colors.primaryColor.substring(1) : colors.primaryColor;
                 const r = parseInt(hex.substring(0, 2), 16);
                 const g = parseInt(hex.substring(2, 4), 16);
@@ -482,6 +479,30 @@
                 clearTimeout(messageTimer);
                 if (duration > 0) { messageTimer = setTimeout(() => ballBubble.classList.remove('visible'), duration); }
             }
+            
+            function hideBubble() {
+                ballBubble.classList.remove('visible');
+                clearTimeout(messageTimer);
+            }
+
+            function guideBallToTarget(message, element) {
+                const rect = element.getBoundingClientRect();
+                targetX = rect.left + window.scrollX + (rect.width / 2) - (ballSize / 2);
+                targetY = rect.top + window.scrollY - ballSize - 20; // Position above the card
+                
+                ballState = 'guiding';
+                clearTimeout(guideMessageTimeout);
+                hideBubble();
+
+                const arrivalCheck = setInterval(() => {
+                    if (Math.hypot(x - targetX, y - targetY) < 5) {
+                        clearInterval(arrivalCheck);
+                        ballState = 'speaking';
+                        vx = 0; vy = 0;
+                        showBubbleMessage(message, 0); // Show message indefinitely until mouseout
+                    }
+                }, 100);
+            }
 
             function summonBallAndShowMessage(message, buttonElement) {
                 const panelRect = document.getElementById('ai-assistant-panel').getBoundingClientRect();
@@ -506,8 +527,7 @@
                 }
                 ballState = 'summoned';
                 clearTimeout(guideMessageTimeout);
-                clearTimeout(messageTimer);
-                ballBubble.classList.remove('visible');
+                hideBubble();
                 const arrivalCheck = setInterval(() => {
                     if (Math.hypot(x - targetX, y - targetY) < 5) {
                         clearInterval(arrivalCheck);
@@ -558,7 +578,7 @@
                     const distance = Math.hypot(x - interactionX + (ballSize / 2), y - interactionY + (ballSize / 2));
                     const currentTime = Date.now();
                     if (distance < 50 && (currentTime - lastHitTime > cooldown)) {
-                        if (ballState === 'speaking') { showBubbleMessage(ballBubble.textContent, 5000); }
+                        if (ballState === 'speaking') { hideBubble(); }
                         ballState = 'roaming';
                         lastHitTime = currentTime;
                         const angle = Math.atan2(y - interactionY + (ballSize / 2), x - interactionX + (ballSize / 2));
@@ -566,7 +586,7 @@
                         scheduleNextGuideMessage();
                     }
                     if (ballState === 'roaming') { vx *= 0.995; vy *= 0.995; }
-                } else if (ballState === 'summoned') {
+                } else if (ballState === 'summoned' || ballState === 'guiding') {
                     const dx = targetX - x, dy = targetY - y;
                     const speed = Math.min(0.1, Math.hypot(dx, dy) / 100);
                     x += dx * speed; y += dy * speed;
@@ -605,6 +625,27 @@
             
             initializeBall();
             animateBall();
+
+            // --- Project Card Hover Logic ---
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('mouseover', () => {
+                    const summary = card.getAttribute('data-summary');
+                    if (summary && ballState !== 'summoned') {
+                        guideBallToTarget(summary, card);
+                    }
+                });
+
+                card.addEventListener('mouseout', () => {
+                    if (ballState === 'speaking' || ballState === 'guiding') {
+                        hideBubble();
+                        ballState = 'roaming';
+                        vx = (Math.random() - 0.5) * 2; // Give it a little nudge
+                        vy = (Math.random() - 0.5) * 2;
+                        scheduleNextGuideMessage();
+                    }
+                });
+            });
 
             // --- Other Scripts (Glow, Menu, Modal, etc.) ---
             const glow = document.getElementById('cursor-glow');
