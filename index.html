@@ -511,7 +511,7 @@
                     } else {
                         const targetRightX = panelRect.right + window.scrollX + 40;
                         const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
-                        const targetYPos = panelRect.top + window.scrollY + (panelRect.height / 2) - (ballSize / 2);
+                        const targetYPos = rect.top + window.scrollY + (rect.height / 2) - (ballSize / 2);
                         
                         if (lastSummonSide === 'right') {
                             targetX = targetLeftX;
@@ -662,3 +662,5 @@
     </script>
 </body>
 </html>
+```
+the ball still isn't going to the same y location as the button that was p
