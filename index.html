@@ -394,7 +394,7 @@
                     const payload = { taskType: 'theme', description, bio: aboutMeContent, skills };
                     const colors = await callApiFunction(payload);
                     applyTheme(colors);
-                    summonBallAndShowMessage("Theme updated! How does it look?", generateThemeBtn);
+                    summonBallAndShowMessage("Theme updated! How does it look?", generateThemeBtn, 5000);
                 } catch (error) {
                     aiError.textContent = `Failed to generate theme: ${error.message}`;
                 } finally {
@@ -497,7 +497,7 @@
                 clearTimeout(messageTimer);
             }
 
-            function summonBallAndShowMessage(message, buttonElement) {
+            function summonBallAndShowMessage(message, buttonElement, duration = 0) {
                 const rect = buttonElement.getBoundingClientRect();
                 
                 if (buttonElement.classList.contains('summary-trigger')) {
@@ -512,14 +512,13 @@
                         const targetRightX = panelRect.right + window.scrollX + 40;
                         const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
                         const targetYPos = panelRect.top + window.scrollY + (panelRect.height / 2) - (ballSize / 2);
-                        const distToRight = Math.hypot(mouseX - targetRightX, mouseY - targetYPos);
-                        const distToLeft = Math.hypot(mouseX - targetLeftX, mouseY - targetYPos);
+                        
                         if (lastSummonSide === 'right') {
-                            targetX = (distToLeft < 100) ? targetRightX : targetLeftX;
-                            lastSummonSide = (distToLeft < 100) ? 'right' : 'left';
+                            targetX = targetLeftX;
+                            lastSummonSide = 'left';
                         } else {
-                            targetX = (distToRight < 100) ? targetLeftX : targetRightX;
-                            lastSummonSide = (distToRight < 100) ? 'left' : 'right';
+                            targetX = targetRightX;
+                            lastSummonSide = 'right';
                         }
                         targetY = targetYPos;
                     }
@@ -533,7 +532,7 @@
                         clearInterval(arrivalCheck);
                         ballState = 'speaking';
                         vx = 0; vy = 0;
-                        showBubbleMessage(message); // Persists until hit
+                        showBubbleMessage(message, duration);
                     }
                 }, 100);
             }
@@ -578,7 +577,9 @@
                     const distance = Math.hypot(x + (ballSize / 2) - interactionX, y + (ballSize / 2) - interactionY);
                     const currentTime = Date.now();
                     if (distance < 30 && (currentTime - lastHitTime > cooldown)) {
-                        if (ballState === 'speaking') { hideBubble(); }
+                        if (ballState === 'speaking') { 
+                            showBubbleMessage(ballBubble.textContent, 3000); // Show for 3 seconds before hiding
+                        }
                         ballState = 'roaming';
                         lastHitTime = currentTime;
                         const angle = Math.atan2(y + (ballSize / 2) - interactionY, x + (ballSize / 2) - interactionX);
