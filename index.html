@@ -40,13 +40,19 @@
             color: var(--text-color);
         }
         .nav-active { background-color: var(--secondary-color); color: white; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, var(--primary-color-glow, rgba(6, 182, 212, 0.1)) 0%, rgba(6, 182, 212, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s, background 0.5s; opacity: 0; }
         .loader { border: 4px solid #4b5563; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        #ball-container { position: absolute; z-index: 5; pointer-events: none; will-change: transform; }
+        #ball-container { 
+            position: absolute; 
+            top: 0;
+            left: 0;
+            /* High z-index to be on top of all content */
+            z-index: 1001; 
+            pointer-events: none; 
+            will-change: transform; 
+        }
         #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s; }
         #ball-bubble { position: fixed; z-index: 1002; background-color: var(--input-bg-color); color: var(--text-muted-color); padding: 10px 12px; border-radius: 8px; font-size: 14px; width: 250px; max-width: 250px; max-height: 240px; box-sizing: border-box; overflow-y: hidden; text-align: center; white-space: normal; opacity: 0; transition: opacity 0.3s ease-in-out, transform 0.2s ease-out, background-color 0.5s; visibility: hidden; pointer-events: auto; }
         #ball-bubble.visible { opacity: 1; visibility: visible; }
@@ -54,13 +60,17 @@
 
         #offscreen-pointer { position: fixed; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid var(--interactive-ball-color); opacity: 0; transition: opacity 0.3s, border-color 0.5s; z-index: 1002; pointer-events: none; }
         
-        .translucent-panel { background-color: var(--panel-bg-color); }
+        .translucent-panel { 
+            background-color: var(--panel-bg-color); 
+            position: relative;
+        }
         .translucent-image { opacity: 0.85; }
     </style>
 </head>
 <body class="antialiased relative">
 
     <div id="cursor-glow"></div>
+    
     <div id="ball-container">
         <div id="interactive-ball"></div>
     </div>
@@ -103,17 +113,17 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <section id="home" class="min-h-screen flex items-center justify-center text-center">
-            <div class="space-y-6">
+            <div class="relative z-20">
                 <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight"><span class="block">Welcome to My Portfolio</span></h1>
-                <p class="max-w-2xl mx-auto text-lg md:text-xl text-[var(--text-muted-color)]">I'm John and I use data and AI to create technology-driven business solutions.</p>
-                <div><a href="#contact" class="inline-block bg-[var(--secondary-color)] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] transition-transform transform hover:scale-105 duration-300">Get In Touch</a></div>
+                <p class="max-w-2xl mx-auto text-lg md:text-xl text-[var(--text-muted-color)] mt-6">I'm John and I use data and AI to create technology-driven business solutions.</p>
+                <div class="mt-8"><a href="#contact" class="inline-block bg-[var(--secondary-color)] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] transition-transform transform hover:scale-105 duration-300">Get In Touch</a></div>
             </div>
         </section>
 
         <section id="about" class="py-20 sm:py-32">
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+            <div class="relative z-20 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
                 <div class="lg:col-span-2"><img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'"></div>
                 <div class="lg:col-span-3 space-y-4">
                     <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)]">About Me</h2>
@@ -145,72 +155,82 @@
         </section>
 
         <section id="projects" class="py-20 sm:py-32">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Projects & Experience</h2>
+            <h2 class="relative z-20 text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Projects & Experience</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="I built a full e-commerce and scheduling site for a local business using Firebase and the Square API.">
-                    <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer"><img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'"></a>
+                    <div class="relative z-20">
+                        <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer"><img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="translucent-image w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'"></a>
+                    </div>
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Trash Bin Cleaning Service Website</h3>
-                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Developed a fully functional e-commerce site for a local service, featuring online scheduling and secure payment processing via the Square API, all connected to a Firebase backend.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Web Development</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Firebase</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Square API</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">JavaScript</span>
+                        <div class="relative z-20 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Trash Bin Cleaning Service Website</h3>
+                            <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Developed a fully functional e-commerce site for a local service, featuring online scheduling and secure payment processing via the Square API, all connected to a Firebase backend.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Web Development</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Firebase</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Square API</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">JavaScript</span>
+                            </div>
+                            <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">View Live Site →</a>
                         </div>
-                        <a href="https://jeverett32.github.io/trashbins/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">View Live Site →</a>
                     </div>
                 </div>
                 <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="I enhanced campus energy efficiency by overhauling BYU's HVAC history, alarm, and air quality systems.">
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">BYU HVAC Systems Enhancement</h3>
-                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Web Development</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">UI/UX</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">SQL</span>
+                         <div class="relative z-20 flex flex-col flex-grow items-start">
+                            <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">BYU HVAC Systems Enhancement</h3>
+                            <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems to enhance user experience and flexibility.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Web Development</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">UI/UX</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">SQL</span>
+                            </div>
+                            <button class="summary-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Show Summary →</button>
                         </div>
-                        <button data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
                 <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="I boosted growth for a startup by identifying UX issues, building a lead list with AI, and designing a social media calendar.">
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Stride Scheduling UX & Growth</h3>
-                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">UX Testing</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">CRM</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Figma</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">AI</span>
+                        <div class="relative z-20 flex flex-col flex-grow items-start">
+                            <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Stride Scheduling UX & Growth</h3>
+                            <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Identified and documented 15+ UX issues via structured testing, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">UX Testing</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">CRM</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Figma</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">AI</span>
+                            </div>
+                            <button class="summary-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Show Summary →</button>
                         </div>
-                        <button data-video-src="https://www.youtube.com/embed/L_LUpnjgPso" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
                 <div class="project-card translucent-panel rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col" data-summary="Using Python and R, I analyzed survey data to build predictive models for behavioral trends, presenting my findings at a conference.">
                     <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Behavioral Trend Analysis</h3>
-                        <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Data Analysis</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Python</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">R</span>
-                            <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Predictive Modeling</span>
+                        <div class="relative z-20 flex flex-col flex-grow items-start">
+                            <h3 class="text-xl font-bold mb-2 text-[var(--text-color)]">Behavioral Trend Analysis</h3>
+                            <p class="text-[var(--text-muted-darker-color)] mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Data Analysis</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Python</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">R</span>
+                                <span class="text-xs font-semibold bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-2 py-1 rounded-full">Predictive Modeling</span>
+                            </div>
+                            <button class="summary-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Show Summary →</button>
                         </div>
-                        <button data-video-src="https://www.youtube.com/embed/3h0_v2cdH1s" class="video-modal-trigger mt-auto inline-block text-[var(--primary-color)] font-semibold hover:text-[var(--secondary-color)] transition-colors text-left">Learn More →</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="py-20 sm:py-32">
-            <div class="text-center">
+            <div class="relative z-20 text-center">
                 <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)] mb-4">Contact & AI Assistant</h2>
                 <p class="text-lg text-[var(--text-muted-color)] mb-8 max-w-3xl mx-auto">Use my AI assistant to see how my skills fit your needs or to ask questions about my experience. Or, feel free to send me a message directly.</p>
             </div>
             
             <div class="max-w-xl mx-auto space-y-12">
                 <div id="ai-assistant-panel" class="bg-[var(--panel-bg-color)] p-6 rounded-lg border border-[var(--panel-border-color)] space-y-6">
-                    <div>
+                    <div class="relative z-20">
                         <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">1. AI-Powered Skills Match</h3>
                         <label for="job-description-text" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Paste Job Description</label>
                         <textarea id="job-description-text" rows="5" placeholder="Paste the full job description here..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors"></textarea>
@@ -224,7 +244,7 @@
                         <div class="text-center mt-4"><button type="button" id="generate-summary-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">✨ Generate Summary<div id="summary-loader" class="loader hidden"></div></button></div>
                     </div>
                     
-                    <div class="border-t border-[var(--panel-border-color)] pt-6">
+                    <div class="relative z-20 border-t border-[var(--panel-border-color)] pt-6">
                          <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">2. AI-Powered Theme Customization</h3>
                          <label for="theme-description" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Describe a theme (e.g., "ocean sunset", "hacker green")</label>
                          <input type="text" id="theme-description" placeholder="Enter theme description..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
@@ -236,7 +256,7 @@
                          </div>
                     </div>
 
-                    <div class="border-t border-[var(--panel-border-color)] pt-6">
+                    <div class="relative z-20 border-t border-[var(--panel-border-color)] pt-6">
                         <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">3. Ask a Question About Me</h3>
                         <label for="qa-question" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Your Question</label>
                         <input type="text" id="qa-question" placeholder="e.g., 'What was your role at BYU?'" class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
@@ -246,7 +266,7 @@
                     <div id="ai-error" class="text-red-400 text-center text-sm"></div>
                 </div>
 
-                <div class="pt-8">
+                <div class="relative z-20 pt-8">
                      <h3 class="text-xl font-bold text-[var(--text-color)] mb-4 text-center">Or, Send a Direct Message</h3>
                     <form id="contact-form" class="space-y-6">
                         <div><label for="name" class="sr-only">Name</label><input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" /></div>
@@ -261,7 +281,7 @@
     </main>
 
     <footer class="bg-[var(--bg-color)] border-t border-[var(--panel-border-color)] relative z-10">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+        <div class="relative z-20 max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center space-x-6 mb-4">
                 <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
                 <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
@@ -270,14 +290,6 @@
             <p class="text-gray-500">© 2025 John Everett. All rights reserved.</p>
         </div>
     </footer>
-
-    <div id="video-modal" class="hidden fixed inset-0 z-50 items-center justify-center">
-        <div id="video-modal-overlay" class="absolute inset-0 bg-black bg-opacity-75"></div>
-        <div id="video-modal-content" class="relative bg-[var(--bg-color)] rounded-lg shadow-xl w-11/12 max-w-4xl p-4">
-             <button id="video-modal-close" class="absolute z-10 -top-3 -right-3 h-10 w-10 bg-white rounded-full text-gray-800 flex items-center justify-center text-2xl font-bold">×</button>
-            <div class="video-container"><iframe id="video-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-        </div>
-    </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script>
@@ -472,7 +484,7 @@
             const isMobile = 'ontouchstart' in window;
             const guideMessages = ["Curious about my work? Head to the Projects section!", "Want to know more? The About section has details!", "Have a question? Ask my AI assistant below!"];
 
-            function showBubbleMessage(text, duration = 5000) {
+            function showBubbleMessage(text, duration = 0) { // Default duration 0 to persist
                 ballBubble.textContent = text;
                 ballBubble.classList.add('visible');
                 setTimeout(() => { ballBubble.style.overflowY = (ballBubble.scrollHeight > ballBubble.clientHeight + 10) ? 'auto' : 'hidden'; }, 0);
@@ -485,46 +497,34 @@
                 clearTimeout(messageTimer);
             }
 
-            function guideBallToTarget(message, element) {
-                const rect = element.getBoundingClientRect();
-                targetX = rect.left + window.scrollX + (rect.width / 2) - (ballSize / 2);
-                targetY = rect.top + window.scrollY - ballSize - 20; // Position above the card
-                
-                ballState = 'guiding';
-                clearTimeout(guideMessageTimeout);
-                hideBubble();
-
-                const arrivalCheck = setInterval(() => {
-                    if (Math.hypot(x - targetX, y - targetY) < 5) {
-                        clearInterval(arrivalCheck);
-                        ballState = 'speaking';
-                        vx = 0; vy = 0;
-                        showBubbleMessage(message, 0); // Show message indefinitely until mouseout
-                    }
-                }, 100);
-            }
-
             function summonBallAndShowMessage(message, buttonElement) {
-                const panelRect = document.getElementById('ai-assistant-panel').getBoundingClientRect();
-                if (isMobile) {
-                    const btnRect = buttonElement.getBoundingClientRect();
-                    targetX = (btnRect.left > window.innerWidth / 2) ? btnRect.left - ballSize - 20 : btnRect.right + 20;
-                    targetY = btnRect.top + window.scrollY;
-                } else {
-                    const targetRightX = panelRect.right + window.scrollX + 40;
-                    const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
-                    const targetYPos = (window.innerHeight / 2) - (ballSize / 2) + window.scrollY;
-                    const distToRight = Math.hypot(mouseX - targetRightX, mouseY - targetYPos);
-                    const distToLeft = Math.hypot(mouseX - targetLeftX, mouseY - targetYPos);
-                    if (lastSummonSide === 'right') {
-                        targetX = (distToLeft < 100) ? targetRightX : targetLeftX;
-                        lastSummonSide = (distToLeft < 100) ? 'right' : 'left';
+                const rect = buttonElement.getBoundingClientRect();
+                
+                if (buttonElement.classList.contains('summary-trigger')) {
+                    targetX = rect.right + window.scrollX + 10;
+                    targetY = rect.top + window.scrollY + (rect.height / 2) - (ballSize / 2);
+                } else { // AI Assistant buttons
+                    const panelRect = document.getElementById('ai-assistant-panel').getBoundingClientRect();
+                     if (isMobile) {
+                        targetX = (rect.left > window.innerWidth / 2) ? rect.left - ballSize - 20 : rect.right + 20;
+                        targetY = rect.top + window.scrollY;
                     } else {
-                        targetX = (distToRight < 100) ? targetLeftX : targetRightX;
-                        lastSummonSide = (distToRight < 100) ? 'left' : 'right';
+                        const targetRightX = panelRect.right + window.scrollX + 40;
+                        const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
+                        const targetYPos = panelRect.top + window.scrollY + (panelRect.height / 2) - (ballSize / 2);
+                        const distToRight = Math.hypot(mouseX - targetRightX, mouseY - targetYPos);
+                        const distToLeft = Math.hypot(mouseX - targetLeftX, mouseY - targetYPos);
+                        if (lastSummonSide === 'right') {
+                            targetX = (distToLeft < 100) ? targetRightX : targetLeftX;
+                            lastSummonSide = (distToLeft < 100) ? 'right' : 'left';
+                        } else {
+                            targetX = (distToRight < 100) ? targetLeftX : targetRightX;
+                            lastSummonSide = (distToRight < 100) ? 'left' : 'right';
+                        }
+                        targetY = targetYPos;
                     }
-                    targetY = targetYPos;
                 }
+                
                 ballState = 'summoned';
                 clearTimeout(guideMessageTimeout);
                 hideBubble();
@@ -533,7 +533,7 @@
                         clearInterval(arrivalCheck);
                         ballState = 'speaking';
                         vx = 0; vy = 0;
-                        showBubbleMessage(message, 0);
+                        showBubbleMessage(message); // Persists until hit
                     }
                 }, 100);
             }
@@ -542,7 +542,7 @@
                 clearTimeout(guideMessageTimeout);
                 guideMessageTimeout = setTimeout(() => {
                     if (ballState === 'roaming') {
-                        showBubbleMessage(guideMessages[Math.floor(Math.random() * guideMessages.length)]);
+                        showBubbleMessage(guideMessages[Math.floor(Math.random() * guideMessages.length)], 5000);
                         scheduleNextGuideMessage();
                     }
                 }, 15000);
@@ -575,18 +575,18 @@
                     if (y + ballSize > pageH || y < 0) vy *= -1;
                     const interactionX = isMobile ? touchX : mouseX;
                     const interactionY = isMobile ? touchY : mouseY;
-                    const distance = Math.hypot(x - interactionX + (ballSize / 2), y - interactionY + (ballSize / 2));
+                    const distance = Math.hypot(x + (ballSize / 2) - interactionX, y + (ballSize / 2) - interactionY);
                     const currentTime = Date.now();
-                    if (distance < 50 && (currentTime - lastHitTime > cooldown)) {
+                    if (distance < 30 && (currentTime - lastHitTime > cooldown)) {
                         if (ballState === 'speaking') { hideBubble(); }
                         ballState = 'roaming';
                         lastHitTime = currentTime;
-                        const angle = Math.atan2(y - interactionY + (ballSize / 2), x - interactionX + (ballSize / 2));
+                        const angle = Math.atan2(y + (ballSize / 2) - interactionY, x + (ballSize / 2) - interactionX);
                         vx = Math.cos(angle) * 6; vy = Math.sin(angle) * 6;
                         scheduleNextGuideMessage();
                     }
                     if (ballState === 'roaming') { vx *= 0.995; vy *= 0.995; }
-                } else if (ballState === 'summoned' || ballState === 'guiding') {
+                } else if (ballState === 'summoned') {
                     const dx = targetX - x, dy = targetY - y;
                     const speed = Math.min(0.1, Math.hypot(dx, dy) / 100);
                     x += dx * speed; y += dy * speed;
@@ -626,23 +626,15 @@
             initializeBall();
             animateBall();
 
-            // --- Project Card Hover Logic ---
-            const projectCards = document.querySelectorAll('.project-card');
-            projectCards.forEach(card => {
-                card.addEventListener('mouseover', () => {
-                    const summary = card.getAttribute('data-summary');
-                    if (summary && ballState !== 'summoned') {
-                        guideBallToTarget(summary, card);
-                    }
-                });
-
-                card.addEventListener('mouseout', () => {
-                    if (ballState === 'speaking' || ballState === 'guiding') {
-                        hideBubble();
-                        ballState = 'roaming';
-                        vx = (Math.random() - 0.5) * 2; // Give it a little nudge
-                        vy = (Math.random() - 0.5) * 2;
-                        scheduleNextGuideMessage();
+            // --- Summary Button Logic ---
+            const summaryTriggers = document.querySelectorAll('.summary-trigger');
+            summaryTriggers.forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    const buttonElement = e.currentTarget;
+                    const parentCard = buttonElement.closest('.project-card');
+                    const summary = parentCard ? parentCard.getAttribute('data-summary') : null;
+                    if (summary) {
+                        summonBallAndShowMessage(summary, buttonElement);
                     }
                 });
             });
@@ -665,11 +657,6 @@
                 });
             }, { root: null, rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0.4 });
             sections.forEach(section => observer.observe(section));
-            const videoModal = document.getElementById('video-modal'), videoIframe = document.getElementById('video-iframe');
-            const closeModal = () => { videoIframe.src = ""; videoModal.classList.add('hidden'); videoModal.classList.remove('flex'); };
-            document.querySelectorAll('.video-modal-trigger').forEach(trigger => { trigger.addEventListener('click', () => { videoIframe.src = trigger.getAttribute('data-video-src'); videoModal.classList.remove('hidden'); videoModal.classList.add('flex'); }); });
-            document.getElementById('video-modal-close').addEventListener('click', closeModal);
-            document.getElementById('video-modal-overlay').addEventListener('click', closeModal);
         });
     </script>
 </body>
