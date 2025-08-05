@@ -48,11 +48,12 @@
             position: absolute; 
             top: 0;
             left: 0;
+            /* High z-index to be on top of all content */
             z-index: 1001; 
             pointer-events: none; 
             will-change: transform; 
         }
-        #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s, transform 0.3s ease-out; }
+        #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s, transform 0.3s ease-out, box-shadow 0.1s; }
         #ball-bubble { position: fixed; z-index: 1002; background-color: var(--input-bg-color); color: var(--text-muted-color); padding: 10px 12px; border-radius: 8px; font-size: 14px; width: 250px; max-width: 250px; max-height: 240px; box-sizing: border-box; overflow-y: hidden; text-align: center; white-space: normal; opacity: 0; transition: opacity 0.3s ease-in-out, transform 0.2s ease-out, background-color 0.5s; visibility: hidden; pointer-events: auto; }
         #ball-bubble.visible { opacity: 1; visibility: visible; }
         #ball-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--input-bg-color) transparent transparent transparent; transition: border-color 0.5s;}
@@ -265,7 +266,7 @@
                     <div id="ai-error" class="text-red-400 text-center text-sm"></div>
                 </div>
 
-                <div class="relative z-20 pt-8">
+                <div id="contact-form-section" class="relative z-20 pt-8">
                      <h3 class="text-xl font-bold text-[var(--text-color)] mb-4 text-center">Or, Send a Direct Message</h3>
                     <form id="contact-form" class="space-y-6">
                         <div><label for="name" class="sr-only">Name</label><input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" /></div>
@@ -650,11 +651,28 @@
                 const arrivalCheck = setInterval(() => {
                     if (Math.hypot(x - targetX, y - targetY) < 5) {
                         clearInterval(arrivalCheck);
+                        
+                        let colorIndex = 0;
+                        const glowAnimation = setInterval(() => {
+                            const newColor = ballColors[colorIndex % ballColors.length];
+                            interactiveBall.style.backgroundColor = newColor;
+                            interactiveBall.style.boxShadow = `0 0 35px ${newColor}`;
+                            colorIndex++;
+                        }, 200);
+
                         interactiveBall.style.transform = 'scale(3)';
                         showBubbleMessage("Yes! Let's get in touch.", 4000);
-                        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                        
                         setTimeout(() => {
+                            document.getElementById('contact-form-section').scrollIntoView({ behavior: 'smooth' });
+                        }, 2000);
+
+                        setTimeout(() => {
+                            clearInterval(glowAnimation);
                             interactiveBall.style.transform = 'scale(1)';
+                            const originalColor = getComputedStyle(document.documentElement).getPropertyValue('--interactive-ball-color');
+                            interactiveBall.style.backgroundColor = originalColor;
+                            interactiveBall.style.boxShadow = `0 0 15px ${originalColor}`;
                             ballState = 'roaming';
                             scheduleNextGuideMessage();
                         }, 4000);
