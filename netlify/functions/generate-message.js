@@ -89,7 +89,7 @@ exports.handler = async function (event) {
       finalPrompt = `
         You are a creative web designer AI. A user wants to change the color theme of their portfolio from its default dark, tech-focused aesthetic. Based on their description, generate a color palette as a JSON object. Maintain good contrast and readability.
         User's description: "${description}"
-        Your Task: Provide a JSON object with specific HEX color values for the keys defined in the schema.
+        Your Task: Provide a JSON object with specific HEX color values for the keys defined in the schema. The ballColorPalette should be an array of 5 complementary colors that fit the theme.
       `;
       const schema = {
         type: "OBJECT",
@@ -103,9 +103,10 @@ exports.handler = async function (event) {
             "inputFocusBorderColor": { "type": "STRING" }, "buttonSecondaryBgColor": { "type": "STRING" },
             "buttonSecondaryHoverBgColor": { "type": "STRING" }, "tagBgColor": { "type": "STRING" },
             "tagTextColor": { "type": "STRING" }, "skillBgColor": { "type": "STRING" },
-            "skillTextColor": { "type": "STRING" }, "interactiveBallColor": { "type": "STRING" }
+            "skillTextColor": { "type": "STRING" }, "interactiveBallColor": { "type": "STRING" },
+            "ballColorPalette": { "type": "ARRAY", "items": { "type": "STRING" } }
         },
-        required: ["bgColor", "headerBgColor", "textColor", "textMutedColor", "textMutedDarkerColor", "primaryColor", "secondaryColor", "secondaryHoverColor", "panelBgColor", "panelBorderColor", "inputBgColor", "inputBorderColor", "inputFocusBorderColor", "buttonSecondaryBgColor", "buttonSecondaryHoverBgColor", "tagBgColor", "tagTextColor", "skillBgColor", "skillTextColor", "interactiveBallColor"]
+        required: ["bgColor", "headerBgColor", "textColor", "textMutedColor", "textMutedDarkerColor", "primaryColor", "secondaryColor", "secondaryHoverColor", "panelBgColor", "panelBorderColor", "inputBgColor", "inputBorderColor", "inputFocusBorderColor", "buttonSecondaryBgColor", "buttonSecondaryHoverBgColor", "tagBgColor", "tagTextColor", "skillBgColor", "skillTextColor", "interactiveBallColor", "ballColorPalette"]
       };
       apiPayload = {
         contents: [{ parts: [{ text: finalPrompt }] }],
