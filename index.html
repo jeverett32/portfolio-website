@@ -48,12 +48,11 @@
             position: absolute; 
             top: 0;
             left: 0;
-            /* High z-index to be on top of all content */
             z-index: 1001; 
             pointer-events: none; 
             will-change: transform; 
         }
-        #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s; }
+        #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s, transform 0.3s ease-out; }
         #ball-bubble { position: fixed; z-index: 1002; background-color: var(--input-bg-color); color: var(--text-muted-color); padding: 10px 12px; border-radius: 8px; font-size: 14px; width: 250px; max-width: 250px; max-height: 240px; box-sizing: border-box; overflow-y: hidden; text-align: center; white-space: normal; opacity: 0; transition: opacity 0.3s ease-in-out, transform 0.2s ease-out, background-color 0.5s; visibility: hidden; pointer-events: auto; }
         #ball-bubble.visible { opacity: 1; visibility: visible; }
         #ball-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--input-bg-color) transparent transparent transparent; transition: border-color 0.5s;}
@@ -365,9 +364,15 @@
             });
 
             askQuestionBtn.addEventListener('click', async () => {
-                const question = qaQuestionInput.value.trim();
+                const question = qaQuestionInput.value.trim().toLowerCase();
                 if (!question) { aiError.textContent = 'Please enter a question first.'; return; }
                 
+                const hireKeywords = ['hire you', 'available for work', 'can i hire', 'are you available'];
+                if (hireKeywords.some(keyword => question.includes(keyword))) {
+                    triggerHireMeEasterEgg();
+                    return;
+                }
+
                 qaLoader.classList.remove('hidden');
                 askQuestionBtn.disabled = true;
                 aiError.textContent = '';
@@ -471,6 +476,7 @@
 
             // --- Interactive Ball Logic ---
             const ballContainer = document.getElementById('ball-container');
+            const interactiveBall = document.getElementById('interactive-ball');
             const ballBubble = document.getElementById('ball-bubble');
             const offscreenPointer = document.getElementById('offscreen-pointer');
             const ballSize = 30;
@@ -483,6 +489,8 @@
             let lastSummonSide = 'right';
             const isMobile = 'ontouchstart' in window;
             const guideMessages = ["Curious about my work? Head to the Projects section!", "Want to know more? The About section has details!", "Have a question? Ask my AI assistant below!"];
+            let hitCounter = 0;
+            const ballColors = ['#06b6d4', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'];
 
             function showBubbleMessage(text, duration = 0) { // Default duration 0 to persist
                 ballBubble.textContent = text;
@@ -577,6 +585,13 @@
                     const distance = Math.hypot(x + (ballSize / 2) - interactionX, y + (ballSize / 2) - interactionY);
                     const currentTime = Date.now();
                     if (distance < 30 && (currentTime - lastHitTime > cooldown)) {
+                        hitCounter++;
+                        if (hitCounter % 5 === 0) {
+                            const newColor = ballColors[(hitCounter / 5) % ballColors.length];
+                            interactiveBall.style.backgroundColor = newColor;
+                            interactiveBall.style.boxShadow = `0 0 15px ${newColor}`;
+                        }
+
                         if (ballState === 'speaking') { 
                             showBubbleMessage(ballBubble.textContent, 3000); // Show for 3 seconds before hiding
                         }
@@ -587,7 +602,7 @@
                         scheduleNextGuideMessage();
                     }
                     if (ballState === 'roaming') { vx *= 0.995; vy *= 0.995; }
-                } else if (ballState === 'summoned') {
+                } else if (ballState === 'summoned' || ballState === 'easterEgg') {
                     const dx = targetX - x, dy = targetY - y;
                     const speed = Math.min(0.1, Math.hypot(dx, dy) / 100);
                     x += dx * speed; y += dy * speed;
@@ -624,6 +639,29 @@
                 requestAnimationFrame(animateBall);
             }
             
+            function triggerHireMeEasterEgg() {
+                ballState = 'easterEgg';
+                targetX = (window.innerWidth / 2) - (ballSize / 2);
+                targetY = (window.innerHeight / 2) + window.scrollY - (ballSize / 2);
+                
+                hideBubble();
+                clearTimeout(guideMessageTimeout);
+
+                const arrivalCheck = setInterval(() => {
+                    if (Math.hypot(x - targetX, y - targetY) < 5) {
+                        clearInterval(arrivalCheck);
+                        interactiveBall.style.transform = 'scale(3)';
+                        showBubbleMessage("Yes! Let's get in touch.", 4000);
+                        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                        setTimeout(() => {
+                            interactiveBall.style.transform = 'scale(1)';
+                            ballState = 'roaming';
+                            scheduleNextGuideMessage();
+                        }, 4000);
+                    }
+                }, 100);
+            }
+
             initializeBall();
             animateBall();
 
