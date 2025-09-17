@@ -49,7 +49,6 @@
             position: absolute; 
             top: 0;
             left: 0;
-            /* High z-index to be on top of all content */
             z-index: 1001; 
             pointer-events: none; 
             will-change: transform; 
@@ -137,57 +136,65 @@
 
         <section id="about" class="py-20 sm:py-32">
             <div class="relative z-20 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-                <div class="lg:col-span-2"><img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'"></div>
+                <div class="lg:col-span-2">
+                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
+                </div>
                 <div class="lg:col-span-3 space-y-4">
                     <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)]">About Me</h2>
                     <div id="about-me-content" class="space-y-4 text-[var(--text-muted-color)]">
                         <p class="text-lg">I'm a STEM-certified Information Systems student at BYU's Marriott School of Business with a 4.0 GPA, passionate about creating deliverable, data-driven business solutions and leveraging AI. My hands-on experience ranges from full-stack web development to enhancing data integrity with SQL.</p>
-                        <p class="text-lg">Before my current role, I spent two years on a mission in southern Brazil, where I became fluent in Portuguese and led diverse teams of 5-20 people from eleven different nationalities. This experience honed my leadership and communication skills, which I now apply to thrive in fast-paced, collaborative environments. Outside of academics, I serve as an officer in the BYU Volleyball Club and enjoy hiking and exploring cybersecurity.</p>
+                        <p class="text-lg">Before my current role, I spent two years on a church mission in southern Brazil, where I became fluent in Portuguese and led diverse teams of 5-20 people from eleven different nationalities. This experience honed my leadership and communication skills, which I now apply to thrive in fast-paced, collaborative environments. Outside of academics, I serve as an officer in the BYU Volleyball Club and enjoy hiking and exploring cybersecurity.</p>
                     </div>
-                    <div class="space-y-6 pt-4">
-                        <h3 class="text-2xl font-bold text-[var(--primary-color)]">My Skills</h3>
-                        <div id="skills-list" class="space-y-4">
-                            <div>
-                                <h4 class="text-lg font-semibold text-[var(--text-muted-color)] mb-3">Programming</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Python</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Java</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">VBA</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">GCL+</span>
-                                </div>
+                </div>
+            </div>
+            <div class="relative z-20 mt-16">
+                <h3 class="text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Skills</h3>
+                <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 max-w-4xl mx-auto">
+                    <!-- Column 1 -->
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4">Programming</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Python</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Java</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">VBA</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">GCL+</span>
                             </div>
-                            <div>
-                                <h4 class="text-lg font-semibold text-[var(--text-muted-color)] mb-3">Data & BI</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">SQL</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Excel</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">pandas</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">SAS</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">R</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tableau</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Power BI</span>
-                                </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4">Data & BI</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">SQL</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Excel</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">pandas</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">SAS</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">R</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tableau</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Power BI</span>
                             </div>
-                             <div>
-                                <h4 class="text-lg font-semibold text-[var(--text-muted-color)] mb-3">Security & Systems</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tridium Niagara 4</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">PowerShell</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Linux</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Virtual Machines</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Microsoft SQL Server</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">MySQL</span>
-                                </div>
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div class="space-y-8">
+                         <div>
+                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4">Security & Systems</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tridium Niagara 4</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">PowerShell</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Linux</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Virtual Machines</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Microsoft SQL Server</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">MySQL</span>
                             </div>
-                             <div>
-                                <h4 class="text-lg font-semibold text-[var(--text-muted-color)] mb-3">Design & Collaboration</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Figma</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Trello</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Microsoft Teams</span>
-                                    <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">AI Prompting</span>
-                                </div>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4">Design & Collaboration</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Figma</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Trello</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Microsoft Teams</span>
+                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">AI Prompting</span>
                             </div>
                         </div>
                     </div>
