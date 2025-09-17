@@ -65,7 +65,14 @@ exports.handler = async function (event) {
       apiPayload = { contents: [{ role: 'user', parts: [{ text: finalPrompt }] }] };
 
     } else if (taskType === 'qa') {
-      const systemPrompt = `
+      // The last message in the history is the user's current question.
+      const currentTurn = history.pop(); 
+      const question = currentTurn.parts[0].text;
+
+      // The rest of the history is the previous conversation.
+      const previousConversation = history;
+
+      const finalPrompt = `
         You are a helpful and conversational AI assistant for John Everett's portfolio. Your task is to answer questions about John based ONLY on the information in the provided professional context.
         Your knowledge is strictly limited to this context. Do not invent any information.
 
@@ -79,13 +86,24 @@ exports.handler = async function (event) {
         ---
         ${fullContext}
         ---
+
+        Based on the context above and our conversation so far, answer the following question:
+        ---
+        ${question}
+        ---
       `;
+
+      // Reconstruct the contents with the previous turns plus the new comprehensive user turn.
+      const newContents = [
+        ...previousConversation,
+        {
+          role: 'user',
+          parts: [{ text: finalPrompt }]
+        }
+      ];
       
       apiPayload = {
-        contents: history, // The conversation history from the frontend
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        }
+        contents: newContents
       };
 
     } else if (taskType === 'theme') {
@@ -128,9 +146,17 @@ exports.handler = async function (event) {
     });
 
     if (!response.ok) {
-      const errorBody = await response.text();
-      console.error('Gemini API Error:', errorBody);
-      throw new Error(`Gemini API request failed with status ${response.status}`);
+        let specificError = `Gemini API request failed with status ${response.status}`;
+        try {
+            const errorBody = await response.json();
+            if (errorBody.error && errorBody.error.message) {
+                specificError = errorBody.error.message;
+            }
+        } catch (e) {
+            // The error body wasn't JSON, the generic message is the best we can do.
+        }
+        console.error('Gemini API Error:', specificError);
+        throw new Error(specificError);
     }
 
     const result = await response.json();
@@ -162,3 +188,4 @@ exports.handler = async function (event) {
     };
   }
 };
+
