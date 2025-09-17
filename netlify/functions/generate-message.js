@@ -65,12 +65,19 @@ exports.handler = async function (event) {
       apiPayload = { contents: [{ role: 'user', parts: [{ text: finalPrompt }] }] };
 
     } else if (taskType === 'qa') {
+      // Defensive check: ensure history is a non-empty array.
+      if (!Array.isArray(history) || history.length === 0) {
+        throw new Error('Invalid or empty conversation history received.');
+      }
+      
+      // Make a copy to avoid mutating the original array from the request body.
+      const historyCopy = [...history];
       // The last message in the history is the user's current question.
-      const currentTurn = history.pop(); 
+      const currentTurn = historyCopy.pop(); 
       const question = currentTurn.parts[0].text;
 
       // The rest of the history is the previous conversation.
-      const previousConversation = history;
+      const previousConversation = historyCopy;
 
       const finalPrompt = `
         You are a helpful and conversational AI assistant for John Everett's portfolio. Your task is to answer questions about John based ONLY on the information in the provided professional context.
