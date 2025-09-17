@@ -16,8 +16,11 @@ exports.handler = async function (event) {
     const pdfData = await pdf(dataBuffer);
     const resumeText = pdfData.text;
 
-    // Get all the data sent from the website.
-    const { taskType, jobDescription, history, description, bio, skills } = JSON.parse(event.body);
+    // Parse the request body once.
+    const body = JSON.parse(event.body);
+    // Destructure properties, using 'let' for 'history' so it can be modified.
+    const { taskType, jobDescription, description, bio, skills } = body;
+    let history = body.history;
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -68,9 +71,7 @@ exports.handler = async function (event) {
         // Defensive check: ensure history is an array. If not, create a default.
         if (!Array.isArray(history)) {
             console.warn('Warning: Conversation history was not provided. Starting a new one.');
-            // This case should ideally not happen if the frontend is correct.
-            // We create a placeholder to prevent a crash.
-            const question = JSON.parse(event.body).question || "Hello";
+            const question = body.question || "Hello";
             history = [{ role: 'user', parts: [{ text: question }] }];
         }
         
