@@ -150,7 +150,6 @@
             <div class="relative z-20 mt-16">
                 <h3 class="text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Skills</h3>
                 <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 max-w-4xl mx-auto">
-                    <!-- Column 1 -->
                     <div class="space-y-8">
                         <div>
                             <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4 text-center">Programming</h4>
@@ -175,7 +174,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Column 2 -->
                     <div class="space-y-8">
                          <div>
                             <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4 text-center">Security & Systems</h4>
@@ -208,25 +206,27 @@
                 <p class="text-lg text-[var(--text-muted-color)] mb-12 max-w-3xl mx-auto">Here are a few projects and experiences I'm proud of. Explore them to see my skills in action.</p>
             </div>
             <div class="relative z-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1: AI Portfolio -->
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="This portfolio is a dynamic showcase built with modern web technologies. It features an AI assistant powered by the Gemini API that can analyze job descriptions, answer questions about my experience, and even dynamically change the site's color theme based on user prompts.">
-                    <div class="flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">AI-Integrated Personal Portfolio</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">A personal portfolio website featuring an AI-powered theme generator and a chatbot to answer recruiter questions, showcasing interactive and intelligent web design.</p>
+                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col" data-summary="This project is a fun Pokémon battle simulator created to solidify core JavaScript concepts. It utilizes an API to fetch random Pokémon data, including stats and sprites, and then simulates a battle based on those stats, displaying the winner and a game history log.">
+                    <a href="https://monsgame.johnreverett.com/" target="_blank" rel="noopener noreferrer">
+                        <img src="images/monsgame.png" alt="Pokemon Battle Arena Screenshot" class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Battle+Arena'">
+                    </a>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">Pokémon Battle Arena</h3>
+                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">A dynamic battle simulator built to practice JavaScript fundamentals, fetching data from a Pokémon API to stage random matchups and determine a winner.</p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">JavaScript</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Gemini AI</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Tailwind CSS</span>
+                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">API</span>
+                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">HTML/CSS</span>
                         </div>
-                        <div class="mt-auto pt-4 flex items-center justify-between">
-                             <div class="flex items-center space-x-2">
-                                <a href="https://github.com/jeverett32/portfolio-website/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                         <div class="mt-auto pt-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <a href="https://monsgame.johnreverett.com/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">View Site</a>
+                                <a href="https://github.com/jeverett32/pokemon-battle-simulator" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
                             </div>
                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
                         </div>
                     </div>
                 </div>
-                <!-- Project 2: E-Commerce -->
                 <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col" data-summary="I built a full e-commerce and scheduling site for a local business using Firebase and the Square API.">
                     <a href="https://trashbins.johnreverett.com/" target="_blank" rel="noopener noreferrer">
                         <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'">
@@ -248,7 +248,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- New Project: Java RPG Game -->
                 <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col" data-summary="I built a complete 2D RPG from scratch in Java, handling everything from the game loop and collision detection to UI with Swing. A key feature is the serialization for saving and loading game states, allowing for persistent player progression through a dynamic world with leveling, upgrades, and a final boss.">
                     <img src="images/javarpg.png" alt="Java RPG Game Screenshot" class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Java+RPG'">
                     <div class="p-6 flex flex-col flex-grow">
@@ -262,14 +261,13 @@
                         </div>
                         <div class="mt-auto pt-4 flex items-center justify-between">
                              <div class="flex items-center space-x-2">
-                                <a href="https://github.com/jeverett32/HeroGame/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
-                            </div>
-                            <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
+                                 <a href="https://github.com/jeverett32/HeroGame/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                             </div>
+                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
                         </div>
                     </div>
                 </div>
-                <!-- Project 3: HVAC -->
-                 <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="I enhanced campus energy efficiency by overhauling BYU's HVAC history, alarm, and air quality systems.">
+                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="I enhanced campus energy efficiency by overhauling BYU's HVAC history, alarm, and air quality systems.">
                     <div class="flex flex-col flex-grow">
                         <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">BYU HVAC Systems Enhancement</h3>
                         <p class="text-[var(--text-muted-color)] mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems.</p>
@@ -279,26 +277,27 @@
                             <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">UI/UX</span>
                         </div>
                          <div class="mt-auto pt-4 flex items-center justify-end">
-                            <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
-                        </div>
+                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
+                         </div>
                     </div>
                 </div>
-                <!-- Project 4: Stride -->
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="I boosted growth for a startup by identifying UX issues, building a lead list with AI, and designing a social media calendar.">
+                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="This portfolio is a dynamic showcase built with modern web technologies. It features an AI assistant powered by the Gemini API that can analyze job descriptions, answer questions about my experience, and even dynamically change the site's color theme based on user prompts.">
                     <div class="flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">Stride Scheduling UX & Growth</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">Identified 15+ UX issues, built a CRM prospect list of 200+ leads using AI tools, and designed a 6-month social media calendar in Figma to boost brand consistency.</p>
+                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">AI-Integrated Personal Portfolio</h3>
+                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">A personal portfolio website featuring an AI-powered theme generator and a chatbot to answer recruiter questions, showcasing interactive and intelligent web design.</p>
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">UX Testing</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">CRM</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Figma</span>
+                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">JavaScript</span>
+                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Gemini AI</span>
+                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Tailwind CSS</span>
                         </div>
-                         <div class="mt-auto pt-4 flex items-center justify-end">
-                            <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
+                        <div class="mt-auto pt-4 flex items-center justify-between">
+                             <div class="flex items-center space-x-2">
+                                 <a href="https://github.com/jeverett32/portfolio-website/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                             </div>
+                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
                         </div>
                     </div>
                 </div>
-                <!-- Project 5: Research -->
                 <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="Using Python and R, I analyzed survey data to build predictive models for behavioral trends, presenting my findings at a conference.">
                     <div class="flex flex-col flex-grow">
                         <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">Behavioral Trend Analysis</h3>
@@ -309,8 +308,8 @@
                              <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">R</span>
                         </div>
                          <div class="mt-auto pt-4 flex items-center justify-end">
-                            <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
-                        </div>
+                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline">Learn More</button>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -342,10 +341,10 @@
                          <label for="theme-description" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Describe a theme (e.g., "ocean sunset", "hacker green")</label>
                          <input type="text" id="theme-description" placeholder="Enter theme description..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
                          <div class="text-center mt-4">
-                             <button type="button" id="generate-theme-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
-                                 🎨 Generate Theme
-                                 <div id="theme-loader" class="loader hidden"></div>
-                             </button>
+                              <button type="button" id="generate-theme-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
+                                   🎨 Generate Theme
+                                   <div id="theme-loader" class="loader hidden"></div>
+                              </button>
                          </div>
                     </div>
 
@@ -618,21 +617,21 @@
                 } else { // AI Assistant buttons
                     const panelRect = document.getElementById('ai-assistant-panel').getBoundingClientRect();
                      if (isMobile) {
-                        targetX = (rect.left > window.innerWidth / 2) ? rect.left - ballSize - 20 : rect.right + 20;
-                        targetY = rect.top + window.scrollY;
+                         targetX = (rect.left > window.innerWidth / 2) ? rect.left - ballSize - 20 : rect.right + 20;
+                         targetY = rect.top + window.scrollY;
                     } else {
-                        const targetRightX = panelRect.right + window.scrollX + 40;
-                        const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
-                        const targetYPos = rect.top + window.scrollY + (rect.height / 2) - (ballSize / 2);
-                        
-                        if (lastSummonSide === 'right') {
-                            targetX = targetLeftX;
-                            lastSummonSide = 'left';
-                        } else {
-                            targetX = targetRightX;
-                            lastSummonSide = 'right';
-                        }
-                        targetY = targetYPos;
+                         const targetRightX = panelRect.right + window.scrollX + 40;
+                         const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
+                         const targetYPos = rect.top + window.scrollY + (rect.height / 2) - (ballSize / 2);
+                         
+                         if (lastSummonSide === 'right') {
+                             targetX = targetLeftX;
+                             lastSummonSide = 'left';
+                         } else {
+                             targetX = targetRightX;
+                             lastSummonSide = 'right';
+                         }
+                         targetY = targetYPos;
                     }
                 }
                 
@@ -821,4 +820,3 @@
     </script>
 </body>
 </html>
-
