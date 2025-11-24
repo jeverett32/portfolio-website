@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau Dashboard | John Everett</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --header-bg-color: rgba(13, 17, 23, 0.8);
+            --text-color: #f0f6fc;
+            --text-muted-color: #c9d1d9;
+            --text-muted-darker-color: #8b949e;
+            --primary-color: #58a6ff;
+            --secondary-color: #388bfd;
+            --secondary-hover-color: #1f6feb;
+            --panel-bg-color: rgba(22, 27, 34, 0.95);
+            --panel-border-color: #30363d;
+            --input-bg-color: #0d1117;
+            --input-border-color: #30363d;
+            --input-focus-border-color: #58a6ff;
+            --button-secondary-bg-color: #21262d;
+            --button-secondary-hover-bg-color: #30363d;
+            --tag-bg-color: #1f6feb;
+            --tag-text-color: #f0f6fc;
+            --skill-bg-color: #30363d;
+            --skill-text-color: #c9d1d9;
+            --interactive-ball-color: #58a6ff;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .nav-active { background-color: var(--secondary-color); color: white; }
+        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, var(--primary-color-glow, rgba(88, 166, 255, 0.1)) 0%, rgba(88, 166, 255, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s, background 0.5s; opacity: 0; }
+        
+        /* Tableau Placeholder Overrides if needed */
+        .tableauPlaceholder { width: 100%; }
+        /* Force iframe to be responsive */
+        iframe { width: 100% !important; max-width: 100% !important; }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <div id="cursor-glow"></div>
+
+    <header id="header" class="sticky top-0 z-50 bg-[var(--header-bg-color)] backdrop-blur-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html">
+                        <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.src='https://placehold.co/40x40/111827/7dd3fc?text=JE'">
+                    </a>
+                    <a href="index.html" class="text-2xl font-bold text-[var(--primary-color)]">John Everett</a>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html#home" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Home</span></a>
+                        <a href="index.html#about" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>About</span></a>
+                        <a href="index.html#projects" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Projects</span></a>
+                        <a href="index.html#contact" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Contact</span></a>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg id="hamburger-icon" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                        <svg id="close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html#home" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">Home</a>
+                <a href="index.html#about" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">About</a>
+                <a href="index.html#projects" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">Projects</a>
+                <a href="index.html#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:bg-[var(--button-secondary-bg-color)]">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-screen py-20">
+        <div class="mb-8">
+            <a href="index.html#projects" class="inline-flex items-center text-[var(--primary-color)] hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Back to Projects
+            </a>
+        </div>
+
+        <section class="bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] p-6">
+            <h1 class="text-3xl font-bold text-[var(--text-color)] mb-6">2025 Female IS Admissions Exploratory Dashboard</h1>
+            <p class="text-[var(--text-muted-color)] mb-8">
+                Interactive Tableau dashboard visualizing key factors that could be affecting the number of females applying to the Information Systems program.
+            </p>
+            
+            <div class="w-full overflow-hidden rounded-lg bg-white p-1">
+                <!-- Embedded Tableau Code -->
+                <div class='tableauPlaceholder' id='viz1764020167167' style='position: relative'><noscript><a href='#'><img alt='Dashboard 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;IS&#47;IS415FinalProject_17634852686030&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='IS415FinalProject_17634852686030&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;IS&#47;IS415FinalProject_17634852686030&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1764020167167');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height='795px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[var(--bg-color)] border-t border-[var(--panel-border-color)] relative z-10 mt-auto">
+        <div class="relative z-20 max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+                <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                <a href="mailto:john.everett32@gmail.com" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+            </div>
+            <p class="text-gray-500">© 2025 John Everett. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const glow = document.getElementById('cursor-glow');
+        const isMobile = 'ontouchstart' in window;
+        if (glow && !isMobile) { document.body.addEventListener('mousemove', e => { glow.style.opacity = '1'; glow.style.left = `${e.clientX}px`; glow.style.top = `${e.clientY}px`; }); }
+        const mobileMenuButton = document.getElementById('mobile-menu-button'), mobileMenu = document.getElementById('mobile-menu'), hamburgerIcon = document.getElementById('hamburger-icon'), closeIcon = document.getElementById('close-icon');
+        const toggleMenu = () => { mobileMenu.classList.toggle('hidden'); hamburgerIcon.classList.toggle('hidden'); closeIcon.classList.toggle('hidden'); };
+        mobileMenuButton.addEventListener('click', toggleMenu);
+    </script>
+</body>
+</html>
