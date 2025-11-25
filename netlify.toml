@@ -2,4 +2,3 @@
 
 [functions]
   included_files = ["netlify/functions/resume.pdf"]
-
