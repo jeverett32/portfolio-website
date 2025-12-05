@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -44,60 +44,62 @@
     </script>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --header-bg-color: rgba(13, 17, 23, 0.8);
-            --text-color: #f0f6fc;
-            --text-muted-color: #c9d1d9;
-            --text-muted-darker-color: #8b949e;
-            --primary-color: #58a6ff;
-            --secondary-color: #388bfd;
-            --secondary-hover-color: #1f6feb;
-            --panel-bg-color: rgba(22, 27, 34, 0.95);
-            --panel-border-color: #30363d;
-            --input-bg-color: #0d1117;
-            --input-border-color: #30363d;
-            --input-focus-border-color: #58a6ff;
-            --button-secondary-bg-color: #21262d;
-            --button-secondary-hover-bg-color: #30363d;
-            --tag-bg-color: #1f6feb;
-            --tag-text-color: #f0f6fc;
-            --skill-bg-color: #30363d;
-            --skill-text-color: #c9d1d9;
-            --interactive-ball-color: #58a6ff;
+            --bg-color: #FFFFFF;
+            --header-bg-color: rgba(255, 255, 255, 0.95);
+            --text-color: #1a1a1a;
+            --text-muted-color: #666666;
+            --text-muted-darker-color: #999999;
+            --primary-color: #D4AF37;
+            --secondary-color: #666666;
+            --secondary-hover-color: #C5A028;
+            --panel-bg-color: #F8F8F8;
+            --panel-border-color: rgba(0, 0, 0, 0.08);
+            --input-bg-color: #FFFFFF;
+            --input-border-color: rgba(0, 0, 0, 0.15);
+            --input-focus-border-color: #D4AF37;
+            --button-secondary-bg-color: #F5F5F5;
+            --button-secondary-hover-bg-color: #E8E8E8;
+            --tag-bg-color: transparent;
+            --tag-text-color: #666666;
+            --skill-bg-color: transparent;
+            --skill-text-color: #666666;
+            --interactive-ball-color: #D4AF37;
+            --surface-color: rgba(248, 248, 248, 0.5);
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
             overflow-x: hidden; 
             background-color: var(--bg-color);
             color: var(--text-color);
+            font-weight: 300;
         }
-        .font-poppins { font-family: 'Poppins', sans-serif; }
-        .nav-active { background-color: var(--secondary-color); color: white; }
-        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, var(--primary-color-glow, rgba(88, 166, 255, 0.1)) 0%, rgba(88, 166, 255, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s, background 0.5s; opacity: 0; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .nav-active { color: var(--primary-color); }
+        #cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, var(--primary-color-glow, rgba(212, 175, 55, 0.05)) 0%, rgba(212, 175, 55, 0) 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; transition: opacity 0.3s, background 0.5s; opacity: 0; }
         .loader { border: 4px solid #4b5563; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        #ball-container { 
-            position: absolute; 
-            top: 0;
-            left: 0;
-            z-index: 1001; 
-            pointer-events: none; 
-            will-change: transform; 
-        }
-        #interactive-ball { width: 30px; height: 30px; background-color: var(--interactive-ball-color); border-radius: 50%; box-shadow: 0 0 15px var(--interactive-ball-color); transition: background-color 0.5s, transform 0.3s ease-out, box-shadow 0.1s; }
-        #ball-bubble { position: fixed; z-index: 1002; background-color: var(--input-bg-color); color: var(--text-muted-color); padding: 10px 12px; border-radius: 8px; font-size: 14px; width: 250px; max-width: 250px; max-height: 240px; box-sizing: border-box; overflow-y: hidden; text-align: center; white-space: normal; opacity: 0; transition: opacity 0.3s ease-in-out, transform 0.2s ease-out, background-color 0.5s; visibility: hidden; pointer-events: auto; }
-        #ball-bubble.visible { opacity: 1; visibility: visible; }
-        #ball-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--input-bg-color) transparent transparent transparent; transition: border-color 0.5s;}
 
-        #offscreen-pointer { position: fixed; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid var(--interactive-ball-color); opacity: 0; transition: opacity 0.3s, border-color 0.5s; z-index: 1002; pointer-events: none; }
         
-        .translucent-panel { 
-            background-color: var(--panel-bg-color); 
-            position: relative;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .translucent-image { opacity: 0.85; }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D0D0D0;
+            border: 1px solid var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+        ::selection {
+            background: var(--primary-color);
+            color: #FFFFFF;
+        }
 
         /* Accessibility & Motion Preferences */
         .skip-link {
@@ -130,29 +132,19 @@
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <div id="cursor-glow"></div>
-    
-    <div id="ball-container">
-        <div id="interactive-ball"></div>
-    </div>
-    <div id="ball-bubble"></div>
-    <div id="offscreen-pointer"></div>
 
     <header id="header" class="sticky top-0 z-50 bg-[var(--header-bg-color)] backdrop-blur-md">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="https://linkedin.com/in/johneverett32/" target="_blank">
-                        <img class="h-10 w-10 rounded-full mr-3" src="images/professional_photo.png" alt="John Everett Professional Photo" onerror="this.src='https://placehold.co/40x40/111827/7dd3fc?text=JE'">
-                    </a>
-                    <span class="text-2xl font-bold text-[var(--primary-color)]">John Everett</span>
+                    <a href="#home" class="text-2xl font-serif font-bold text-[var(--text-color)] tracking-tight hover:text-[var(--primary-color)] transition-colors">John Everett.</a>
                 </div>
                 <div class="hidden md:block">
-                    <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
-                        <a href="#home" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Home</span></a>
-                        <a href="#about" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>About</span></a>
-                        <a href="#projects" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Projects</span></a>
-                        <a href="#ai-assistant" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>AI Assistant</span></a>
-                        <a href="#contact" class="nav-link flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 text-[var(--text-muted-color)] hover:bg-[var(--button-secondary-bg-color)] hover:text-[var(--text-color)]"><span>Contact</span></a>
+                    <div id="nav-menu" class="ml-10 flex items-baseline space-x-10">
+                        <a href="#about" class="nav-link text-sm uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors duration-300"><span>About</span></a>
+                        <a href="#projects" class="nav-link text-sm uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors duration-300"><span>Projects</span></a>
+                        <a href="#ai-assistant" class="nav-link text-sm uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors duration-300"><span>Assistant</span></a>
+                        <a href="#contact" class="nav-link text-sm uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors duration-300"><span>Contact</span></a>
                     </div>
                 </div>
                 <div class="md:hidden flex items-center">
@@ -176,90 +168,95 @@
     </header>
 
     <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <section id="home" class="min-h-screen flex items-center justify-center text-center">
+        <section id="home" class="relative min-h-screen flex items-center pt-20">
+            <div class="relative z-20 max-w-4xl">
+                <p class="text-[var(--primary-color)] font-medium tracking-widest uppercase text-sm mb-6">Portfolio 2025</p>
+                
+                <h1 class="text-5xl md:text-8xl font-serif font-medium text-[var(--text-color)] mb-8 leading-tight">
+                    Data Analyst & <br />
+                    <span class="text-[var(--text-muted-color)]">Systems Specialist</span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-[var(--text-muted-color)] max-w-2xl mb-12 font-light leading-relaxed">
+                    STEM-Certified BSIS Student at Brigham Young University. <br/>
+                    Blending data analytics with full-stack engineering to solve complex business problems.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="#projects" class="group flex items-center gap-3 text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors pb-1 border-b border-[var(--text-color)]/30 hover:border-[var(--primary-color)] w-fit">
+                        <span class="font-medium">View Selected Works</span>
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
+                    
+                    <a href="netlify/functions/resume.pdf" download="John_Everett_Resume.pdf" class="group flex items-center gap-3 text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors pb-1 border-b border-transparent hover:border-[var(--text-color)]/30 w-fit">
+                        <span class="font-medium">Resume</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="absolute right-0 bottom-0 w-1/3 h-1/3 bg-gradient-to-tl from-[var(--panel-bg-color)] to-transparent opacity-20 pointer-events-none" />
+        </section>
+
+        <section id="about" class="py-24">
             <div class="relative z-20">
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-[var(--primary-color)] font-poppins"><span class="block">John Everett</span></h1>
-                <div class="max-w-3xl mx-auto mt-6 text-center">
-                    <p class="text-xl md:text-2xl text-[var(--text-color)] font-medium">
-                        STEM-Certified BSIS Student at Brigham Young University
-                    </p>
-                    <p class="text-md md:text-lg text-[var(--text-muted-darker-color)] mt-1">
-                        (Grad Class of April 2027)
-                    </p>
-                    <p class="max-w-2xl mx-auto text-base md:text-lg text-[var(--text-muted-color)] mt-4">
-                        Future Data Analytics Intern at Sunoco LP. Looking to connect with professionals in the data analytics and cybersecurity fields.
-                    </p>
-                </div>
-                <div class="mt-8 flex justify-center space-x-4">
-                    <a href="#contact" class="inline-block bg-[var(--secondary-color)] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] transition-transform transform hover:scale-105 duration-300" aria-label="Get In Touch">Get In Touch</a>
-                    <a href="netlify/functions/resume.pdf" download="John_Everett_Resume.pdf" class="inline-block bg-transparent border-2 border-[var(--secondary-color)] text-[var(--secondary-color)] font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] hover:text-white transition-transform transform hover:scale-105 duration-300" aria-label="Download John Everett's Resume">Download Resume</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="py-20 sm:py-32">
-            <div class="relative z-20 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-                <div class="lg:col-span-2">
-                    <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="translucent-image rounded-lg shadow-2xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/600x800/111827/7dd3fc?text=Hiking+Photo'">
-                </div>
-                <div class="lg:col-span-3 space-y-4">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)]">About Me</h2>
-                    <div id="about-me-content" class="space-y-4 text-[var(--text-muted-color)]">
-                        <p class="text-lg">I'm a STEM-certified Information Systems student at BYU's Marriott School of Business with a 4.0 GPA, passionate about creating deliverable, data-driven business solutions and leveraging AI. My hands-on experience includes full-stack web and app development, cloud computing, database design, and much more.</p>
-                        <p class="text-lg">Before my current role, I spent two years on a church mission in southern Brazil, where I became fluent in Portuguese and led diverse teams of 5-20 people from eleven different nationalities. This experience honed my leadership and communication skills, which I now apply to thrive in fast-paced, collaborative environments. Outside of academics, I serve as an officer in the BYU Volleyball Club and enjoy the outdoors and exploring new technologies. This Summer of 2026, I will work as a data analytics intern for Sunoco LP in Dallas, TX. I will be creating data products (datasets, reports, dashboard, machine learning models) used in Retail and Midstream Fuel Analytics. </p>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
+                    <div class="md:col-span-4">
+                        <h2 class="text-4xl font-serif text-[var(--text-color)] mb-6">About</h2>
+                        <div class="h-px w-12 bg-[var(--primary-color)] mb-8"></div>
+                        <img src="images/hiking.png" alt="John Everett hiking in the mountains" class="w-full h-auto object-cover transition-all duration-700" onerror="this.src='https://placehold.co/800x1000/1C1C1C/D4AF37?text=Hiking+Photo'">
                     </div>
-                </div>
-            </div>
-            <div class="relative z-20 mt-16">
-                <h3 class="text-3xl sm:text-4xl font-bold text-center text-[var(--primary-color)] mb-12">My Skills</h3>
-                <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 max-w-4xl mx-auto">
-                    <div class="space-y-8">
-                        <div>
-                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4 text-center">Programming</h4>
-                            <div class="flex flex-wrap gap-3 justify-center">
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Python</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">EJS</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Java</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">React Native</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">VBA</span>
-                            </div>
+                    <div class="md:col-span-8 space-y-12">
+                        <div id="about-me-content" class="space-y-6 text-[var(--text-muted-color)] font-light">
+                            <p class="text-xl text-[var(--text-color)]">I am a STEM-certified Information Systems student at Brigham Young University with a 4.0 GPA.</p>
+                            <p class="text-base">I'm passionate about creating deliverable, data-driven business solutions and leveraging AI. My hands-on experience includes full-stack web and app development, cloud computing, database design, and much more.</p>
+                            <p class="text-base">Before my current role, I spent two years on a church mission in southern Brazil, where I became fluent in Portuguese and led diverse teams of 5-20 people from eleven different nationalities. This experience honed my leadership and communication skills, which I now apply to thrive in fast-paced, collaborative environments. Outside of academics, I serve as an officer in the BYU Volleyball Club and enjoy the outdoors and exploring new technologies. This Summer of 2026, I will work as a data analytics intern for Sunoco LP in Dallas, TX. I will be creating data products (datasets, reports, dashboard, machine learning models) used in Retail and Midstream Fuel Analytics.</p>
                         </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4 text-center">Data & BI</h4>
-                            <div class="flex flex-wrap gap-3 justify-center">
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">MSSQL</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">MySQL</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">PostgreSQL</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Excel</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tableau</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Power BI</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Jupyter Notebooks</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Google Colab</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-8">
-                         <div>
-                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4 text-center">Security & Systems</h4>
-                            <div class="flex flex-wrap gap-3 justify-center">
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Tridium Niagara</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">AWS</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">PowerShell</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Linux</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Virtual Machines</span>
-
-                            </div>
-                        </div>
-                         <div>
-                            <h4 class="text-xl font-semibold text-[var(--text-muted-color)] mb-4 text-center">Design & Collaboration</h4>
-                            <div class="flex flex-wrap gap-3 justify-center">
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Figma</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Trello</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Slack</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">Microsoft Teams</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">GitHub</span>
-                                <span class="bg-[var(--skill-bg-color)] text-[var(--skill-text-color)] px-4 py-2 rounded-full text-sm font-medium">AI Prompting</span>
+                        <div class="pt-8 border-t border-[var(--panel-border-color)]">
+                            <h3 class="text-lg font-serif text-[var(--text-color)] mb-8">Technical Proficiency</h3>
+                            
+                            <div id="skills-list" class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
+                                <div>
+                                    <h4 class="text-xs uppercase tracking-widest text-[var(--primary-color)] mb-4">Programming</h4>
+                                    <ul class="space-y-2">
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Python</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">JavaScript</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Java</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">React Native</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">TypeScript</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm pb-1">VBA</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase tracking-widest text-[var(--primary-color)] mb-4">Data & BI</h4>
+                                    <ul class="space-y-2">
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">MSSQL, MySQL, PostgreSQL</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Excel</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Tableau, Power BI</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Jupyter Notebooks</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm pb-1">Google Colab</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase tracking-widest text-[var(--primary-color)] mb-4">Security & Systems</h4>
+                                    <ul class="space-y-2">
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Tridium Niagara</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">AWS</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">PowerShell, Linux</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm pb-1">Virtual Machines</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase tracking-widest text-[var(--primary-color)] mb-4">Design & Collab</h4>
+                                    <ul class="space-y-2">
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Figma</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Trello, Slack</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">Microsoft Teams</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm border-b border-[var(--panel-border-color)] pb-1">GitHub</li>
+                                        <li class="text-[var(--text-muted-color)] text-sm pb-1">AI Prompting</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -267,190 +264,253 @@
             </div>
         </section>
 
-        <section id="projects" class="py-20 sm:py-32">
-            <div class="relative z-20 text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)] mb-4">My Projects & Experience</h2>
-                <p class="text-lg text-[var(--text-muted-color)] mb-12 max-w-3xl mx-auto">Here are a few projects and experiences I'm proud of. Explore them to see my skills in action.</p>
-            </div>
-            <div class="relative z-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col" data-summary="This Tableau dashboard project visualizes complex supply chain data, providing interactive insights into key performance metrics. It demonstrates advanced data visualization techniques and the ability to derive actionable business intelligence from raw data.">
-                    <a href="tableau.html">
-                        <img src="https://public.tableau.com/static/images/IS/IS415FinalProject_17634852686030/Dashboard1/1.png" alt="Tableau Dashboard Screenshot" class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Tableau+Dashboard'">
-                    </a>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">2025 IS Female Admissions Tableau Dashboard</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">An interactive Tableau dashboard visualizing key factors that could be affecting the number of females applying to the Information Systems program.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Tableau</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Data Visualization</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Business Intelligence</span>
-                        </div>
-                         <div class="mt-auto pt-4 flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <a href="tableau.html" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">View Dashboard</a>
+        <section id="projects" class="py-24">
+            <div class="relative z-20">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                    <div>
+                        <h2 class="text-4xl font-serif text-[var(--text-color)] mb-4">Selected Works</h2>
+                        <p class="text-[var(--text-muted-color)] max-w-md font-light">A curation of full-stack development, data analytics, and system integration projects.</p>
+                    </div>
+                    <div class="h-px bg-[var(--panel-border-color)] flex-1 md:ml-12 md:mb-2"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                    <div class="project-card group flex flex-col" data-summary="Full-stack web application for Ella Rises nonprofit supporting young Latina girls through STEM, art, and leadership events. Built with Node.js and deployed on AWS Elastic Beanstalk, featuring a fully normalized database connected via AWS RDS. Integrated Experience capstone project demonstrating enterprise-level database design and cloud deployment.">
+                        <a href="http://ellarises27.is404.net" target="_blank" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/EllaRisesWebsite.png" alt="Ella Rises Website Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Ella+Rises+Website'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </a>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Ella Rises Web Platform</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Full-stack platform for nonprofit empowering Latina girls. Node.js backend with normalized database on AWS RDS.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Node.js</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">AWS RDS</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Elastic Beanstalk</span>
                             </div>
-                            <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline" aria-label="Learn more about the Tableau Dashboard project">Learn More</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col" data-summary="I built a full e-commerce and scheduling site for a local business using Firebase and the Square API.">
-                    <a href="https://trashbins.johnreverett.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Trash+Bin+Site'">
-                    </a>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">Trash Bin Cleaning Service Website</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">Developed a fully functional e-commerce site for a local service, featuring online scheduling and secure payments via the Square API, all connected to a Firebase backend.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Firebase</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Square API</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">JavaScript</span>
-                        </div>
-                         <div class="mt-auto pt-4 flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <a href="https://trashbins.johnreverett.com/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">View Site</a>
-                                <a href="https://github.com/jeverett32/trashbins" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="http://ellarises27.is404.net" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Site</a>
+                                <a href="https://github.com/colelatour/INTEX2025" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
                             </div>
-                            <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline" aria-label="Learn more about the Trash Bin Cleaning Service Website">Learn More</button>
                         </div>
                     </div>
-                </div>
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col" data-summary="I built a complete 2D RPG from scratch in Java, handling everything from the game loop and collision detection to UI with Swing. A key feature is the serialization for saving and loading game states, allowing for persistent player progression through a dynamic world with leveling, upgrades, and a final boss.">
-                    <img src="images/javarpg.png" alt="Java RPG Game Screenshot" class="w-full h-56 object-cover" onerror="this.src='https://placehold.co/600x400/1f2937/7dd3fc?text=Java+RPG'">
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">Java RPG Adventure</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">A 2D RPG built with Java Swing where the hero, Shrek, battles enemies to level up and save the swamp. The game features a tile-based world, combat, an upgrade market, and persistent save/load functionality.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Java</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Java Swing</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Game Development</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">OOP</span>
-                        </div>
-                        <div class="mt-auto pt-4 flex items-center justify-between">
-                             <div class="flex items-center space-x-2">
-                                 <a href="https://github.com/jeverett32/HeroGame/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
-                             </div>
-                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline" aria-label="Learn more about the Java RPG Adventure">Learn More</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="I enhanced campus energy efficiency by overhauling BYU's HVAC history, alarm, and air quality systems.">
-                    <div class="flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">BYU HVAC Systems Enhancement</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">Improved campus energy efficiency by overhauling HVAC history, alarm, and air quality systems. Revamped our service request website by improving forms and CRM systems.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Java</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">SQL</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">UI/UX</span>
-                        </div>
-                         <div class="mt-auto pt-4 flex items-center justify-end">
-                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline" aria-label="Learn more about the BYU HVAC Systems Enhancement">Learn More</button>
-                         </div>
-                    </div>
-                </div>
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="This portfolio is a dynamic showcase built with modern web technologies. It features an AI assistant powered by the Gemini API that can analyze job descriptions, answer questions about my experience, and even dynamically change the site's color theme based on user prompts.">
-                    <div class="flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">AI-Integrated Personal Portfolio</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">A personal portfolio website featuring an AI-powered theme generator and a chatbot to answer recruiter questions, showcasing interactive and intelligent web design.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">JavaScript</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Gemini AI</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Tailwind CSS</span>
-                        </div>
-                        <div class="mt-auto pt-4 flex items-center justify-between">
-                             <div class="flex items-center space-x-2">
-                                 <a href="https://github.com/jeverett32/portfolio-website/" target="_blank" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
-                             </div>
-                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline" aria-label="Learn more about the AI-Integrated Personal Portfolio">Learn More</button>
+                    <div class="project-card group flex flex-col" data-summary="Interactive Tableau dashboard tracking participation, educational outcomes, and community engagement for Ella Rises, a nonprofit empowering young Latina girls through STEM, art, and leadership programs. The dashboard provides data-driven insights into program effectiveness and community impact.">
+                        <a href="ella-rises-dashboard.html" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/EllaRisesDashboard.png" alt="Ella Rises Dashboard Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Ella+Rises+Dashboard'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </a>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Ella Rises Impact Dashboard</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Interactive dashboard measuring community impact through participation, educational outcomes, and engagement metrics.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Tableau</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Data Visualization</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Analytics</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="ella-rises-dashboard.html" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Dashboard</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="project-card bg-[var(--panel-bg-color)] rounded-lg shadow-lg overflow-hidden border border-[var(--panel-border-color)] flex flex-col p-6" data-summary="Using Python and R, I analyzed survey data to build predictive models for behavioral trends, presenting my findings at a conference.">
-                    <div class="flex flex-col flex-grow">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-2">Behavioral Trend Analysis</h3>
-                        <p class="text-[var(--text-muted-color)] mb-4 flex-grow">Analyzed survey data using SAS, Python, and R to refine predictive models for behavioral trends. Presented key findings and data-driven insights at a university conference.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Data Analysis</span>
-                            <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">Python</span>
-                             <span class="bg-[var(--tag-bg-color)] text-[var(--tag-text-color)] px-3 py-1 rounded-full text-xs font-medium">R</span>
+                    <div class="project-card group flex flex-col" data-summary="This Tableau dashboard project visualizes complex supply chain data, providing interactive insights into key performance metrics. It demonstrates advanced data visualization techniques and the ability to derive actionable business intelligence from raw data.">
+                        <a href="tableau.html" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/FemaleAdmissions.png" alt="Tableau Dashboard Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Tableau+Dashboard'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </a>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">2025 IS Female Admissions Dashboard</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Interactive Tableau dashboard analyzing factors affecting female application numbers to the Information Systems program.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Tableau</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Data Visualization</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">BI</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="tableau.html" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Project</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
                         </div>
-                         <div class="mt-auto pt-4 flex items-center justify-end">
-                             <button type="button" class="summary-trigger text-[var(--primary-color)] hover:underline" aria-label="Learn more about the Behavioral Trend Analysis">Learn More</button>
-                         </div>
                     </div>
-                </div>
+                    <div class="project-card group flex flex-col" data-summary="I built a full e-commerce and scheduling site for a local business using Firebase and the Square API.">
+                        <a href="https://trashbins.johnreverett.com/" target="_blank" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Trash+Bin+Site'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </a>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Trash Bin Cleaning Service</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Full e-commerce and scheduling site for a local business, built with Firebase and the Square API.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Firebase</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Square API</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">E-commerce</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="https://trashbins.johnreverett.com/" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Project</a>
+                                <a href="https://github.com/jeverett32/trashbins" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card group flex flex-col" data-summary="I built a complete 2D RPG from scratch in Java, handling everything from the game loop and collision detection to UI with Swing. A key feature is the serialization for saving and loading game states, allowing for persistent player progression through a dynamic world with leveling, upgrades, and a final boss.">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/javarpg.png" alt="Java RPG Game Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Java+RPG'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </div>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Java RPG Adventure</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">2D RPG built from scratch in Java Swing. Features tile-based world, combat, upgrades, and save/load system.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Java</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Swing</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Game Dev</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="https://github.com/jeverett32/HeroGame/" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card group flex flex-col" data-summary="This portfolio is a dynamic showcase built with modern web technologies. It features an AI assistant powered by the Gemini API that can analyze job descriptions, answer questions about my experience, and even dynamically change the site's color theme based on user prompts.">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/PersonalPortfolio.png" alt="Personal Portfolio Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Personal+Portfolio'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </div>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">AI-Integrated Portfolio</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">This website! Featuring Gemini AI-powered theme generation, skill matching, and an interactive chatbot.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">React</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Gemini API</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">AI</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="https://github.com/jeverett32/portfolio-website/" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
                                     </div>
                                 </section>
                         
-                                <section id="ai-assistant" class="py-20 sm:py-32">
-                                    <div class="relative z-20 text-center">                <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)] mb-4">AI Assistant</h2>
-                <p class="text-lg text-[var(--text-muted-color)] mb-8 max-w-3xl mx-auto">Use my AI assistant to see how my skills fit your needs, ask questions about my experience, or even generate a new theme for this site.</p>
-            </div>
-            
-            <div class="max-w-xl mx-auto space-y-12">
-                <div id="ai-assistant-panel" class="bg-[var(--panel-bg-color)] p-6 rounded-lg border border-[var(--panel-border-color)] space-y-6">
-                    <div class="relative z-20">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">1. AI-Powered Skills Match</h3>
-                        <label for="job-description-text" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Paste Job Description</label>
-                        <textarea id="job-description-text" rows="5" placeholder="Paste the full job description here..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors"></textarea>
-                        <div class="flex items-center justify-center my-4"><span class="flex-grow bg-[var(--input-border-color)] h-px"></span><span class="mx-4 text-[var(--text-muted-darker-color)] text-sm">OR</span><span class="flex-grow bg-[var(--input-border-color)] h-px"></span></div>
-                        <label class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Upload Job Description File</label>
-                        <div class="flex items-center gap-4">
-                            <label for="job-description-file" class="cursor-pointer bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-medium px-4 py-2 rounded-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-colors">Select a file</label>
-                            <input type="file" id="job-description-file" class="hidden" accept=".txt,.md,.pdf">
-                            <p id="file-name-display" class="text-sm text-[var(--text-muted-darker-color)] truncate">No file chosen</p>
+        <section id="ai-assistant" class="py-24 bg-[var(--surface-color)] border-y border-[var(--panel-border-color)]">
+            <div class="relative z-20 max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-12">
+                    <!-- Menu / Introduction -->
+                    <div class="md:w-1/3">
+                        <h2 class="text-3xl font-serif text-[var(--text-color)] mb-4">Interactive Concierge</h2>
+                        <p class="text-[var(--text-muted-color)] font-light mb-8">Powered by Google Gemini 2.5. Interact with this portfolio dynamically.</p>
+                        
+                        <nav class="space-y-1">
+                            <button class="ai-tab-btn w-full text-left px-4 py-3 text-sm tracking-wide uppercase border-l-2 transition-all duration-300 border-primary text-[var(--text-color)] bg-white/5" data-tab="chat">Inquire</button>
+                            <button class="ai-tab-btn w-full text-left px-4 py-3 text-sm tracking-wide uppercase border-l-2 transition-all duration-300 border-[var(--panel-border-color)] text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:border-white/30" data-tab="skills">Analyze Fit</button>
+                            <button class="ai-tab-btn w-full text-left px-4 py-3 text-sm tracking-wide uppercase border-l-2 transition-all duration-300 border-[var(--panel-border-color)] text-[var(--text-muted-color)] hover:text-[var(--text-color)] hover:border-white/30" data-tab="theme">Personalize Aesthetic</button>
+                        </nav>
+                    </div>
+
+                    <!-- Interaction Area -->
+                    <div class="md:w-2/3 min-h-[500px] bg-[var(--bg-color)] border border-[var(--panel-border-color)] p-8">
+                        <div id="ai-assistant-panel" class="h-full">
+                            <!-- Chat Tab -->
+                            <div class="ai-tab-content flex flex-col h-full" data-tab="chat">
+                                <div id="chat-history" class="flex-1 overflow-y-auto space-y-6 pr-2">
+                                    <div class="flex justify-start">
+                                        <div class="max-w-[85%] text-left">
+                                            <span class="text-xs uppercase tracking-wider text-[var(--text-muted-color)]/50 block mb-1">Assistant</span>
+                                            <div class="text-sm md:text-base leading-relaxed text-[var(--text-muted-color)]">Welcome. I am John's AI Concierge. How may I assist you today?</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="border-t border-[var(--panel-border-color)] pt-4 flex gap-4 mt-4">
+                                    <input type="text" id="qa-question" placeholder="Type your inquiry..." class="flex-1 bg-transparent border-b border-[var(--panel-border-color)] px-0 py-2 text-[var(--text-color)] focus:outline-none focus:border-[var(--primary-color)] transition-colors" />
+                                    <button id="ask-question-btn" class="text-sm uppercase tracking-widest text-[var(--primary-color)] hover:text-[var(--text-color)] transition-colors">
+                                        Send
+                                        <div id="qa-loader" class="loader hidden inline-block ml-2"></div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Skills Tab -->
+                            <div class="ai-tab-content hidden flex-col h-full" data-tab="skills">
+                                <h3 class="text-xl font-serif mb-6 text-[var(--text-color)]">Job Description Analysis</h3>
+                                <textarea id="job-description-text" placeholder="Paste job requirements here..." class="w-full bg-[var(--input-bg-color)] border border-[var(--panel-border-color)] p-4 text-sm text-[var(--text-muted-color)] focus:outline-none focus:border-[var(--primary-color)] resize-none mb-6 transition-colors" style="height: calc(100% - 200px);"></textarea>
+                                <input type="file" id="job-description-file" class="hidden" accept=".txt,.md,.pdf">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-[var(--text-muted-color)]/50">Analysis provided by Gemini 2.5</span>
+                                    <button id="generate-summary-btn" class="px-6 py-2 border border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-[var(--bg-color)] transition-colors uppercase text-xs tracking-widest">
+                                        Analyze
+                                        <div id="summary-loader" class="loader hidden inline-block ml-2"></div>
+                                    </button>
+                                </div>
+                                <div id="match-result" class="hidden mt-6 p-4 bg-[var(--input-bg-color)] border-l-2 border-[var(--primary-color)] text-sm text-[var(--text-muted-color)] leading-relaxed"></div>
+                            </div>
+
+                            <!-- Theme Tab -->
+                            <div class="ai-tab-content hidden flex-col h-full justify-center items-center text-center" data-tab="theme">
+                                <h3 class="text-xl font-serif mb-4 text-[var(--text-color)]">Aesthetic Generator</h3>
+                                <p class="text-[var(--text-muted-color)] font-light mb-8 max-w-sm">Describe a visual atmosphere (e.g., "Nordic Minimalism", "Desert Dusk") to dynamically restyle this portfolio.</p>
+                                <div class="w-full max-w-md border-b border-[var(--panel-border-color)] flex items-center mb-8">
+                                    <input type="text" id="theme-description" placeholder="Enter concept..." class="flex-1 bg-transparent px-0 py-3 text-[var(--text-color)] text-center focus:outline-none" />
+                                </div>
+                                <button id="generate-theme-btn" class="px-8 py-3 bg-[var(--text-color)] text-[var(--bg-color)] font-medium hover:bg-[var(--primary-color)] transition-colors">
+                                    Apply Style
+                                    <div id="theme-loader" class="loader hidden inline-block ml-2"></div>
+                                </button>
+                            </div>
+
+                            <div id="ai-error" class="text-red-400 text-center text-sm mt-4"></div>
                         </div>
-                        <div class="text-center mt-4"><button type="button" id="generate-summary-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">✨ Generate Summary<div id="summary-loader" class="loader hidden"></div></button></div>
                     </div>
-                    
-                    <div class="relative z-20 border-t border-[var(--panel-border-color)] pt-6">
-                         <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">2. AI-Powered Theme Customization</h3>
-                         <label for="theme-description" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Describe a theme (e.g., "ocean sunset", "hacker green")</label>
-                         <input type="text" id="theme-description" placeholder="Enter theme description..." class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
-                         <div class="text-center mt-4">
-                              <button type="button" id="generate-theme-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">
-                                   🎨 Generate Theme
-                                   <div id="theme-loader" class="loader hidden"></div>
-                              </button>
-                         </div>
-                    </div>
-
-                    <div class="relative z-20 border-t border-[var(--panel-border-color)] pt-6">
-                        <h3 class="text-xl font-bold text-[var(--text-color)] mb-4">3. Ask a Question About Me</h3>
-                        <label for="qa-question" class="block text-sm font-medium text-[var(--text-muted-color)] mb-2">Your Question</label>
-                        <input type="text" id="qa-question" placeholder="e.g., 'What was your role at BYU?'" class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" />
-                        <div class="text-center mt-4"><button type="button" id="ask-question-btn" class="bg-[var(--button-secondary-bg-color)] text-[var(--text-color)] font-bold px-6 py-3 rounded-full shadow-lg hover:bg-[var(--button-secondary-hover-bg-color)] transition-transform transform hover:scale-105 duration-300 inline-flex items-center gap-2">💬 Ask Question<div id="qa-loader" class="loader hidden"></div></button></div>
-                    </div>
-
-                    <div id="ai-error" class="text-red-400 text-center text-sm"></div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="pt-0 sm:pt-4 pb-20 sm:pb-32">
-            <div class="max-w-xl mx-auto">
-                <div id="contact-form-section" class="relative z-20 pt-8">
-                     <h2 class="text-3xl sm:text-4xl font-bold text-[var(--primary-color)] mb-4 text-center">Get In Touch</h2>
-                     <p class="text-lg text-[var(--text-muted-color)] mb-8 max-w-3xl mx-auto text-center">Feel free to send me a message directly.</p>
-                    <form id="contact-form" class="space-y-6">
-                        <div><label for="name" class="sr-only">Name</label><input type="text" name="name" id="name" placeholder="Your Name" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" /></div>
-                        <div><label for="email" class="sr-only">Email</label><input type="email" name="email" id="email" placeholder="Your Email" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors" /></div>
-                        <div><label for="message" class="sr-only">Message</label><textarea name="message" id="message" rows="4" placeholder="Your Message" required class="w-full bg-[var(--input-bg-color)] border-2 border-[var(--input-border-color)] rounded-lg px-4 py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--input-focus-border-color)] transition-colors"></textarea></div>
-                        <div class="text-center"><button type="submit" id="send-message-btn" class="bg-[var(--secondary-color)] text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-[var(--secondary-hover-color)] transition-transform transform hover:scale-105 duration-300">Send Message</button></div>
+        <section id="contact" class="py-24">
+            <div class="max-w-2xl mx-auto">
+                <div id="contact-form-section" class="relative z-20">
+                     <h2 class="text-4xl font-serif text-[var(--text-color)] mb-4 text-center">Get In Touch</h2>
+                     <div class="h-px w-12 bg-[var(--primary-color)] mb-8 mx-auto"></div>
+                     <p class="text-[var(--text-muted-color)] mb-12 text-center font-light">Feel free to send me a message directly.</p>
+                    <form id="contact-form" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="group">
+                                <input type="text" name="name" id="name" required class="w-full bg-transparent border-b border-[var(--input-border-color)] py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--primary-color)] transition-colors placeholder:text-transparent" placeholder=" " />
+                                <label for="name" class="block text-xs uppercase tracking-widest text-[var(--text-muted-color)] mt-2 group-focus-within:text-[var(--primary-color)] transition-colors">Name</label>
+                            </div>
+                            <div class="group">
+                                <input type="email" name="email" id="email" required class="w-full bg-transparent border-b border-[var(--input-border-color)] py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--primary-color)] transition-colors placeholder:text-transparent" placeholder=" " />
+                                <label for="email" class="block text-xs uppercase tracking-widest text-[var(--text-muted-color)] mt-2 group-focus-within:text-[var(--primary-color)] transition-colors">Email</label>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <textarea name="message" id="message" rows="4" required class="w-full bg-transparent border-b border-[var(--input-border-color)] py-3 text-[var(--text-color)] focus:outline-none focus:border-[var(--primary-color)] transition-colors resize-none placeholder:text-transparent" placeholder=" "></textarea>
+                            <label for="message" class="block text-xs uppercase tracking-widest text-[var(--text-muted-color)] mt-2 group-focus-within:text-[var(--primary-color)] transition-colors">Message</label>
+                        </div>
+                        <div class="pt-4 text-center">
+                            <button type="submit" id="send-message-btn" class="px-10 py-3 border border-[var(--text-color)] text-[var(--text-color)] hover:bg-[var(--text-color)] hover:text-[var(--bg-color)] transition-all duration-300 font-medium">Send Message</button>
+                        </div>
                     </form>
                     <div id="form-status" class="mt-6 text-center"></div>
+                    <div class="mt-16 text-center">
+                        <a href="mailto:john.everett32@gmail.com" class="text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors text-sm tracking-wide">john.everett32@gmail.com</a>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-[var(--bg-color)] border-t border-[var(--panel-border-color)] relative z-10">
-        <div class="relative z-20 max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex justify-center space-x-6 mb-4">
-                <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
-                <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                <a href="mailto:john.everett32@gmail.com" class="text-[var(--text-muted-darker-color)] hover:text-[var(--text-color)] transition-colors" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+    <footer class="bg-[var(--bg-color)] border-t border-[var(--panel-border-color)] relative z-10 py-12">
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-2xl font-serif font-bold text-[var(--text-color)]">John Everett.</div>
+                <div class="flex justify-center space-x-8">
+                    <a href="https://github.com/jeverett32" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+                    <a href="https://linkedin.com/in/johneverett32/" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                    <a href="mailto:john.everett32@gmail.com" class="text-[var(--text-muted-color)] hover:text-[var(--primary-color)] transition-colors" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+                </div>
+                <p class="text-[var(--text-muted-darker-color)] text-sm">© 2025 John Everett</p>
             </div>
-            <p class="text-gray-500">© 2025 John Everett. All rights reserved.</p>
         </div>
     </footer>
     
@@ -490,7 +550,6 @@
             
             const jobDescTextarea = document.getElementById('job-description-text');
             const jobDescFile = document.getElementById('job-description-file');
-            const fileNameDisplay = document.getElementById('file-name-display');
             const qaQuestionInput = document.getElementById('qa-question');
             const themeDescriptionInput = document.getElementById('theme-description');
             
@@ -502,9 +561,7 @@
             const aboutMeContent = document.getElementById('about-me-content').innerText.trim();
             const skills = Array.from(document.querySelectorAll('#skills-list span')).map(span => span.textContent).join(', ');
 
-            jobDescFile.addEventListener('change', () => {
-                fileNameDisplay.textContent = jobDescFile.files.length > 0 ? `${jobDescFile.files[0].name}` : 'No file chosen';
-            });
+
 
             generateSummaryBtn.addEventListener('click', async () => {
                 let jobDescription = jobDescTextarea.value.trim();
@@ -515,10 +572,12 @@
                 summaryLoader.classList.remove('hidden');
                 generateSummaryBtn.disabled = true;
                 aiError.textContent = '';
+                const matchResultDiv = document.getElementById('match-result');
                 try {
                     const payload = { taskType: 'match', jobDescription, bio: aboutMeContent, skills };
                     const generatedSummary = await callApiFunction(payload);
-                    summonBallAndShowMessage(generatedSummary, generateSummaryBtn);
+                    matchResultDiv.textContent = generatedSummary;
+                    matchResultDiv.classList.remove('hidden');
                 } catch (error) {
                     aiError.textContent = `Failed to generate summary: ${error.message}`;
                 } finally {
@@ -527,29 +586,30 @@
                 }
             });
 
-            askQuestionBtn.addEventListener('click', async () => {
-                const question = qaQuestionInput.value.trim().toLowerCase();
+            const handleAskQuestion = async () => {
+                const question = qaQuestionInput.value.trim();
                 if (!question) { aiError.textContent = 'Please enter a question first.'; return; }
-                
-                const hireKeywords = ['hire you', 'available for work', 'can i hire', 'are you available'];
-                if (hireKeywords.some(keyword => question.includes(keyword))) {
-                    triggerHireMeEasterEgg();
-                    return;
-                }
 
+                addChatMessage(question, true);
+                qaQuestionInput.value = '';
                 qaLoader.classList.remove('hidden');
                 askQuestionBtn.disabled = true;
                 aiError.textContent = '';
                 try {
                     const payload = { taskType: 'qa', question, bio: aboutMeContent, skills };
                     const answer = await callApiFunction(payload);
-                    summonBallAndShowMessage(answer, askQuestionBtn);
+                    addChatMessage(answer, false);
                 } catch (error) {
                     aiError.textContent = `Failed to get answer: ${error.message}`;
                 } finally {
                     qaLoader.classList.add('hidden');
                     askQuestionBtn.disabled = false;
                 }
+            };
+
+            askQuestionBtn.addEventListener('click', handleAskQuestion);
+            qaQuestionInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') handleAskQuestion();
             });
 
             generateThemeBtn.addEventListener('click', async () => {
@@ -601,19 +661,14 @@
             function applyTheme(colors) {
                 const root = document.documentElement;
                 for (const [key, value] of Object.entries(colors)) {
-                    if (key !== 'ballColorPalette') {
-                        const cssVar = '--' + key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
-                        root.style.setProperty(cssVar, value);
-                    }
-                }
-                if (colors.ballColorPalette && Array.isArray(colors.ballColorPalette) && colors.ballColorPalette.length === 5) {
-                    ballColors = colors.ballColorPalette;
+                    const cssVar = '--' + key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+                    root.style.setProperty(cssVar, value);
                 }
                 const hex = colors.primaryColor.startsWith('#') ? colors.primaryColor.substring(1) : colors.primaryColor;
                 const r = parseInt(hex.substring(0, 2), 16);
                 const g = parseInt(hex.substring(2, 4), 16);
                 const b = parseInt(hex.substring(4, 6), 16);
-                root.style.setProperty('--primary-color-glow', `rgba(${r}, ${g}, ${b}, 0.1)`);
+                root.style.setProperty('--primary-color-glow', `rgba(${r}, ${g}, ${b}, 0.05)`);
             }
 
             function readFileContent(file) {
@@ -643,213 +698,49 @@
                 });
             }
 
-            // --- Interactive Ball Logic ---
-            const ballContainer = document.getElementById('ball-container');
-            const interactiveBall = document.getElementById('interactive-ball');
-            const ballBubble = document.getElementById('ball-bubble');
-            const offscreenPointer = document.getElementById('offscreen-pointer');
-            const ballSize = 30;
-            let x, y, vx, vy;
-            let mouseX = -200, mouseY = -200;
-            let lastHitTime = 0;
-            const cooldown = 500;
-            let messageTimer, guideMessageTimeout;
-            let ballState = 'roaming', targetX, targetY;
-            let lastSummonSide = 'right';
-            const isMobile = 'ontouchstart' in window;
-            const guideMessages = ["Curious about my work? Head to the Projects section!", "Want to know more? The About section has details!", "Have a question? Ask my AI assistant below!"];
-            let hitCounter = 0;
-            let ballColors = ['#06b6d4', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'];
-
-            function showBubbleMessage(text, duration = 0) { // Default duration 0 to persist
-                ballBubble.textContent = text;
-                ballBubble.classList.add('visible');
-                setTimeout(() => { ballBubble.style.overflowY = (ballBubble.scrollHeight > ballBubble.clientHeight + 10) ? 'auto' : 'hidden'; }, 0);
-                clearTimeout(messageTimer);
-                if (duration > 0) { messageTimer = setTimeout(() => ballBubble.classList.remove('visible'), duration); }
-            }
+            // --- Tab Switching Logic ---
+            const tabButtons = document.querySelectorAll('.ai-tab-btn');
+            const tabContents = document.querySelectorAll('.ai-tab-content');
             
-            function hideBubble() {
-                ballBubble.classList.remove('visible');
-                clearTimeout(messageTimer);
-            }
-
-            function summonBallAndShowMessage(message, buttonElement, duration = 0) {
-                const rect = buttonElement.getBoundingClientRect();
-                
-                if (buttonElement.classList.contains('summary-trigger')) {
-                    targetX = rect.right + window.scrollX + 10;
-                    targetY = rect.top + window.scrollY + (rect.height / 2) - (ballSize / 2);
-                } else { // AI Assistant buttons
-                    const panelRect = document.getElementById('ai-assistant-panel').getBoundingClientRect();
-                     if (isMobile) {
-                         targetX = (rect.left > window.innerWidth / 2) ? rect.left - ballSize - 20 : rect.right + 20;
-                         targetY = rect.top + window.scrollY;
-                    } else {
-                         const targetRightX = panelRect.right + window.scrollX + 40;
-                         const targetLeftX = panelRect.left + window.scrollX - 40 - ballSize;
-                         const targetYPos = rect.top + window.scrollY + (rect.height / 2) - (ballSize / 2);
-                         
-                         if (lastSummonSide === 'right') {
-                             targetX = targetLeftX;
-                             lastSummonSide = 'left';
-                         } else {
-                             targetX = targetRightX;
-                             lastSummonSide = 'right';
-                         }
-                         targetY = targetYPos;
-                    }
-                }
-                
-                ballState = 'summoned';
-                clearTimeout(guideMessageTimeout);
-                hideBubble();
-                const arrivalCheck = setInterval(() => {
-                    if (Math.hypot(x - targetX, y - targetY) < 5) {
-                        clearInterval(arrivalCheck);
-                        ballState = 'speaking';
-                        vx = 0; vy = 0;
-                        showBubbleMessage(message, duration);
-                    }
-                }, 100);
-            }
-            
-            function scheduleNextGuideMessage() {
-                clearTimeout(guideMessageTimeout);
-                guideMessageTimeout = setTimeout(() => {
-                    if (ballState === 'roaming') {
-                        showBubbleMessage(guideMessages[Math.floor(Math.random() * guideMessages.length)], 5000);
-                        scheduleNextGuideMessage();
-                    }
-                }, 15000);
-            }
-
-            function initializeBall() {
-                const rect = document.getElementById('home').getBoundingClientRect();
-                x = rect.left + window.scrollX + (rect.width / 4);
-                y = rect.top + window.scrollY + (rect.height / 4);
-                vx = (Math.random() - 0.5) * 4;
-                vy = (Math.random() - 0.5) * 4;
-                showBubbleMessage(`Welcome! You can hit me with your ${isMobile ? 'finger' : 'cursor'}. You can also ask me questions or change the theme in the AI section below!`, 10000);
-                scheduleNextGuideMessage();
-            }
-            
-            document.addEventListener('mousemove', (e) => { mouseX = e.pageX; mouseY = e.pageY; });
-            let touchX = -1000, touchY = -1000;
-            const resetTouch = () => { touchX = -1000; touchY = -1000; };
-            document.addEventListener('touchstart', (e) => { touchX = e.touches[0].pageX; touchY = e.touches[0].pageY; });
-            document.addEventListener('touchmove', (e) => { touchX = e.touches[0].pageX; touchY = e.touches[0].pageY; });
-            document.addEventListener('touchend', resetTouch);
-            document.addEventListener('touchcancel', resetTouch);
-
-            function animateBall() {
-                const pageW = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
-                const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-                if (ballState === 'roaming' || ballState === 'speaking') {
-                    x += vx; y += vy;
-                    if (x + ballSize > pageW || x < 0) vx *= -1;
-                    if (y + ballSize > pageH || y < 0) vy *= -1;
-                    const interactionX = isMobile ? touchX : mouseX;
-                    const interactionY = isMobile ? touchY : mouseY;
-                    const distance = Math.hypot(x + (ballSize / 2) - interactionX, y + (ballSize / 2) - interactionY);
-                    const currentTime = Date.now();
-                    if (distance < 30 && (currentTime - lastHitTime > cooldown)) {
-                        hitCounter++;
-                        if (hitCounter % 5 === 0) {
-                            const newColor = ballColors[(hitCounter / 5) % ballColors.length];
-                            interactiveBall.style.backgroundColor = newColor;
-                            interactiveBall.style.boxShadow = `0 0 15px ${newColor}`;
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.dataset.tab;
+                    
+                    // Update buttons
+                    tabButtons.forEach(b => {
+                        b.classList.remove('border-primary', 'text-[var(--text-color)]', 'bg-white/5');
+                        b.classList.add('border-[var(--panel-border-color)]', 'text-[var(--text-muted-color)]');
+                    });
+                    btn.classList.add('border-primary', 'text-[var(--text-color)]', 'bg-white/5');
+                    btn.classList.remove('border-[var(--panel-border-color)]', 'text-[var(--text-muted-color)]');
+                    
+                    // Update content
+                    tabContents.forEach(content => {
+                        if (content.dataset.tab === targetTab) {
+                            content.classList.remove('hidden');
+                            content.classList.add('flex');
+                        } else {
+                            content.classList.add('hidden');
+                            content.classList.remove('flex');
                         }
+                    });
+                });
+            });
 
-                        if (ballState === 'speaking') { 
-                            showBubbleMessage(ballBubble.textContent, 3000); // Show for 3 seconds before hiding
-                        }
-                        ballState = 'roaming';
-                        lastHitTime = currentTime;
-                        const angle = Math.atan2(y + (ballSize / 2) - interactionY, x + (ballSize / 2) - interactionX);
-                        vx = Math.cos(angle) * 6; vy = Math.sin(angle) * 6;
-                        scheduleNextGuideMessage();
-                    }
-                    if (ballState === 'roaming') { vx *= 0.995; vy *= 0.995; }
-                } else if (ballState === 'summoned' || ballState === 'easterEgg') {
-                    const dx = targetX - x, dy = targetY - y;
-                    const speed = Math.min(0.1, Math.hypot(dx, dy) / 100);
-                    x += dx * speed; y += dy * speed;
-                }
-                ballContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-                const viewTop = window.scrollY, viewBottom = viewTop + window.innerHeight, viewLeft = window.scrollX, viewRight = viewLeft + window.innerWidth;
-                const isOffScreen = y < viewTop || y > viewBottom - ballSize || x < viewLeft || x > viewRight - ballSize;
-                if (isOffScreen) {
-                    offscreenPointer.style.opacity = '1';
-                    const margin = 25;
-                    let pointerX = Math.max(margin, Math.min(x - viewLeft, window.innerWidth - margin));
-                    let pointerY = Math.max(margin, Math.min(y - viewTop, window.innerHeight - margin));
-                    offscreenPointer.style.left = `${pointerX}px`;
-                    offscreenPointer.style.top = `${pointerY}px`;
-                    const angle = Math.atan2((y - viewTop) - pointerY, (x - viewLeft) - pointerX);
-                    offscreenPointer.style.transform = `translate(-50%, -50%) rotate(${angle + Math.PI / 2}rad)`;
-                    ballBubble.style.left = `${pointerX}px`;
-                    ballBubble.style.top = `${pointerY}px`;
-                    if (pointerY < 60) { ballBubble.style.transform = 'translateX(-50%) translateY(30px)'; } 
-                    else if (pointerY > window.innerHeight - 60) { ballBubble.style.transform = 'translateX(-50%) translateY(-100%) translateY(-30px)';} 
-                    else if (pointerX < 60) { ballBubble.style.transform = 'translateX(-10px) translateY(-50%)'; } 
-                    else { ballBubble.style.transform = 'translateX(-100%) translateY(-50%) translateX(10px)'; }
-                } else {
-                    offscreenPointer.style.opacity = '0';
-                    const ballScreenX = x - viewLeft, ballScreenY = y - viewTop;
-                    ballBubble.style.left = `${ballScreenX + (ballSize / 2)}px`;
-                    ballBubble.style.top = `${ballScreenY - 10}px`;
-                    const bubbleWidth = ballBubble.offsetWidth;
-                    let translateX = -bubbleWidth / 2;
-                    if (ballScreenX + (ballSize / 2) + (bubbleWidth / 2) > window.innerWidth) { translateX = -bubbleWidth + (window.innerWidth - ballScreenX) - (ballSize / 2) - 10; }
-                    if (ballScreenX + (ballSize / 2) - (bubbleWidth / 2) < 0) { translateX = -(ballScreenX + (ballSize / 2)) + 10; }
-                    ballBubble.style.transform = `translateX(${translateX}px) translateY(-100%)`;
-                }
-                requestAnimationFrame(animateBall);
+            // --- Chat History Management ---
+            const chatHistory = document.getElementById('chat-history');
+            function addChatMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+                messageDiv.innerHTML = `
+                    <div class="max-w-[85%] ${isUser ? 'text-right' : 'text-left'}">
+                        <span class="text-xs uppercase tracking-wider text-[var(--text-muted-color)]/50 block mb-1">${isUser ? 'You' : 'Assistant'}</span>
+                        <div class="text-sm md:text-base leading-relaxed ${isUser ? 'text-[var(--text-color)]' : 'text-[var(--text-muted-color)]'}">${text}</div>
+                    </div>
+                `;
+                chatHistory.appendChild(messageDiv);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
             }
-            
-            function triggerHireMeEasterEgg() {
-                ballState = 'easterEgg';
-                targetX = (window.innerWidth / 2) - (ballSize / 2);
-                targetY = (window.innerHeight / 2) + window.scrollY - (ballSize / 2);
-                
-                hideBubble();
-                clearTimeout(guideMessageTimeout);
-
-                const arrivalCheck = setInterval(() => {
-                    if (Math.hypot(x - targetX, y - targetY) < 5) {
-                        clearInterval(arrivalCheck);
-                        
-                        let colorIndex = 0;
-                        const glowAnimation = setInterval(() => {
-                            const newColor = ballColors[colorIndex % ballColors.length];
-                            interactiveBall.style.backgroundColor = newColor;
-                            interactiveBall.style.boxShadow = `0 0 35px ${newColor}`;
-                            colorIndex++;
-                        }, 200);
-
-                        interactiveBall.style.transform = 'scale(3)';
-                        showBubbleMessage("Yes! Let's get in touch.", 4000);
-                        
-                        setTimeout(() => {
-                            document.getElementById('contact-form-section').scrollIntoView({ behavior: 'smooth' });
-                        }, 2000);
-
-                        setTimeout(() => {
-                            clearInterval(glowAnimation);
-                            interactiveBall.style.transform = 'scale(1)';
-                            const originalColor = getComputedStyle(document.documentElement).getPropertyValue('--interactive-ball-color');
-                            interactiveBall.style.backgroundColor = originalColor;
-                            interactiveBall.style.boxShadow = `0 0 15px ${originalColor}`;
-                            ballState = 'roaming';
-                            scheduleNextGuideMessage();
-                        }, 4000);
-                    }
-                }, 100);
-            }
-
-            initializeBall();
-            animateBall();
 
             // --- Summary Button Logic ---
             const summaryTriggers = document.querySelectorAll('.summary-trigger');
@@ -859,14 +750,12 @@
                     const parentCard = buttonElement.closest('.project-card');
                     const summary = parentCard ? parentCard.getAttribute('data-summary') : null;
                     if (summary) {
-                        summonBallAndShowMessage(summary, buttonElement);
+                        alert(summary); // Simple popup for now
                     }
                 });
             });
 
-            // --- Other Scripts (Glow, Menu, Modal, etc.) ---
-            const glow = document.getElementById('cursor-glow');
-            if (glow && !isMobile) { document.body.addEventListener('mousemove', e => { glow.style.opacity = '1'; glow.style.left = `${e.clientX}px`; glow.style.top = `${e.clientY}px`; }); }
+            // --- Other Scripts (Menu, Modal, etc.) ---
             const mobileMenuButton = document.getElementById('mobile-menu-button'), mobileMenu = document.getElementById('mobile-menu'), hamburgerIcon = document.getElementById('hamburger-icon'), closeIcon = document.getElementById('close-icon');
             const toggleMenu = () => { mobileMenu.classList.toggle('hidden'); hamburgerIcon.classList.toggle('hidden'); closeIcon.classList.toggle('hidden'); };
             mobileMenuButton.addEventListener('click', toggleMenu);
