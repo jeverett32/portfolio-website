@@ -623,10 +623,14 @@
                     const payload = { taskType: 'theme', description, bio: aboutMeContent, skills };
                     const colors = await callApiFunction(payload);
                     applyTheme(colors);
-                    summonBallAndShowMessage("Theme updated! How does it look?", generateThemeBtn, 5000);
+                    aiError.textContent = '';
+                    aiError.style.color = 'var(--accent-color)';
+                    aiError.textContent = '✓ Theme updated successfully!';
+                    setTimeout(() => { aiError.textContent = ''; aiError.style.color = ''; }, 3000);
                 } catch (error) {
+                    aiError.style.color = '';
                     aiError.textContent = `Failed to generate theme: ${error.message}`;
-                } finally {
+                }finally {
                     themeLoader.classList.add('hidden');
                     generateThemeBtn.disabled = false;
                 }
