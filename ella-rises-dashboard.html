@@ -11,25 +11,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #121212;
-            --header-bg-color: rgba(18, 18, 18, 0.9);
-            --text-color: #EAEAEA;
-            --text-muted-color: #A3A3A3;
-            --text-muted-darker-color: #707070;
+            --bg-color: #FFFFFF;
+            --header-bg-color: rgba(255, 255, 255, 0.95);
+            --text-color: #1a1a1a;
+            --text-muted-color: #666666;
+            --text-muted-darker-color: #999999;
             --primary-color: #D4AF37;
-            --secondary-color: #A3A3A3;
+            --secondary-color: #666666;
             --secondary-hover-color: #C5A028;
-            --panel-bg-color: #1C1C1C;
-            --panel-border-color: rgba(255, 255, 255, 0.05);
-            --input-bg-color: #121212;
-            --input-border-color: rgba(255, 255, 255, 0.1);
+            --panel-bg-color: #F8F8F8;
+            --panel-border-color: rgba(0, 0, 0, 0.08);
+            --input-bg-color: #FFFFFF;
+            --input-border-color: rgba(0, 0, 0, 0.15);
             --input-focus-border-color: #D4AF37;
-            --button-secondary-bg-color: #2A2A2A;
-            --button-secondary-hover-bg-color: #3A3A3A;
+            --button-secondary-bg-color: #F5F5F5;
+            --button-secondary-hover-bg-color: #E8E8E8;
             --tag-bg-color: transparent;
-            --tag-text-color: #A3A3A3;
+            --tag-text-color: #666666;
             --skill-bg-color: transparent;
-            --skill-text-color: #A3A3A3;
+            --skill-text-color: #666666;
             --interactive-ball-color: #D4AF37;
         }
 
@@ -51,7 +51,7 @@
             background: var(--bg-color);
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--panel-bg-color);
+            background: #D0D0D0;
             border: 1px solid var(--bg-color);
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -59,7 +59,7 @@
         }
         ::selection {
             background: var(--primary-color);
-            color: var(--bg-color);
+            color: #FFFFFF;
         }
         
         /* Tableau Placeholder Overrides if needed */
@@ -162,6 +162,39 @@
         const mobileMenuButton = document.getElementById('mobile-menu-button'), mobileMenu = document.getElementById('mobile-menu'), hamburgerIcon = document.getElementById('hamburger-icon'), closeIcon = document.getElementById('close-icon');
         const toggleMenu = () => { mobileMenu.classList.toggle('hidden'); hamburgerIcon.classList.toggle('hidden'); closeIcon.classList.toggle('hidden'); };
         mobileMenuButton.addEventListener('click', toggleMenu);
+
+        function loadThemeFromStorage() {
+            const savedTheme = localStorage.getItem('portfolioTheme');
+            if (savedTheme) {
+                try {
+                    const colors = JSON.parse(savedTheme);
+                    applyTheme(colors);
+                } catch (e) {
+                    console.error('Failed to parse saved theme:', e);
+                }
+            }
+        }
+
+        function applyTheme(colors) {
+            const root = document.documentElement;
+            for (const [key, value] of Object.entries(colors)) {
+                const cssVar = '--' + key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+                root.style.setProperty(cssVar, value);
+            }
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'portfolioTheme' && e.newValue) {
+                try {
+                    const colors = JSON.parse(e.newValue);
+                    applyTheme(colors);
+                } catch (err) {
+                    console.error('Failed to apply theme from storage event:', err);
+                }
+            }
+        });
+
+        loadThemeFromStorage();
     </script>
 </body>
 </html>

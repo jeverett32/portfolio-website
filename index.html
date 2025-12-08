@@ -673,6 +673,8 @@
                 const g = parseInt(hex.substring(2, 4), 16);
                 const b = parseInt(hex.substring(4, 6), 16);
                 root.style.setProperty('--primary-color-glow', `rgba(${r}, ${g}, ${b}, 0.05)`);
+                
+                localStorage.setItem('portfolioTheme', JSON.stringify(colors));
             }
 
             function readFileContent(file) {
