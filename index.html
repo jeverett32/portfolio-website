@@ -170,7 +170,7 @@
     <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <section id="home" class="relative min-h-screen flex items-center pt-20">
             <div class="relative z-20 max-w-4xl">
-                <p class="text-[var(--primary-color)] font-medium tracking-widest uppercase text-sm mb-6">Portfolio 2025</p>
+                <p class="text-[var(--primary-color)] font-medium tracking-widest uppercase text-sm mb-6">Portfolio 2026</p>
                 
                 <h1 class="text-5xl md:text-8xl font-serif font-medium text-[var(--text-color)] mb-8 leading-tight">
                     Data Analyst & <br />
@@ -178,7 +178,7 @@
                 </h1>
 
                 <p class="text-xl md:text-2xl text-[var(--text-muted-color)] max-w-2xl mb-12 font-light leading-relaxed">
-                    STEM-Certified BSIS Student at Brigham Young University. <br/>
+                    STEM-Designated BSIS Student at Brigham Young University. <br/>
                     Blending data analytics with full-stack engineering to solve complex business problems.
                 </p>
 
@@ -275,6 +275,25 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                    <div class="project-card group flex flex-col" data-summary="Built a predictive maintenance sensor for heavy machinery for the Student Innovator of the Year competition at BYU. Built a full machine learning model pipeline including cleaning mass amounts of vibration data, performing feature engineering, and choosing and training a Random Forest Classifier model to put onto our sensor.">
+                        <a href="outlier-node.html" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/SIOY_5_showcase.jpeg" alt="Outlier Node Sensor Showcase" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Outlier+Node'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </a>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Outlier Node</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Predictive maintenance sensor for heavy machinery. Full ML pipeline from vibration data cleaning to Random Forest Classifier deployment.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Pandas</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">ML Modeling</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Fusion 360</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="outlier-node.html" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Project</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="project-card group flex flex-col" data-summary="Full-stack web application for Ella Rises nonprofit supporting young Latina girls through STEM, art, and leadership events. Built with Node.js and deployed on AWS Elastic Beanstalk, featuring a fully normalized database connected via AWS RDS. Integrated Experience capstone project demonstrating enterprise-level database design and cloud deployment.">
                         <a href="http://ellarises27.is404.net" target="_blank" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
                             <img src="images/EllaRisesWebsite.png" alt="Ella Rises Website Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Ella+Rises+Website'">
@@ -372,27 +391,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="project-card group flex flex-col" data-summary="This portfolio is a dynamic showcase built with modern web technologies. It features an AI assistant powered by the Gemini API that can analyze job descriptions, answer questions about my experience, and even dynamically change the site's color theme based on user prompts.">
-                        <div class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
-                            <img src="images/PersonalPortfolio.png" alt="Personal Portfolio Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Personal+Portfolio'">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
-                        </div>
-                        <div class="flex flex-col flex-1">
-                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">AI-Integrated Portfolio</h3>
-                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">This website! Featuring Gemini AI-powered theme generation, skill matching, and an interactive chatbot.</p>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">React</span>
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Gemini API</span>
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">AI</span>
-                            </div>
-                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
-                                <a href="https://github.com/jeverett32/portfolio-website/" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
-                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
-                            </div>
-                        </div>
-                    </div>
-                                    </div>
-                                </section>
+            </div>
+        </section>
                         
         <section id="ai-assistant" class="py-24 bg-[var(--surface-color)] border-y border-[var(--panel-border-color)]">
             <div class="relative z-20 max-w-6xl mx-auto">
