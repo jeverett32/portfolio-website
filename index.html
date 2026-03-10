@@ -275,6 +275,25 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                    <div class="project-card group flex flex-col" data-summary="Built and documented a Proxmox-based homelab infrastructure for self-hosted services and disaster recovery. The environment includes Pi-hole, Immich, Docker/Portainer, Minecraft, Jellyfin, and a media pipeline, with configuration tracked in Git and backup workflows automated through Python and shell scripts. Includes service runbooks, hardware mapping, and recovery procedures for fast restoration from snapshots.">
+                        <a href="https://github.com/jeverett32/proxmoxer" target="_blank" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
+                            <img src="images/homelab.png" alt="Proxmox Homelab Infrastructure" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Homelab+Infrastructure'">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        </a>
+                        <div class="flex flex-col flex-1">
+                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Proxmox Homelab Infrastructure</h3>
+                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Production-style homelab with documented service architecture, automated backups, and recovery runbooks across Proxmox-hosted LXC/VM workloads.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Linux</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Networking</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Docker</span>
+                            </div>
+                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
+                                <a href="https://github.com/jeverett32/proxmoxer" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Project</a>
+                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="project-card group flex flex-col" data-summary="Built a predictive maintenance sensor for heavy machinery for the Student Innovator of the Year competition at BYU. Built a full machine learning model pipeline including cleaning mass amounts of vibration data, performing feature engineering, and choosing and training a Random Forest Classifier model to put onto our sensor.">
                         <a href="outlier-node.html" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
                             <img src="images/SIOY_5_showcase.jpeg" alt="Outlier Node Sensor Showcase" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Outlier+Node'">
@@ -352,26 +371,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="project-card group flex flex-col" data-summary="I built a full e-commerce and scheduling site for a local business using Firebase and the Square API.">
-                        <a href="https://trashbins.johnreverett.com/" target="_blank" class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
-                            <img src="images/trashbinsss.png" alt="Trash Bin Cleaning Website Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Trash+Bin+Site'">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
-                        </a>
-                        <div class="flex flex-col flex-1">
-                            <h3 class="text-xl font-serif text-[var(--text-color)] group-hover:text-[var(--primary-color)] transition-colors mb-3">Trash Bin Cleaning Service</h3>
-                            <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">Full e-commerce and scheduling site for a local business, built with Firebase and the Square API.</p>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Firebase</span>
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Square API</span>
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">E-commerce</span>
-                            </div>
-                            <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
-                                <a href="https://trashbins.johnreverett.com/" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-color)] hover:text-[var(--primary-color)] transition-colors">View Project</a>
-                                <a href="https://github.com/jeverett32/trashbins" target="_blank" class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors">Code</a>
-                                <button type="button" class="summary-trigger text-xs font-bold uppercase tracking-widest text-[var(--text-muted-color)] hover:text-[var(--text-color)] transition-colors ml-auto" aria-label="Learn more">Learn More</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="project-card group flex flex-col" data-summary="I built a complete 2D RPG from scratch in Java, handling everything from the game loop and collision detection to UI with Swing. A key feature is the serialization for saving and loading game states, allowing for persistent player progression through a dynamic world with leveling, upgrades, and a final boss.">
                         <div class="relative aspect-[4/3] overflow-hidden bg-[var(--panel-bg-color)] mb-6">
                             <img src="images/javarpg.png" alt="Java RPG Game Screenshot" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/1C1C1C/D4AF37?text=Java+RPG'">
@@ -382,7 +381,7 @@
                             <p class="text-[var(--text-muted-color)] text-sm leading-relaxed mb-4 flex-1">2D RPG built from scratch in Java Swing. Features tile-based world, combat, upgrades, and save/load system.</p>
                             <div class="flex flex-wrap gap-2 mb-4">
                                 <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Java</span>
-                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Swing</span>
+                                <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">OOP</span>
                                 <span class="text-xs text-[var(--text-muted-color)]/60 uppercase tracking-wider">Game Dev</span>
                             </div>
                             <div class="flex gap-4 pt-4 border-t border-[var(--panel-border-color)]">
@@ -561,6 +560,18 @@
             const aboutMeContent = document.getElementById('about-me-content').innerText.trim();
             const skills = Array.from(document.querySelectorAll('#skills-list span')).map(span => span.textContent).join(', ');
 
+            
+                // Extract hero section information
+                const heroTitle = document.querySelector('#home h1').innerText.trim();
+                const heroDescription = document.querySelector('#home p.text-xl').innerText.trim();
+            
+                // Extract project information
+                const projects = Array.from(document.querySelectorAll('.project-card')).map(card => {
+                    const title = card.querySelector('h3')?.textContent.trim() || 'Untitled Project';
+                    const summary = card.getAttribute('data-summary') || '';
+                    const tags = Array.from(card.querySelectorAll('.flex.flex-wrap.gap-2 span')).map(tag => tag.textContent.trim());
+                    return { title, summary, tags: tags.join(', ') };
+                });
 
 
             generateSummaryBtn.addEventListener('click', async () => {
@@ -574,7 +585,7 @@
                 aiError.textContent = '';
                 const matchResultDiv = document.getElementById('match-result');
                 try {
-                    const payload = { taskType: 'match', jobDescription, bio: aboutMeContent, skills };
+                    const payload = { taskType: 'match', jobDescription, bio: aboutMeContent, skills, projects, heroTitle, heroDescription };
                     const generatedSummary = await callApiFunction(payload);
                     matchResultDiv.textContent = generatedSummary;
                     matchResultDiv.classList.remove('hidden');
@@ -596,7 +607,7 @@
                 askQuestionBtn.disabled = true;
                 aiError.textContent = '';
                 try {
-                    const payload = { taskType: 'qa', question, bio: aboutMeContent, skills };
+                    const payload = { taskType: 'qa', question, bio: aboutMeContent, skills, projects, heroTitle, heroDescription };
                     const answer = await callApiFunction(payload);
                     addChatMessage(answer, false);
                 } catch (error) {
@@ -620,7 +631,7 @@
                 generateThemeBtn.disabled = true;
                 aiError.textContent = '';
                 try {
-                    const payload = { taskType: 'theme', description, bio: aboutMeContent, skills };
+                    const payload = { taskType: 'theme', description, bio: aboutMeContent, skills, projects, heroTitle, heroDescription };
                     const colors = await callApiFunction(payload);
                     applyTheme(colors);
                     aiError.textContent = '';
