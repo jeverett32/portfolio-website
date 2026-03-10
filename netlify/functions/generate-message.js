@@ -46,7 +46,7 @@ exports.handler = async function (event) {
     let apiPayload;
     let isThemeTask = false;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     if (taskType === 'match') {
       const finalPrompt = `
@@ -93,9 +93,9 @@ exports.handler = async function (event) {
         `;
       
         apiPayload = {
-            contents: history, // Pass the conversation history directly
+            contents: history,
             systemInstruction: {
-            parts: [{ text: systemPrompt }]
+                parts: [{ text: systemPrompt }]
             }
         };
 
@@ -131,6 +131,9 @@ exports.handler = async function (event) {
       throw new Error('Invalid task type specified.');
     }
 
+    console.log('Gemini API Request - Task Type:', taskType);
+    console.log('Gemini API Request - Payload:', JSON.stringify(apiPayload).substring(0, 500));
+
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -140,18 +143,32 @@ exports.handler = async function (event) {
     if (!response.ok) {
         let specificError = `Gemini API request failed with status ${response.status}`;
         try {
-            const errorBody = await response.json();
-            if (errorBody.error && errorBody.error.message) {
-                specificError = errorBody.error.message;
+            const errorText = await response.text();
+            console.error('Gemini API Error Response:', errorText);
+            try {
+                const errorBody = JSON.parse(errorText);
+                if (errorBody.error && errorBody.error.message) {
+                    specificError = errorBody.error.message;
+                }
+            } catch (parseErr) {
+                specificError += ` - Response: ${errorText}`;
             }
         } catch (e) {
-            // The error body wasn't JSON, the generic message is the best we can do.
+            // Couldn't read the error body
         }
         console.error('Gemini API Error:', specificError);
         throw new Error(specificError);
     }
 
-    const result = await response.json();
+    let result;
+    try {
+        const responseText = await response.text();
+        console.log('Gemini API Response:', responseText.substring(0, 500)); // Log first 500 chars
+        result = JSON.parse(responseText);
+    } catch (parseError) {
+        console.error('Failed to parse Gemini response:', parseError);
+        throw new Error('Invalid JSON response from Gemini API');
+    }
     
     if (!result.candidates || !result.candidates[0].content.parts[0].text) {
         throw new Error('Invalid response structure from Gemini API.');

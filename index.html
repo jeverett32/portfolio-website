@@ -645,11 +645,31 @@
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `API request failed with status ${response.status}`);
+                    let errorMessage = `API request failed with status ${response.status}`;
+                    try {
+                        const errorText = await response.text();
+                        if (errorText) {
+                            try {
+                                const errorData = JSON.parse(errorText);
+                                errorMessage = errorData.error || errorMessage;
+                            } catch (parseErr) {
+                                errorMessage = errorText || errorMessage;
+                            }
+                        }
+                    } catch (e) {
+                        // Use default error message
+                    }
+                    throw new Error(errorMessage);
                 }
 
-                const result = await response.json();
+                let result;
+                try {
+                    const responseText = await response.text();
+                    result = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('Failed to parse response:', parseError);
+                    throw new Error('Invalid response from server');
+                }
                 
                 if (payload.taskType === 'theme') {
                     if (result.colors) {
