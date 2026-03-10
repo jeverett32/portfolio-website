@@ -46,7 +46,7 @@ exports.handler = async function (event) {
     let apiPayload;
     let isThemeTask = false;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     if (taskType === 'match') {
       const finalPrompt = `
