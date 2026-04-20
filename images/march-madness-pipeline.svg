@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">March Madness prediction pipeline illustration</title>
+  <desc id="desc">A bracket and model-evaluation illustration for an NCAA tournament prediction project.</desc>
+  <rect width="1200" height="900" fill="#f8f8f6"/>
+  <rect x="78" y="78" width="1044" height="744" rx="6" fill="#ffffff" stroke="#d9d9d2"/>
+  <text x="118" y="142" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#111111">March Madness Prediction Pipeline</text>
+  <text x="118" y="180" font-family="Arial, sans-serif" font-size="22" fill="#666666">Relative strength features, symmetry augmentation, and time-aware validation</text>
+  <rect x="118" y="232" width="260" height="130" rx="4" fill="#111111"/>
+  <text x="146" y="281" font-family="Arial, sans-serif" font-size="23" fill="#ffffff">Class Rank</text>
+  <text x="146" y="332" font-family="Arial, sans-serif" font-size="58" font-weight="700" fill="#d4af37">#1</text>
+  <rect x="430" y="232" width="260" height="130" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="458" y="281" font-family="Arial, sans-serif" font-size="23" fill="#111111">Best Model</text>
+  <text x="458" y="332" font-family="Arial, sans-serif" font-size="52" font-weight="700" fill="#d4af37">82.5%</text>
+  <rect x="742" y="232" width="300" height="130" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="770" y="281" font-family="Arial, sans-serif" font-size="23" fill="#111111">Upset-Year Lift</text>
+  <text x="770" y="332" font-family="Arial, sans-serif" font-size="52" font-weight="700" fill="#d4af37">+15.9%</text>
+  <g fill="none" stroke="#111111" stroke-width="4">
+    <path d="M170 458 H300 V515 H390"/>
+    <path d="M170 572 H300 V515"/>
+    <path d="M170 682 H300 V625 H390"/>
+    <path d="M170 792 H300 V625"/>
+    <path d="M390 515 H500 V570 H610"/>
+    <path d="M390 625 H500 V570"/>
+    <path d="M610 570 H725"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="21" fill="#111111">
+    <rect x="118" y="428" width="110" height="56" fill="#f2f2f2" stroke="#deded8"/><text x="138" y="463">Duke</text>
+    <rect x="118" y="542" width="110" height="56" fill="#f2f2f2" stroke="#deded8"/><text x="138" y="577">TCU</text>
+    <rect x="118" y="652" width="110" height="56" fill="#f2f2f2" stroke="#deded8"/><text x="138" y="687">BYU</text>
+    <rect x="118" y="762" width="110" height="56" fill="#f2f2f2" stroke="#deded8"/><text x="138" y="797">Auburn</text>
+    <rect x="390" y="487" width="130" height="56" fill="#111111"/><text x="416" y="523" fill="#ffffff">Duke</text>
+    <rect x="390" y="597" width="130" height="56" fill="#111111"/><text x="416" y="633" fill="#ffffff">BYU</text>
+    <rect x="610" y="542" width="145" height="56" fill="#d4af37"/><text x="636" y="578" fill="#111111">Duke</text>
+  </g>
+  <rect x="810" y="430" width="250" height="310" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="838" y="482" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111111">Feature Stack</text>
+  <g font-family="Arial, sans-serif" font-size="20" fill="#666666">
+    <text x="838" y="535">KenPom deltas</text>
+    <text x="838" y="580">Barttorvik deltas</text>
+    <text x="838" y="625">EvanMiya deltas</text>
+    <text x="838" y="670">Seed context</text>
+    <text x="838" y="715">Travel + fatigue</text>
+  </g>
+</svg>

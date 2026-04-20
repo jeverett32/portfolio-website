@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>March Madness Prediction Pipeline | John Everett</title>
+    <meta name="description" content="NCAA Tournament prediction pipeline that won a class competition against 56 students using advanced metrics, symmetry augmentation, time-aware validation, and tuned classifiers.">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="container nav">
+            <a href="index.html" class="brand">John Everett.</a>
+            <a href="index.html#projects" class="back-link">Back to Projects</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container hero">
+            <div>
+                <p class="eyebrow">Machine Learning · Sports Analytics · Competition Winner</p>
+                <h1>March Madness Prediction Pipeline</h1>
+                <p class="lede">A tournament prediction pipeline built around relative-strength features, symmetry augmentation, and time-aware validation. The model won a class competition against 56 other students for best prediction accuracy.</p>
+                <div class="tag-list">
+                    <span>Python</span><span>scikit-learn</span><span>XGBoost</span><span>Optuna</span><span>TimeSeriesSplit</span><span>Sports Analytics</span>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="images/march-madness-pipeline.svg" alt="March Madness bracket prediction pipeline illustration">
+            </div>
+        </section>
+
+        <div class="container metrics">
+            <div class="metric"><strong>#1</strong><span>Class competition result</span></div>
+            <div class="metric"><strong>56</strong><span>Students competed</span></div>
+            <div class="metric"><strong>82.5%</strong><span>Best test accuracy</span></div>
+            <div class="metric"><strong>+15.9%</strong><span>Lift in upset-heavy 2024</span></div>
+        </div>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Problem</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>March Madness prediction is noisy because the tournament is single-elimination, the sample size is small, and upset dynamics matter more than they do in long regular seasons. A model that only follows seed rank can look strong in chalk-heavy years but miss the places where predictive value actually exists.</p>
+                    <p>The goal was to build a pipeline that could predict individual matchups and complete brackets while avoiding temporal leakage. For the class competition, accuracy mattered, but I also wanted the modeling approach to be defensible.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Approach</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <div class="callout-grid">
+                        <div class="callout">
+                            <h3>Relative Features</h3>
+                            <p>Converted raw team metrics into deltas between Team A and Team B, letting the model learn matchup advantage directly.</p>
+                        </div>
+                        <div class="callout">
+                            <h3>Symmetry Augmentation</h3>
+                            <p>Recorded each game twice, A vs B and B vs A, with negated features. This doubled the training data and stabilized predictions.</p>
+                        </div>
+                        <div class="callout">
+                            <h3>Temporal Validation</h3>
+                            <p>Used TimeSeriesSplit to keep future tournament outcomes out of earlier training folds.</p>
+                        </div>
+                    </div>
+                    <p>The dataset used historical seasons from 2016-2025 and combined advanced sources including KenPom, Barttorvik, TeamRankings, EvanMiya, RPPF, and Heat Check. I also included tournament context, seed information, travel distance, timezone changes, and rating momentum.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Modeling</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <ul class="timeline-list">
+                        <li><strong>Feature selection:</strong> SelectFromModel with XGBoost identified the top 25 predictive metrics.</li>
+                        <li><strong>Optimization:</strong> Optuna ran Bayesian hyperparameter search across 50 trials per model.</li>
+                        <li><strong>Model comparison:</strong> SGDClassifier reached 82.5% test accuracy, Logistic Regression reached 80.2%, and a seed baseline reached 74.6%.</li>
+                        <li><strong>Bracket generation:</strong> The final pipeline could predict a single matchup or recursively advance teams through a full bracket.</li>
+                    </ul>
+                    <p>The SGDClassifier performed best overall and was especially useful in upset-heavy years. Logistic Regression produced more stable probabilities but tended to be more conservative.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Result</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>The pipeline won the class competition against 56 other students for best prediction accuracy. In the upset-heavy 2024 tournament, the SGD model produced a 15.9% lift over a seed-only baseline.</p>
+                    <p>The main modeling lesson was that careful feature construction beat brute-force complexity. Expanding the search space too far increased overfitting because the tournament sample is small, while relative-strength features and symmetry augmentation gave the model a cleaner signal.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Caveats</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>The test set is small, and tournament results are inherently stochastic. The model also cannot account for late injuries, locker-room dynamics, coaching changes, or other qualitative information that can matter in March.</p>
+                    <p>For future versions, I would add uncertainty intervals to bracket outputs and separate probability calibration from winner selection so the system can be evaluated beyond raw accuracy.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container next-links">
+                <a class="text-link" href="mlb-pipeline.html">Previous Case Study</a>
+                <a class="text-link" href="outlier-node.html">Next Case Study</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="brand">John Everett.</div>
+            <p>© 2026 John Everett</p>
+        </div>
+    </footer>
+    <script src="case-study.js"></script>
+</body>
+</html>

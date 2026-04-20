@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">MLB betting pipeline dashboard illustration</title>
+  <desc id="desc">A dashboard-style illustration with model predictions, betting edge, database, and pipeline status panels.</desc>
+  <rect width="1200" height="900" fill="#f7f7f5"/>
+  <rect x="80" y="70" width="1040" height="760" rx="6" fill="#ffffff" stroke="#d9d9d2"/>
+  <rect x="80" y="70" width="1040" height="82" rx="6" fill="#111111"/>
+  <text x="120" y="123" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#d4af37">MLB Moneyline Pipeline</text>
+  <text x="865" y="122" font-family="Arial, sans-serif" font-size="22" fill="#f1f1f1">LIVE: OFF</text>
+  <rect x="120" y="200" width="290" height="160" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="145" y="246" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#111111">Model Edge</text>
+  <text x="145" y="310" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#d4af37">+7.4%</text>
+  <text x="145" y="335" font-family="Arial, sans-serif" font-size="18" fill="#666666">Positive EV candidate</text>
+  <rect x="455" y="200" width="290" height="160" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="480" y="246" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#111111">Kelly Stake</text>
+  <text x="480" y="310" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#d4af37">$18</text>
+  <text x="480" y="335" font-family="Arial, sans-serif" font-size="18" fill="#666666">Sized from balance</text>
+  <rect x="790" y="200" width="290" height="160" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="815" y="246" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#111111">Next Run</text>
+  <text x="815" y="310" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#d4af37">5m</text>
+  <text x="815" y="335" font-family="Arial, sans-serif" font-size="18" fill="#666666">Before first pitch</text>
+  <rect x="120" y="410" width="960" height="110" rx="4" fill="#ffffff" stroke="#deded8"/>
+  <text x="145" y="453" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#111111">Pipeline</text>
+  <g fill="none" stroke="#d4af37" stroke-width="4">
+    <path d="M245 472 H390"/>
+    <path d="M485 472 H630"/>
+    <path d="M725 472 H870"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="17" text-anchor="middle">
+    <circle cx="205" cy="472" r="32" fill="#111111"/><text x="205" y="478" fill="#ffffff">Fetch</text>
+    <circle cx="445" cy="472" r="32" fill="#111111"/><text x="445" y="478" fill="#ffffff">Train</text>
+    <circle cx="685" cy="472" r="32" fill="#111111"/><text x="685" y="478" fill="#ffffff">Score</text>
+    <circle cx="925" cy="472" r="32" fill="#111111"/><text x="925" y="478" fill="#ffffff">Bet</text>
+  </g>
+  <rect x="120" y="570" width="460" height="200" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <polyline points="155,720 215,695 275,705 335,650 395,635 455,600 535,615" fill="none" stroke="#d4af37" stroke-width="5"/>
+  <text x="145" y="620" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#111111">Balance History</text>
+  <rect x="625" y="570" width="455" height="200" rx="4" fill="#f2f2f2" stroke="#deded8"/>
+  <text x="650" y="620" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#111111">PostgreSQL Tables</text>
+  <g font-family="Arial, sans-serif" font-size="20" fill="#666666">
+    <text x="650" y="668">games</text>
+    <text x="805" y="668">bets</text>
+    <text x="940" y="668">settings</text>
+    <text x="650" y="718">balance</text>
+    <text x="805" y="718">odds</text>
+    <text x="940" y="718">features</text>
+  </g>
+</svg>

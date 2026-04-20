@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxmox Homelab Infrastructure | John Everett</title>
+    <meta name="description" content="Proxmox homelab case study covering self-hosted services, Linux administration, Docker, LXC containers, backups, and operational documentation.">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="container nav">
+            <a href="index.html" class="brand">John Everett.</a>
+            <a href="index.html#projects" class="back-link">Back to Projects</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container hero">
+            <div>
+                <p class="eyebrow">Systems Engineering · Linux · Self Hosting</p>
+                <h1>Proxmox Homelab Infrastructure</h1>
+                <p class="lede">A production-style homelab running self-hosted services across Proxmox LXC containers and VMs, with documented recovery paths, automated backups, and operational runbooks.</p>
+                <div class="tag-list">
+                    <span>Linux</span><span>Proxmox</span><span>Docker</span><span>LXC</span><span>Python</span><span>Networking</span>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="images/homelab.webp" alt="Proxmox homelab infrastructure overview">
+            </div>
+        </section>
+
+        <div class="container metrics">
+            <div class="metric"><strong>8</strong><span>Active services</span></div>
+            <div class="metric"><strong>LXC</strong><span>Containerized services</span></div>
+            <div class="metric"><strong>Docs</strong><span>Runbooks and maps</span></div>
+            <div class="metric"><strong>Backups</strong><span>Automated workflows</span></div>
+        </div>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Problem</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>I wanted a practical environment for learning infrastructure beyond local development. The goal was to run real services that I personally use, then manage them with the same concerns a production environment would have: uptime, backups, networking, service isolation, and recovery documentation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Architecture</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>The homelab runs on Proxmox with services split across LXC containers and VMs. Services include DNS ad-blocking, photo management, media serving, container management, game hosting, and supporting utilities.</p>
+                    <div class="callout-grid">
+                        <div class="callout">
+                            <h3>Service Isolation</h3>
+                            <p>LXC containers keep services separated while keeping resource overhead low.</p>
+                        </div>
+                        <div class="callout">
+                            <h3>Operations</h3>
+                            <p>Runbooks document service locations, ports, recovery steps, and maintenance procedures.</p>
+                        </div>
+                        <div class="callout">
+                            <h3>Automation</h3>
+                            <p>Python and shell scripts support backup workflows and routine maintenance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>What I Learned</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>This project made infrastructure problems concrete. DNS configuration, firewall behavior, storage planning, container networking, backup verification, and service restarts all become easier to understand when they affect systems I actually rely on.</p>
+                    <p>It also gave me a strong foundation for deploying later projects, including the MLB pipeline, which uses the same homelab environment and systemd-managed services.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Links</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p><a class="text-link" href="https://github.com/jeverett32/proxmoxer" target="_blank" rel="noopener noreferrer">View GitHub Repository</a></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container next-links">
+                <a class="text-link" href="outlier-node.html">Previous Case Study</a>
+                <a class="text-link" href="ella-rises-dashboard.html">Next Case Study</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="brand">John Everett.</div>
+            <p>© 2026 John Everett</p>
+        </div>
+    </footer>
+    <script src="case-study.js"></script>
+</body>
+</html>

@@ -885,7 +885,7 @@
         </div>
         <div class="about-grid">
             <div class="about-img-col fade-up">
-                <img src="images/hiking.png" alt="John Everett" class="about-photo"
+                <img src="images/hiking.webp" alt="John Everett" class="about-photo"
                     loading="eager" fetchpriority="high"
                     onerror="this.src='https://placehold.co/480x640/F2F2F2/D4AF37?text=John+Everett'">
             </div>
@@ -1342,10 +1342,51 @@
 /* ── Project Data ───────────────────────────────────────────── */
 const PROJECTS = [
     {
+        id: 'mlb-pipeline',
+        title: 'MLB Betting Pipeline',
+        subtitle: 'Automated Betting System · ML Operations',
+        image: 'images/mlb-pipeline.svg',
+        alt: 'MLB betting pipeline dashboard illustration',
+        tags: ['Python', 'FastAPI', 'PostgreSQL', 'LightGBM/XGBoost', 'Kalshi API', 'Proxmox'],
+        metrics: [
+            { value: '36K', label: 'Historical Games' },
+            { value: '5 min', label: 'Pre-game Run Window' },
+            { value: '2', label: 'Production LXC Services' }
+        ],
+        cardMetrics: [
+            { value: '36K', label: 'Games Loaded' },
+            { value: 'EV+', label: 'Bet Detection' }
+        ],
+        description: 'Built an automated MLB moneyline betting system that fetches schedules, odds, pitcher stats, weather, and FanGraphs data; trains a gradient-boosted model; identifies positive-expected-value bets; sizes wagers; and places Kalshi orders when live betting is enabled. The system runs on a Proxmox homelab with PostgreSQL persistence, systemd-managed services, and a password-protected FastAPI dashboard for predictions, bet logs, performance, and live-betting controls.',
+        links: [
+            { label: 'Case Study', href: 'mlb-pipeline.html', external: false, primary: true },
+            { label: 'GitHub', href: 'https://github.com/jeverett32/mlb-pipeline', external: true, primary: false }
+        ]
+    },
+    {
+        id: 'march-madness',
+        title: 'March Madness Prediction Pipeline',
+        subtitle: 'NCAA Tournament Modeling · Competition Winner',
+        image: 'images/march-madness-pipeline.svg',
+        alt: 'March Madness prediction pipeline bracket illustration',
+        tags: ['Python', 'scikit-learn', 'XGBoost', 'Optuna', 'TimeSeriesSplit', 'Sports Analytics'],
+        metrics: [
+            { value: '#1', label: 'Class Competition' },
+            { value: '56', label: 'Students Competed' },
+            { value: '82.5%', label: 'Best Test Accuracy' }
+        ],
+        cardMetrics: [
+            { value: '#1', label: 'Class Rank' },
+            { value: '82.5%', label: 'Accuracy' }
+        ],
+        description: 'Built an NCAA Tournament prediction pipeline using historical 2016-2025 data, advanced metrics from KenPom/Barttorvik/EvanMiya-style sources, relative-strength feature engineering, symmetry augmentation, XGBoost-based feature selection, Optuna tuning, and time-aware cross-validation. The project won a class competition against 56 other students for best prediction accuracy and showed a 15.9% lift over seed baseline in the upset-heavy 2024 tournament.',
+        links: [{ label: 'Case Study', href: 'march-madness.html', external: false, primary: true }]
+    },
+    {
         id: 'outlier-node',
         title: 'Outlier Node',
         subtitle: 'Predictive Maintenance · Machine Learning',
-        image: 'images/SIOY_5_showcase.jpeg',
+        image: 'images/SIOY_5_showcase.webp',
         alt: 'Outlier Node sensor at BYU Student Innovator of the Year showcase',
         tags: ['Python', 'Polars', 'scikit-learn', 'Random Forest', 'Fusion 360', 'Embedded Systems'],
         metrics: [
@@ -1364,7 +1405,7 @@ const PROJECTS = [
         id: 'proxmox-homelab',
         title: 'Proxmox Homelab Infrastructure',
         subtitle: 'Self-Hosted Services · Systems Engineering',
-        image: 'images/homelab.png',
+        image: 'images/homelab.webp',
         alt: 'Proxmox homelab infrastructure overview',
         tags: ['Linux', 'Proxmox', 'Docker', 'Python', 'Shell Scripting', 'Networking'],
         metrics: [
@@ -1375,55 +1416,34 @@ const PROJECTS = [
             { value: '8', label: 'Services Running' }
         ],
         description: 'Production-style homelab on Proxmox running 8 self-hosted services across LXC containers and VMs — including Pi-hole (DNS ad-blocking), Immich (photo management), Jellyfin (media server), Portainer (container management), Minecraft, and more — with near-perfect uptime excluding internet outages. Automated backup workflows with Python and shell scripts. Full infrastructure documented with service runbooks, hardware maps, and recovery procedures for fast snapshot restoration.',
-        links: [{ label: 'View on GitHub', href: 'https://github.com/jeverett32/proxmoxer', external: true, primary: true }]
-    },
-    {
-        id: 'ella-rises-web',
-        title: 'Ella Rises Web Platform',
-        subtitle: 'Full-Stack Web Application · Cloud Deployment',
-        image: 'images/EllaRisesWebsite.png',
-        alt: 'Ella Rises website screenshot',
-        tags: ['Node.js', 'AWS RDS', 'Elastic Beanstalk', 'MySQL', 'JavaScript', 'MVC'],
-        metrics: [],
-        cardMetrics: [],
-        description: 'Full-stack web application built for Ella Rises, a nonprofit empowering young Latina girls through STEM, art, and leadership events. Built with Node.js following MVC architecture and deployed on AWS Elastic Beanstalk, with a fully normalized (3NF) relational database on AWS RDS. Capstone project for BYU\'s IS program, demonstrating enterprise-level database design, cloud deployment, and team-based software development.',
-        links: [{ label: 'View on GitHub', href: 'https://github.com/colelatour/INTEX2025', external: true, primary: true }]
+        links: [
+            { label: 'Case Study', href: 'homelab.html', external: false, primary: true },
+            { label: 'GitHub', href: 'https://github.com/jeverett32/proxmoxer', external: true, primary: false }
+        ]
     },
     {
         id: 'ella-rises-dashboard',
         title: 'Ella Rises Impact Dashboard',
         subtitle: 'Data Visualization · Business Intelligence',
-        image: 'images/EllaRisesDashboard.png',
+        image: 'images/EllaRisesDashboard.webp',
         alt: 'Ella Rises impact dashboard',
         tags: ['Tableau', 'Data Visualization', 'Analytics', 'Business Intelligence', 'KPI Design'],
         metrics: [],
         cardMetrics: [],
         description: 'Interactive Tableau dashboard measuring community impact for the Ella Rises nonprofit, tracking participation rates, educational outcomes, and community engagement across program events. Designed for program coordinators to evaluate effectiveness and surface actionable insights to inform future initiatives and funding decisions.',
-        links: [{ label: 'View Dashboard', href: 'ella-rises-dashboard.html', external: false, primary: true }]
+        links: [{ label: 'Case Study', href: 'ella-rises-dashboard.html', external: false, primary: true }]
     },
     {
         id: 'female-admissions',
         title: '2025 IS Female Admissions Dashboard',
         subtitle: 'Data Analysis · Business Intelligence',
-        image: 'images/FemaleAdmissions.png',
+        image: 'images/FemaleAdmissions.webp',
         alt: 'IS Female Admissions Tableau dashboard',
         tags: ['Tableau', 'Data Analysis', 'Business Intelligence', 'Higher Education'],
         metrics: [],
         cardMetrics: [],
         description: 'Interactive Tableau dashboard analyzing demographic and academic factors influencing female application rates to BYU\'s Information Systems program. Visualizes multi-year admission trends to surface actionable insights for improving program diversity and outreach strategy — presented to IS program faculty.',
-        links: [{ label: 'View Dashboard', href: 'tableau.html', external: false, primary: true }]
-    },
-    {
-        id: 'java-rpg',
-        title: 'Java RPG Adventure',
-        subtitle: 'Game Development · Object-Oriented Design',
-        image: 'images/javarpg.png',
-        alt: 'Java RPG game screenshot',
-        tags: ['Java', 'Swing', 'OOP', 'Game Loop', 'Serialization', 'Design Patterns'],
-        metrics: [],
-        cardMetrics: [],
-        description: 'Complete 2D tile-based RPG built from scratch in Java Swing — handling everything from the custom game loop and collision detection to combat systems and UI rendering. Key features include Java object serialization for persistent save/load state, procedurally designed tile maps, a progressive level-up and upgrade system, and a final boss encounter. Demonstrates deep understanding of OOP design patterns and event-driven architecture.',
-        links: [{ label: 'View on GitHub', href: 'https://github.com/jeverett32/HeroGame/', external: true, primary: true }]
+        links: [{ label: 'Case Study', href: 'tableau.html', external: false, primary: true }]
     }
 ];
 

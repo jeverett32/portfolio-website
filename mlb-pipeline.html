@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLB Betting Pipeline | John Everett</title>
+    <meta name="description" content="Automated MLB moneyline betting pipeline with model training, positive-EV bet detection, Kalshi order placement, PostgreSQL persistence, and a FastAPI monitoring dashboard.">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="container nav">
+            <a href="index.html" class="brand">John Everett.</a>
+            <a href="index.html#projects" class="back-link">Back to Projects</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container hero">
+            <div>
+                <p class="eyebrow">Machine Learning · Automation · Infrastructure</p>
+                <h1>MLB Betting Pipeline</h1>
+                <p class="lede">An automated MLB moneyline system that fetches live game data, trains a gradient-boosted model, identifies positive-expected-value bets, places Kalshi orders when live mode is enabled, and exposes the whole operation through a self-hosted FastAPI dashboard.</p>
+                <div class="tag-list">
+                    <span>Python</span><span>FastAPI</span><span>PostgreSQL</span><span>LightGBM/XGBoost</span><span>Kalshi API</span><span>Proxmox</span>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="images/mlb-pipeline.svg" alt="MLB betting pipeline dashboard illustration">
+            </div>
+        </section>
+
+        <div class="container metrics">
+            <div class="metric"><strong>36K</strong><span>Historical games migrated</span></div>
+            <div class="metric"><strong>5 min</strong><span>Pre-game execution window</span></div>
+            <div class="metric"><strong>2</strong><span>Production LXC services</span></div>
+            <div class="metric"><strong>8080</strong><span>Dashboard port</span></div>
+        </div>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Problem</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>Sports betting models are easy to prototype and hard to operate. The interesting work is not just predicting a winner; it is collecting reliable pre-game data, converting odds into comparable probabilities, deciding when an edge is large enough to act on, sizing the wager responsibly, and keeping enough operational visibility to know what the system is doing.</p>
+                    <p>I built this as an end-to-end production-style pipeline instead of a notebook. The system needed to run unattended on my homelab, preserve every prediction and bet in PostgreSQL, and give me a dashboard where I could inspect model performance before allowing real orders.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Architecture</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <div class="callout-grid">
+                        <div class="callout">
+                            <h3>Data Collection</h3>
+                            <p>Fetches schedules, scores, pitcher IDs, odds, weather, FanGraphs statistics, and Kalshi balance data from multiple APIs and fallback sources.</p>
+                        </div>
+                        <div class="callout">
+                            <h3>Prediction Loop</h3>
+                            <p>Runs a trained gradient-boosted model, calculates edge against market prices, and applies Kelly-style sizing before a bet is recorded or placed.</p>
+                        </div>
+                        <div class="callout">
+                            <h3>Operations</h3>
+                            <p>Runs on two Proxmox LXC containers: PostgreSQL 16 on one container and Python 3.12 services on another, managed by systemd.</p>
+                        </div>
+                    </div>
+                    <ul class="timeline-list">
+                        <li><strong>fetch_data.py</strong> pulls schedule, odds, pitcher, weather, and FanGraphs inputs.</li>
+                        <li><strong>predict.py</strong> scores games, calculates market edge, and sizes the bet.</li>
+                        <li><strong>place_bet.py</strong> submits Kalshi orders when live betting is enabled, or dry-runs when it is off.</li>
+                        <li><strong>run_pipeline.py</strong> orchestrates the full loop and wakes up five minutes before scheduled games.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>What I Built</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>The pipeline stores games, bets, balance history, and settings in PostgreSQL. A one-time migration loads roughly 36,000 historical games from 2010-2025 into the database so the model has enough history to train from.</p>
+                    <p>The dashboard is a FastAPI app with tabs for balance history, upcoming games, bet logs, model performance, and raw database inspection. It also includes a live betting toggle backed by the settings table, so I can switch between dry-run and real order placement without restarting the pipeline.</p>
+                    <p>I also implemented the deployment path: uv-managed Python dependencies, systemd services for both the pipeline and dashboard, and operational commands for checking logs and recovering services after reboot or failure.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Tradeoffs</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p>The current public demo is limited because the dashboard sits behind authentication and can expose betting/balance information. The next step is a read-only public landing page with sanitized screenshots, architecture notes, and sample performance charts.</p>
+                    <p>I also default live betting to off. That makes the system safer to operate while I evaluate calibration and market behavior, and it keeps the same code path useful for both simulation and production.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container section-grid">
+                <div>
+                    <h2>Links</h2>
+                    <div class="section-title-line"></div>
+                </div>
+                <div class="content-stack">
+                    <p><a class="text-link" href="https://github.com/jeverett32/mlb-pipeline" target="_blank" rel="noopener noreferrer">View GitHub Repository</a></p>
+                    <p>The live dashboard is intentionally private for now. A public read-only site can be added without exposing account or betting controls.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container next-links">
+                <a class="text-link" href="index.html#projects">Back to All Projects</a>
+                <a class="text-link" href="march-madness.html">Next Case Study</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="brand">John Everett.</div>
+            <p>© 2026 John Everett</p>
+        </div>
+    </footer>
+    <script src="case-study.js"></script>
+</body>
+</html>
