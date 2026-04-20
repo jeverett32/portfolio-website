@@ -5,6 +5,7 @@
     --text-muted-color: #666666;
     --text-muted-darker-color: #999999;
     --primary-color: #D4AF37;
+    --primary-text-color: #8B6B00;
     --panel-bg-color: #F2F2F2;
     --panel-border-color: rgba(0, 0, 0, 0.08);
     --font-serif: 'Playfair Display', serif;
@@ -63,7 +64,7 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .back-link:hover,
-.text-link:hover { color: var(--primary-color); }
+.text-link:hover { color: var(--primary-text-color); }
 
 .hero {
     padding: 5.5rem 0 3rem;
@@ -74,7 +75,7 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .eyebrow {
-    color: var(--primary-color);
+    color: var(--primary-text-color);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.18em;
@@ -144,7 +145,7 @@ h1 {
 }
 
 .metric strong {
-    color: var(--primary-color);
+    color: var(--primary-text-color);
     display: block;
     font-family: var(--font-serif);
     font-size: 1.8rem;
@@ -277,7 +278,7 @@ h1 {
 
 footer {
     border-top: 1px solid var(--panel-border-color);
-    color: var(--text-muted-darker-color);
+    color: var(--text-muted-color);
     padding: 2.5rem 0;
 }
 
