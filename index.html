@@ -978,7 +978,7 @@
                 </div>
                 <div class="timeline-content">
                     <div class="timeline-meta">
-                        <span class="timeline-date">Mar 2024 – Present</span>
+                        <span class="timeline-date">Mar 2025 – Present</span>
                         <span class="timeline-badge">Employment</span>
                     </div>
                     <h3>Software Developer</h3>
@@ -1129,7 +1129,7 @@
                     <div class="skill-bar"><div class="skill-info"><span>Python</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-width="85"></div></div></div>
                     <div class="skill-bar"><div class="skill-info"><span>JavaScript</span><span class="skill-pct">78%</span></div><div class="skill-track"><div class="skill-fill" data-width="78"></div></div></div>
                     <div class="skill-bar"><div class="skill-info"><span>Java / C#</span><span class="skill-pct">65%</span></div><div class="skill-track"><div class="skill-fill" data-width="65"></div></div></div>
-                    <div class="skill-bar"><div class="skill-info"><span>R</span><span class="skill-pct">60%</span></div><div class="skill-track"><div class="skill-fill" data-width="60"></div></div></div>
+                    <div class="skill-bar"><div class="skill-info"><span>R</span><span class="skill-pct">40%</span></div><div class="skill-track"><div class="skill-fill" data-width="40"></div></div></div>
                 </div>
             </div>
             <div class="fade-up fade-up-delay-1">
@@ -1156,7 +1156,7 @@
                     <div class="skill-bar"><div class="skill-info"><span>Git / GitHub</span><span class="skill-pct">86%</span></div><div class="skill-track"><div class="skill-fill" data-width="86"></div></div></div>
                     <div class="skill-bar"><div class="skill-info"><span>Figma</span><span class="skill-pct">63%</span></div><div class="skill-track"><div class="skill-fill" data-width="63"></div></div></div>
                     <div class="skill-bar"><div class="skill-info"><span>Fusion 360</span><span class="skill-pct">55%</span></div><div class="skill-track"><div class="skill-fill" data-width="55"></div></div></div>
-                    <div class="skill-bar"><div class="skill-info"><span>Tridium Niagara</span><span class="skill-pct">50%</span></div><div class="skill-track"><div class="skill-fill" data-width="50"></div></div></div>
+                    <div class="skill-bar"><div class="skill-info"><span>Tridium Niagara</span><span class="skill-pct">75%</span></div><div class="skill-track"><div class="skill-fill" data-width="75"></div></div></div>
                 </div>
             </div>
         </div>
@@ -1640,7 +1640,6 @@ function applyTheme(colors) {
     const hex = colors.primaryColor.startsWith('#') ? colors.primaryColor.slice(1) : colors.primaryColor;
     const r = parseInt(hex.slice(0, 2), 16), g = parseInt(hex.slice(2, 4), 16), b = parseInt(hex.slice(4, 6), 16);
     root.style.setProperty('--primary-color-glow', `rgba(${r},${g},${b},0.07)`);
-    localStorage.setItem('portfolioTheme', JSON.stringify(colors));
 }
 
 /* Lazy-load PDF.js only when needed */
@@ -1782,11 +1781,8 @@ document.addEventListener('mousemove', (e) => {
     glowTimeout = setTimeout(() => { cursorGlow.style.opacity = '0'; }, 2500);
 });
 
-/* ── Restore Saved Theme ────────────────────────────────────── */
-try {
-    const saved = localStorage.getItem('portfolioTheme');
-    if (saved) applyTheme(JSON.parse(saved));
-} catch {}
+/* ── Clear any previously saved theme so defaults always apply ── */
+try { localStorage.removeItem('portfolioTheme'); } catch {}
 
 /* ── Init ───────────────────────────────────────────────────── */
 renderProjects();
