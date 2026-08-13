@@ -2002,7 +2002,8 @@ try { localStorage.removeItem('portfolioTheme'); } catch {}
 /* ── Init ───────────────────────────────────────────────────── */
 renderExperienceTimeline();
 renderProjects();
-// Re-observe newly rendered project cards
+// Re-observe newly rendered experience and project cards
+document.querySelectorAll('#experience-timeline .fade-up').forEach(el => fadeObserver.observe(el));
 document.querySelectorAll('#projects-grid .fade-up').forEach(el => fadeObserver.observe(el));
 // Re-observe skill groups now that DOM is ready
 document.querySelectorAll('.skills-grid > div').forEach(group => skillObserver.observe(group));
