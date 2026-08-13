@@ -323,7 +323,7 @@
     .timeline { max-width: 780px; }
     .timeline-item {
         display: grid; grid-template-columns: 56px 1fr;
-        gap: 1.25rem; margin-bottom: 2.75rem;
+        gap: 1.25rem; margin-bottom: 1.5rem;
     }
     .timeline-item:last-child { margin-bottom: 0; }
     .timeline-marker {
@@ -361,7 +361,35 @@
         margin-bottom: 0.2rem; line-height: 1.3;
     }
     .timeline-company {
-        font-size: 0.825rem; color: var(--text-muted-color); margin-bottom: 0.65rem;
+        font-size: 0.825rem; color: var(--text-muted-color); margin-bottom: 0;
+    }
+    .timeline-card {
+        width: 100%; text-align: left; background: none; border: none;
+        padding: 0; cursor: pointer; font: inherit; color: inherit;
+    }
+    .timeline-card:hover h3 { color: var(--primary-text-color); }
+    .timeline-card:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 4px; border-radius: 2px;
+    }
+    .timeline-hint {
+        display: inline-block; margin-top: 0.35rem;
+        font-size: 0.65rem; text-transform: uppercase;
+        letter-spacing: 0.1em; color: var(--text-muted-darker-color);
+    }
+    .experience-modal-panel { max-width: 640px; }
+    .experience-modal-panel .modal-body { padding-top: 2.5rem; }
+    .exp-modal-meta {
+        display: flex; gap: 0.75rem; align-items: center;
+        flex-wrap: wrap; margin-bottom: 0.75rem;
+    }
+    #exp-modal-bullets {
+        margin: 1rem 0 1.25rem; padding-left: 1.15rem;
+        font-size: 0.9rem; color: var(--text-muted-color); line-height: 1.7;
+    }
+    #exp-modal-bullets li + li { margin-top: 0.55rem; }
+    #exp-modal-company {
+        font-size: 0.875rem; color: var(--text-muted-color); margin-bottom: 0.25rem;
     }
     .timeline-desc {
         font-size: 0.875rem; color: var(--text-muted-color);
@@ -833,6 +861,25 @@
     </div>
 </div>
 
+<!-- ── Experience Modal ─────────────────────────────────────── -->
+<div id="experience-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="exp-modal-title" aria-describedby="exp-modal-bullets" hidden inert>
+    <div class="modal-panel experience-modal-panel">
+        <button type="button" class="modal-close" id="experience-modal-close-btn" aria-label="Close">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="modal-body">
+            <div class="exp-modal-meta">
+                <span id="exp-modal-date" class="timeline-date"></span>
+                <span id="exp-modal-badge" class="timeline-badge"></span>
+            </div>
+            <h2 id="exp-modal-title"></h2>
+            <p id="exp-modal-company"></p>
+            <ul id="exp-modal-bullets"></ul>
+            <div id="exp-modal-tags" class="modal-tags"></div>
+        </div>
+    </div>
+</div>
+
 <!-- ── Header ───────────────────────────────────────────────── -->
 <header id="header">
     <nav class="container nav-inner">
@@ -970,16 +1017,7 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                         </div>
                         <div>
-                            <span class="highlight-title">Data Analyst — Brevium</span>
-                            <span class="highlight-sub">Aug 2026 · American Fork, UT · Healthcare Analytics</span>
-                        </div>
-                    </div>
-                    <div class="highlight">
-                        <div class="highlight-icon" aria-hidden="true">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                        </div>
-                        <div>
-                            <span class="highlight-title">Data Analytics Intern — Sunoco LP</span>
+                            <span class="highlight-title">Internship - Data Analytics at Sunoco LP</span>
                             <span class="highlight-sub">May – Aug 2026 · Dallas, TX · Retail &amp; Midstream Fuel Analytics</span>
                         </div>
                     </div>
@@ -996,192 +1034,8 @@
             <h2>Experience</h2>
             <div class="section-line"></div>
         </div>
-        <div class="timeline">
-            <div class="timeline-item fade-up">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Aug 2026 – Present</span>
-                        <span class="timeline-badge">Employment</span>
-                    </div>
-                    <h3>Data Analyst</h3>
-                    <p class="timeline-company">Brevium · American Fork, UT</p>
-                    <p class="timeline-desc">Building data products and analytics for patient reactivation software at a healthcare technology company. Working with Python, SQL, and machine learning to support predictive models and operational insights across medical practice data.</p>
-                    <div class="timeline-tags">
-                        <span>Python</span><span>SQL</span><span>Pandas</span><span>scikit-learn</span><span>Healthcare Analytics</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-1">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">May – Aug 2026</span>
-                        <span class="timeline-badge">Internship</span>
-                    </div>
-                    <h3>Data Analytics Intern</h3>
-                    <p class="timeline-company">Sunoco LP · Dallas, TX</p>
-                    <p class="timeline-desc">
-                        Trained a composite machine learning model with an integrated dashboard for price elasticity to predict how gas price changes will impact volume
-                        <br>
-                        Solo-developed dashboard used daily by two teams handling operations totaling over 50% of annual EBIDTA
-                        <br>
-                        Created cost model and slide deck comparing profit levers and optimal locations for strategic meetings between executive stakeholders about a pilot commercial program
-                        <br>
-                        Used Python and SQL to build data products for various employees and teams across a Fortune 50 enterprise
-                        <br>
-                        Spearheaded Databricks integration by reorganizing data structuring, building Genie agents, and developing with ucode</p>
-                    <div class="timeline-tags">
-                        <span>Python</span><span>SQL</span><span>Pandas</span><span>Databricks</span><span>Machine Learning</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-2">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Mar 2025 – Aug 2026</span>
-                        <span class="timeline-badge">Employment</span>
-                    </div>
-                    <h3>Software Developer</h3>
-                    <p class="timeline-company">Brigham Young University · Provo, UT</p>
-                    <p class="timeline-desc">Developed and improved HVAC monitoring systems handling 100,000+ alarms and history trackers. Engineered SQL queries to audit and sync missing histories across 100+ systems, and rebuilt the A/C shop website with improved integration and usability.</p>
-                    <div class="timeline-tags">
-                        <span>SQL</span><span>Full-Stack</span><span>Tridium Niagara</span><span>HVAC Systems</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-2">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Feb 2026 – Present</span>
-                        <span class="timeline-badge">Volunteer</span>
-                    </div>
-                    <h3>Coding Instructor</h3>
-                    <p class="timeline-company">Kids Who Code — BYU Y-Serve · Provo, UT</p>
-                    <p class="timeline-desc">Teaching programming fundamentals to K–12 students through BYU's Y-Serve community service program, making computer science accessible to young learners.</p>
-                    <div class="timeline-tags">
-                        <span>Teaching</span><span>Mentorship</span><span>Community Service</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Mar – May 2026</span>
-                        <span class="timeline-badge">Volunteer</span>
-                    </div>
-                    <h3>Assistant Volleyball Coach</h3>
-                    <p class="timeline-company">Middle School Boys Volleyball Camp · Provo, UT</p>
-                    <p class="timeline-desc">Volunteer assistant volleyball coach for a middle school boys volleyball camp. Led 3 hours of practice a week with tournaments every Saturday, helping organize and run practices and games.</p>
-                    <div class="timeline-tags">
-                        <span>Coaching</span><span>Youth Development</span><span>Event Coordination</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-1">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Sep 2025 – Feb 2026</span>
-                        <span class="timeline-badge">Startup</span>
-                    </div>
-                    <h3>ML Engineer &amp; Project Lead</h3>
-                    <p class="timeline-company">Outlier Node — BYU Student Innovator of the Year · Provo, UT</p>
-                    <p class="timeline-desc">Led development of a predictive maintenance sensor for industrial motors as a competition and early-stage startup project. Engineered the full hardware-to-software pipeline: processed NASA bearing datasets (7M+ points) with Polars, extracted RMS/Kurtosis/Crest Factor features, and trained a Random Forest Classifier achieving 99.6% accuracy. Designed custom sensor hardware in Fusion 360 and 3D printed prototypes.</p>
-                    <div class="timeline-tags">
-                        <span>Python</span><span>Polars</span><span>Random Forest</span><span>Fusion 360</span><span>Embedded Systems</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-2">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Oct 2024 – May 2025</span>
-                        <span class="timeline-badge">Research</span>
-                    </div>
-                    <h3>Research Assistant</h3>
-                    <p class="timeline-company">Brigham Young University · Provo, UT</p>
-                    <p class="timeline-desc">Conducted statistical analysis (ANOVA, T-tests) on survey data using R and Python to build predictive models of student team dynamics. Presented findings at UVU Conference, distilling insights into a 10-minute data story for academic peers.</p>
-                    <div class="timeline-tags">
-                        <span>R</span><span>Python</span><span>ANOVA</span><span>Statistical Modeling</span><span>Conference Presenter</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-1">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Jan 2025 – Apr 2025</span>
-                        <span class="timeline-badge">Contract</span>
-                    </div>
-                    <h3>Sponsor Liaison</h3>
-                    <p class="timeline-company">Stride Scheduling · Provo, UT</p>
-                    <p class="timeline-desc">Identified and documented 15+ UX/system vulnerabilities via structured testing. Built a prospecting list of 1,000+ project managers for sales outreach. Managed weekly sponsor meetings and tracked project milestones.</p>
-                    <div class="timeline-tags">
-                        <span>UX Testing</span><span>Stakeholder Management</span><span>Sales Outreach</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item fade-up fade-up-delay-2">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-connector"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Oct 2024 – Jan 2026</span>
-                        <span class="timeline-badge">Leadership</span>
-                    </div>
-                    <h3>Club Officer</h3>
-                    <p class="timeline-company">BYU Volleyball Club · Provo, UT</p>
-                    <p class="timeline-desc">Managed scheduling, communications, and operations for competitive club volleyball at BYU, coordinating practices, tournaments, and team logistics.</p>
-                </div>
-            </div>
-            <div class="timeline-item fade-up">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Aug 2022 – Aug 2024</span>
-                        <span class="timeline-badge">Service</span>
-                    </div>
-                    <h3>Volunteer Representative</h3>
-                    <p class="timeline-company">The Church of Jesus Christ of Latter-day Saints · Rio Grande do Sul, Brazil</p>
-                    <p class="timeline-desc">Two years of full-time service in Southern Brazil. Held leadership roles as trainer (6 months), district leader (3 months), and zone leader (14 months). Led groups of 4–20 people from eleven nationalities through goal-setting, trainings, and presentations.</p>
-                    <div class="timeline-tags">
-                        <span>Portuguese (Fluent)</span><span>Zone Leader</span><span>Cross-cultural Leadership</span>
-                    </div>
-                </div>
-            </div>
+        <div id="experience-timeline" class="timeline" aria-label="Work experience timeline">
+            <!-- Rendered by JS from EXPERIENCES data -->
         </div>
     </div>
 </section>
@@ -1409,6 +1263,221 @@
 </footer>
 
 <script>
+/* ── Experience Data ────────────────────────────────────────── */
+const EXPERIENCES = [
+    {
+        id: 'brevium',
+        date: 'Aug 2026 – Present',
+        badge: 'Employment',
+        title: 'Data Analyst',
+        company: 'Brevium · American Fork, UT',
+        bullets: [
+            'Building data products and analytics for patient reactivation software at a healthcare technology company.',
+            'Working with Python, SQL, and machine learning to support predictive models and operational insights across medical practice data.'
+        ],
+        tags: ['Python', 'SQL', 'Pandas', 'scikit-learn', 'Healthcare Analytics']
+    },
+    {
+        id: 'sunoco',
+        date: 'May – Aug 2026',
+        badge: 'Internship',
+        title: 'Data Analytics Intern',
+        company: 'Sunoco LP · Dallas, TX',
+        bullets: [
+            'Trained a composite machine learning model with an integrated dashboard for price elasticity to predict how gas price changes will impact volume.',
+            'Solo-developed dashboard used daily by two teams handling operations totaling over 50% of annual EBIDTA.',
+            'Created cost model and slide deck comparing profit levers and optimal locations for strategic meetings between executive stakeholders about a pilot commercial program.',
+            'Used Python and SQL to build data products for various employees and teams across a Fortune 50 enterprise.',
+            'Spearheaded Databricks integration by reorganizing data structuring, building Genie agents, and developing with ucode.'
+        ],
+        tags: ['Python', 'SQL', 'Pandas', 'Databricks', 'Machine Learning']
+    },
+    {
+        id: 'byu-developer',
+        date: 'Mar 2025 – Aug 2026',
+        badge: 'Employment',
+        title: 'Software Developer',
+        company: 'Brigham Young University · Provo, UT',
+        bullets: [
+            'Developed and improved HVAC monitoring systems handling 100,000+ alarms and history trackers.',
+            'Engineered SQL queries to audit and sync missing histories across 100+ systems.',
+            'Rebuilt the A/C shop website with improved integration and usability.'
+        ],
+        tags: ['SQL', 'Full-Stack', 'Tridium Niagara', 'HVAC Systems']
+    },
+    {
+        id: 'coding-instructor',
+        date: 'Feb 2026 – Present',
+        badge: 'Volunteer',
+        title: 'Coding Instructor',
+        company: 'Kids Who Code — BYU Y-Serve · Provo, UT',
+        bullets: [
+            'Teaching programming fundamentals to K–12 students through BYU\'s Y-Serve community service program, making computer science accessible to young learners.'
+        ],
+        tags: ['Teaching', 'Mentorship', 'Community Service']
+    },
+    {
+        id: 'volleyball-coach',
+        date: 'Mar – May 2026',
+        badge: 'Volunteer',
+        title: 'Assistant Volleyball Coach',
+        company: 'Middle School Boys Volleyball Camp · Provo, UT',
+        bullets: [
+            'Volunteer assistant volleyball coach for a middle school boys volleyball camp.',
+            'Led 3 hours of practice a week with tournaments every Saturday, helping organize and run practices and games.'
+        ],
+        tags: ['Coaching', 'Youth Development', 'Event Coordination']
+    },
+    {
+        id: 'outlier-node',
+        date: 'Sep 2025 – Feb 2026',
+        badge: 'Startup',
+        title: 'ML Engineer & Project Lead',
+        company: 'Outlier Node — BYU Student Innovator of the Year · Provo, UT',
+        bullets: [
+            'Led development of a predictive maintenance sensor for industrial motors as a competition and early-stage startup project.',
+            'Engineered the full hardware-to-software pipeline: processed NASA bearing datasets (7M+ points) with Polars, extracted RMS/Kurtosis/Crest Factor features, and trained a Random Forest Classifier achieving 99.6% accuracy.',
+            'Designed custom sensor hardware in Fusion 360 and 3D printed prototypes.'
+        ],
+        tags: ['Python', 'Polars', 'Random Forest', 'Fusion 360', 'Embedded Systems']
+    },
+    {
+        id: 'research-assistant',
+        date: 'Oct 2024 – May 2025',
+        badge: 'Research',
+        title: 'Research Assistant',
+        company: 'Brigham Young University · Provo, UT',
+        bullets: [
+            'Conducted statistical analysis (ANOVA, T-tests) on survey data using R and Python to build predictive models of student team dynamics.',
+            'Presented findings at UVU Conference, distilling insights into a 10-minute data story for academic peers.'
+        ],
+        tags: ['R', 'Python', 'ANOVA', 'Statistical Modeling', 'Conference Presenter']
+    },
+    {
+        id: 'stride-scheduling',
+        date: 'Jan 2025 – Apr 2025',
+        badge: 'Contract',
+        title: 'Sponsor Liaison',
+        company: 'Stride Scheduling · Provo, UT',
+        bullets: [
+            'Identified and documented 15+ UX/system vulnerabilities via structured testing.',
+            'Built a prospecting list of 1,000+ project managers for sales outreach.',
+            'Managed weekly sponsor meetings and tracked project milestones.'
+        ],
+        tags: ['UX Testing', 'Stakeholder Management', 'Sales Outreach']
+    },
+    {
+        id: 'volleyball-club',
+        date: 'Oct 2024 – Jan 2026',
+        badge: 'Leadership',
+        title: 'Club Officer',
+        company: 'BYU Volleyball Club · Provo, UT',
+        bullets: [
+            'Managed scheduling, communications, and operations for competitive club volleyball at BYU, coordinating practices, tournaments, and team logistics.'
+        ],
+        tags: []
+    },
+    {
+        id: 'lds-mission',
+        date: 'Aug 2022 – Aug 2024',
+        badge: 'Service',
+        title: 'Volunteer Representative',
+        company: 'The Church of Jesus Christ of Latter-day Saints · Rio Grande do Sul, Brazil',
+        bullets: [
+            'Two years of full-time service in Southern Brazil.',
+            'Held leadership roles as trainer (6 months), district leader (3 months), and zone leader (14 months).',
+            'Led groups of 4–20 people from eleven nationalities through goal-setting, trainings, and presentations.'
+        ],
+        tags: ['Portuguese (Fluent)', 'Zone Leader', 'Cross-cultural Leadership']
+    }
+];
+
+function renderExperienceTimeline() {
+    const timeline = document.getElementById('experience-timeline');
+    if (!timeline) return;
+
+    timeline.innerHTML = EXPERIENCES.map((exp, i) => {
+        const delayClass = i % 3 === 1 ? ' fade-up-delay-1' : i % 3 === 2 ? ' fade-up-delay-2' : '';
+        const isLast = i === EXPERIENCES.length - 1;
+        return `
+            <div class="timeline-item fade-up${delayClass}">
+                <div class="timeline-marker">
+                    <div class="timeline-dot"></div>
+                    ${isLast ? '' : '<div class="timeline-connector"></div>'}
+                </div>
+                <div class="timeline-content">
+                    <button type="button" class="timeline-card" data-experience-id="${exp.id}" aria-label="View details for ${exp.title} at ${exp.company.split(' · ')[0]}">
+                        <div class="timeline-meta">
+                            <span class="timeline-date">${exp.date}</span>
+                            <span class="timeline-badge">${exp.badge}</span>
+                        </div>
+                        <h3>${exp.title}</h3>
+                        <p class="timeline-company">${exp.company}</p>
+                        <span class="timeline-hint">View details</span>
+                    </button>
+                </div>
+            </div>`;
+    }).join('');
+
+    timeline.querySelectorAll('.timeline-card').forEach(btn => {
+        btn.addEventListener('click', () => openExperienceModal(btn.dataset.experienceId));
+    });
+}
+
+let lastExperienceModalTrigger = null;
+
+function openExperienceModal(experienceId) {
+    const exp = EXPERIENCES.find(x => x.id === experienceId);
+    if (!exp) return;
+
+    document.getElementById('exp-modal-date').textContent = exp.date;
+    document.getElementById('exp-modal-badge').textContent = exp.badge;
+    document.getElementById('exp-modal-title').textContent = exp.title;
+    document.getElementById('exp-modal-company').textContent = exp.company;
+    document.getElementById('exp-modal-bullets').innerHTML = exp.bullets.map(b => `<li>${b}</li>`).join('');
+
+    const tagsEl = document.getElementById('exp-modal-tags');
+    if (exp.tags.length) {
+        tagsEl.innerHTML = exp.tags.map(t => `<span>${t}</span>`).join('');
+        tagsEl.style.display = '';
+    } else {
+        tagsEl.innerHTML = '';
+        tagsEl.style.display = 'none';
+    }
+
+    const overlay = document.getElementById('experience-modal');
+    lastExperienceModalTrigger = document.activeElement;
+    overlay.hidden = false;
+    overlay.inert = false;
+    overlay.removeAttribute('inert');
+    requestAnimationFrame(() => overlay.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+    document.getElementById('experience-modal-close-btn').focus();
+}
+
+function closeExperienceModal() {
+    const overlay = document.getElementById('experience-modal');
+    if (overlay.hidden || !overlay.classList.contains('open')) return;
+
+    overlay.classList.remove('open');
+    overlay.inert = true;
+    overlay.setAttribute('inert', '');
+    document.body.style.overflow = '';
+
+    window.setTimeout(() => {
+        overlay.hidden = true;
+        if (lastExperienceModalTrigger && typeof lastExperienceModalTrigger.focus === 'function') {
+            lastExperienceModalTrigger.focus();
+        }
+        lastExperienceModalTrigger = null;
+    }, 350);
+}
+
+document.getElementById('experience-modal-close-btn').addEventListener('click', closeExperienceModal);
+document.getElementById('experience-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeExperienceModal();
+});
+
 /* ── Project Data ───────────────────────────────────────────── */
 const PROJECTS = [
     {
@@ -1558,8 +1627,14 @@ function renderProjects() {
 
 	function trapModalFocus(e) {
 	    if (e.key !== 'Tab') return;
-	    const overlay = document.getElementById('project-modal');
-	    if (!overlay.classList.contains('open')) return;
+	    const projectOverlay = document.getElementById('project-modal');
+	    const experienceOverlay = document.getElementById('experience-modal');
+	    const overlay = projectOverlay.classList.contains('open')
+	        ? projectOverlay
+	        : experienceOverlay.classList.contains('open')
+	            ? experienceOverlay
+	            : null;
+	    if (!overlay) return;
 
 	    const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
 	    const focusableEls = Array.from(focusable).filter(el =>
@@ -1638,7 +1713,10 @@ document.getElementById('project-modal').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeProjectModal();
 });
 	document.addEventListener('keydown', (e) => {
-	    if (e.key === 'Escape') closeProjectModal();
+	    if (e.key === 'Escape') {
+	        closeProjectModal();
+	        closeExperienceModal();
+	    }
 	});
 
 /* ── Contact Form ───────────────────────────────────────────── */
@@ -1922,6 +2000,7 @@ document.addEventListener('mousemove', (e) => {
 try { localStorage.removeItem('portfolioTheme'); } catch {}
 
 /* ── Init ───────────────────────────────────────────────────── */
+renderExperienceTimeline();
 renderProjects();
 // Re-observe newly rendered project cards
 document.querySelectorAll('#projects-grid .fade-up').forEach(el => fadeObserver.observe(el));
