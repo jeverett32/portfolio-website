@@ -320,28 +320,6 @@
     }
 
     /* ─── Experience Timeline ───────────────────────────────── */
-    .timeline { max-width: 780px; }
-    .timeline-item {
-        display: grid; grid-template-columns: 56px 1fr;
-        gap: 1.25rem; margin-bottom: 1.5rem;
-    }
-    .timeline-item:last-child { margin-bottom: 0; }
-    .timeline-marker {
-        display: flex; flex-direction: column;
-        align-items: center; padding-top: 0.3rem;
-    }
-    .timeline-dot {
-        width: 12px; height: 12px; border-radius: 50%;
-        background: var(--primary-color); flex-shrink: 0;
-        box-shadow: 0 0 0 3px var(--panel-bg-color), 0 0 0 5px var(--primary-color);
-    }
-    .section:not(.section-alt) .timeline-dot {
-        box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 5px var(--primary-color);
-    }
-    .timeline-connector {
-        width: 1px; flex: 1; background: var(--panel-border-color);
-        margin-top: 0.6rem; min-height: 32px;
-    }
     .timeline-meta {
         display: flex; gap: 0.75rem; align-items: center;
         margin-bottom: 0.4rem; flex-wrap: wrap;
@@ -355,27 +333,52 @@
         letter-spacing: 0.08em; color: var(--text-muted-color);
         background: var(--panel-border-color); padding: 2px 8px; border-radius: 2px;
     }
-    .timeline-content h3 {
-        font-size: 1.1rem; font-weight: 600;
-        font-family: var(--font-serif); color: var(--text-color);
-        margin-bottom: 0.2rem; line-height: 1.3;
+    .experience-grid {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 3rem 2rem;
     }
-    .timeline-company {
-        font-size: 0.825rem; color: var(--text-muted-color); margin-bottom: 0;
+    .exp-card { display: flex; flex-direction: column; position: relative; }
+    .exp-card-action {
+        position: absolute; inset: 0; padding: 0; margin: 0;
+        border: none; background: transparent; cursor: pointer;
+        z-index: 2; border-radius: 6px;
     }
-    .timeline-card {
-        width: 100%; text-align: left; background: none; border: none;
-        padding: 0; cursor: pointer; font: inherit; color: inherit;
+    .exp-card-action:focus-visible {
+        outline: 3px solid rgba(139, 107, 0, 0.55);
+        outline-offset: 4px;
     }
-    .timeline-card:hover h3 { color: var(--primary-text-color); }
-    .timeline-card:focus-visible {
-        outline: 2px solid var(--primary-color);
-        outline-offset: 4px; border-radius: 2px;
+    .exp-card:hover .exp-title, .exp-card:focus-within .exp-title { color: var(--primary-text-color); }
+    .exp-banner {
+        display: flex; align-items: center; justify-content: center;
+        height: 150px; background: var(--panel-bg-color); margin-bottom: 1.4rem;
     }
-    .timeline-hint {
-        display: inline-block; margin-top: 0.35rem;
-        font-size: 0.65rem; text-transform: uppercase;
-        letter-spacing: 0.1em; color: var(--text-muted-darker-color);
+    .exp-logo {
+        width: 84px; height: 84px; border-radius: 50%;
+        background: #fff; border: 1px solid var(--panel-border-color);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden; transition: transform 0.4s ease;
+    }
+    .exp-card:hover .exp-logo { transform: scale(1.06); }
+    .exp-logo img { width: 100%; height: 100%; object-fit: contain; padding: 15px; }
+    .exp-logo.fill img { padding: 0; object-fit: cover; }
+    .exp-logo span {
+        font-family: var(--font-serif); font-size: 1.7rem; font-weight: 600;
+        letter-spacing: 0.04em; color: var(--primary-text-color);
+    }
+    .exp-title {
+        font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600;
+        color: var(--text-color); margin-bottom: 0.2rem;
+        transition: color 0.2s; line-height: 1.3;
+    }
+    .exp-company { font-size: 0.825rem; color: var(--text-muted-color); margin-bottom: 0.75rem; }
+    .exp-desc {
+        font-size: 0.825rem; color: var(--text-muted-color);
+        line-height: 1.65; margin-bottom: 0.9rem; flex: 1;
+    }
+    .exp-footer {
+        display: flex; gap: 1rem; padding-top: 0.9rem;
+        border-top: 1px solid var(--panel-border-color); align-items: center;
     }
     .experience-modal-panel { max-width: 640px; }
     .experience-modal-panel .modal-body { padding-top: 2.5rem; }
@@ -815,6 +818,7 @@
         }
         .github-grid { grid-template-columns: 1fr; }
         .projects-grid { grid-template-columns: 1fr; }
+        .experience-grid { grid-template-columns: 1fr; }
         .form-grid { grid-template-columns: 1fr; }
         .footer-inner { flex-direction: column; text-align: center; }
         .hero-stats { gap: 1.5rem; }
@@ -925,7 +929,7 @@
             <span class="hero-title-muted">Systems Specialist</span>
         </h1>
         <p class="hero-description">
-            Data Analyst at Brevium · STEM-Designated BSIS Student at Brigham Young University.<br>
+            Data Analyst at Opiniion · STEM-Designated BSIS Student at Brigham Young University.<br>
             Blending data analytics with full-stack engineering to solve complex business problems.
         </p>
         <div class="hero-stats">
@@ -973,7 +977,7 @@
                 <div class="about-bio">
                     <p class="about-bio-lead">I'm a STEM-certified Information Systems student at Brigham Young University with a 3.98 GPA.</p>
                     <p>I focus on building data-driven business solutions and applying AI in practical settings. My hands-on experience spans full-stack web development, cloud computing, database design, machine learning pipelines, and systems infrastructure.</p>
-                    <p>Before attending BYU, I studied Computer Science at Pepperdine University and then spent two years as a volunteer missionary in southern Brazil. There, I became fluent in Portuguese and led groups of 4 to 20 people from eleven nationalities while serving as a trainer, district leader, and zone leader. I'm currently a Data Analyst at Brevium. I recently completed a Data Analytics internship at Sunoco LP in Dallas, Texas.</p>
+                    <p>Before attending BYU, I studied Computer Science at Pepperdine University and then spent two years as a volunteer missionary in southern Brazil. There, I became fluent in Portuguese and led groups of 4 to 20 people from eleven nationalities while serving as a trainer, district leader, and zone leader. I'm currently a Data Analyst at Opiniion. I previously completed data analytics internships at Brevium and Sunoco LP in Dallas, Texas.</p>
                 </div>
                 <div class="about-highlights">
                     <div class="highlight">
@@ -999,8 +1003,8 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                         </div>
                         <div>
-                            <span class="highlight-title">Full Tuition Scholarship</span>
-                            <span class="highlight-sub">BYU Marriott School · Spring/Summer/Fall 2025 &amp; Winter 2026</span>
+                            <span class="highlight-title">Full Academic Scholarship</span>
+                            <span class="highlight-sub">BYU Marriott School · 2025–2026 &amp; 2026–2027 academic years · Dean's List</span>
                         </div>
                     </div>
                     <div class="highlight">
@@ -1021,6 +1025,24 @@
                             <span class="highlight-sub">May – Aug 2026 · Dallas, TX · Retail &amp; Midstream Fuel Analytics</span>
                         </div>
                     </div>
+                    <div class="highlight">
+                        <div class="highlight-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/><path d="M12 2a7 7 0 0 0-7 7 7 7 0 0 0 .66 3"/><path d="M12 2a7 7 0 0 1 7 7 7 7 0 0 1-.66 3"/></svg>
+                        </div>
+                        <div>
+                            <span class="highlight-title">SnowPro Core Certification</span>
+                            <span class="highlight-sub">Snowflake · Issued Nov 2026 · Expires Nov 2028 · <a href="https://achieve.snowflake.com/96f4f627-3799-4214-baf3-327c74ef5eae" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Verify credential</a></span>
+                        </div>
+                    </div>
+                    <div class="highlight">
+                        <div class="highlight-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/><path d="M12 2a7 7 0 0 0-7 7 7 7 0 0 0 .66 3"/><path d="M12 2a7 7 0 0 1 7 7 7 7 0 0 1-.66 3"/></svg>
+                        </div>
+                        <div>
+                            <span class="highlight-title">Databricks Fundamentals Accreditation</span>
+                            <span class="highlight-sub">Databricks Academy · Issued Jul 2026</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1034,7 +1056,7 @@
             <h2>Experience</h2>
             <div class="section-line"></div>
         </div>
-        <div id="experience-timeline" class="timeline" aria-label="Work experience timeline">
+        <div id="experience-grid" class="experience-grid" aria-label="Relevant work experience">
             <!-- Rendered by JS from EXPERIENCES data -->
         </div>
     </div>
@@ -1061,9 +1083,9 @@
                 <p class="skills-category">Data &amp; Analytics</p>
                 <div class="skill-bars">
                     <div class="skill-bar"><div class="skill-info"><span>SQL (MSSQL / MySQL / PostgreSQL)</span><span class="skill-pct">83%</span></div><div class="skill-track"><div class="skill-fill" data-width="83"></div></div></div>
-                    <div class="skill-bar"><div class="skill-info"><span>ML (scikit-learn, vetiver, pandas)</span><span class="skill-pct">88%</span></div><div class="skill-track"><div class="skill-fill" data-width="88"></div></div></div>
-                    <div class="skill-bar"><div class="skill-info"><span>Databricks</span><span class="skill-pct">70%</span></div><div class="skill-track"><div class="skill-fill" data-width="70"></div></div></div>
-                    <div class="skill-bar"><div class="skill-info"><span>Tableau / Power BI / Shiny</span><span class="skill-pct">80%</span></div><div class="skill-track"><div class="skill-fill" data-width="80"></div></div></div>
+                    <div class="skill-bar"><div class="skill-info"><span>ML (scikit-learn, vetiver, pandas, polars)</span><span class="skill-pct">88%</span></div><div class="skill-track"><div class="skill-fill" data-width="88"></div></div></div>
+                    <div class="skill-bar"><div class="skill-info"><span>Databricks / Snowflake</span><span class="skill-pct">89%</span></div><div class="skill-track"><div class="skill-fill" data-width="89"></div></div></div>
+                    <div class="skill-bar"><div class="skill-info"><span>Tableau / Power BI / Shiny / Omni</span><span class="skill-pct">80%</span></div><div class="skill-track"><div class="skill-fill" data-width="80"></div></div></div>
                 </div>
             </div>
             <div class="fade-up fade-up-delay-2">
@@ -1266,16 +1288,35 @@
 /* ── Experience Data ────────────────────────────────────────── */
 const EXPERIENCES = [
     {
-        id: 'brevium',
-        date: 'Aug 2026 – Present',
+        id: 'opiniion',
+        date: 'Oct 2026 – Present',
         badge: 'Employment',
         title: 'Data Analyst',
-        company: 'Brevium · American Fork, UT',
+        company: 'Opiniion Inc. · Lehi, UT',
+        logo: 'images/logo-opiniion.webp',
+        summary: 'Building the gold-level data layer and executive dashboards that drive financial reporting and market strategy.',
         bullets: [
-            'Building data products and analytics for patient reactivation software at a healthcare technology company.',
-            'Working with Python, SQL, and machine learning to support predictive models and operational insights across medical practice data.'
+            'Using data science and AI to build tools and reports for executives that enable action, not just insights.',
+            'Developing gold-level metrics and datasets for the Databricks data lake using dbt to create a deterministic and reliable data layer for AI and Omni.',
+            'Creating dashboards that directly guide financial reporting, budgeting, and quarterly and annual planning.',
+            'Defining metrics to calculate TAM, SAM, whitespace, and SOM to identify the ICP and help executives adjust market strategy.'
         ],
-        tags: ['Python', 'SQL', 'Pandas', 'scikit-learn', 'Healthcare Analytics']
+        tags: ['Financial Analysis', 'Statistical Analysis', 'Databricks', 'dbt', 'SQL', 'Python']
+    },
+    {
+        id: 'brevium',
+        date: 'Aug – Oct 2026',
+        badge: 'Internship',
+        title: 'Data Analyst',
+        company: 'Brevium · American Fork, UT',
+        logo: 'images/logo-brevium.webp',
+        summary: 'Automated manual reporting and built internal tooling for warehouse querying and patient-outreach analytics.',
+        bullets: [
+            'Automated a Python and SQL report that replaced a manual process, cutting time spent from 6 hours to minutes.',
+            'Performed feature engineering and statistical analysis to identify 20+ ideal attributes for patient-outreach templates.',
+            'Created a custom Python package and VS Code extension enabling automated internal warehouse querying and data product development in Python.'
+        ],
+        tags: ['Python', 'SQL', 'Feature Engineering', 'Automation', 'Healthcare Analytics']
     },
     {
         id: 'sunoco',
@@ -1283,143 +1324,68 @@ const EXPERIENCES = [
         badge: 'Internship',
         title: 'Data Analytics Intern',
         company: 'Sunoco LP · Dallas, TX',
+        logo: 'images/logo-sunoco.webp',
+        logoFill: true,
+        summary: 'Shipped price elasticity models, a Databricks data lake, and dashboards for teams handling ~50% of company EBITDA.',
         bullets: [
-            'Trained a composite machine learning model with an integrated dashboard for price elasticity to predict how gas price changes will impact volume.',
+            'Developed data tools for three teams managing hundreds of millions of dollars in revenue, moving them from Excel datasets to complex price elasticity machine learning models.',
+            'Trained a composite machine learning model with an integrated dashboard for price elasticity to predict how gas price changes will impact volume across 500+ gas stations.',
             'Solo-developed dashboard used daily by two teams handling operations totaling over 50% of annual EBIDTA.',
             'Created cost model and slide deck comparing profit levers and optimal locations for strategic meetings between executive stakeholders about a pilot commercial program.',
             'Used Python and SQL to build data products for various employees and teams across a Fortune 50 enterprise.',
-            'Spearheaded Databricks integration by reorganizing data structuring, building Genie agents, and developing with ucode.'
+            'Led Databricks implementation by creating a data lake, reorganizing data structuring, building Genie agents for pricing analysts, and developing with ucode.'
         ],
         tags: ['Python', 'SQL', 'Pandas', 'Databricks', 'Machine Learning']
-    },
-    {
-        id: 'byu-developer',
-        date: 'Mar 2025 – Aug 2026',
-        badge: 'Employment',
-        title: 'Software Developer',
-        company: 'Brigham Young University · Provo, UT',
-        bullets: [
-            'Developed and improved HVAC monitoring systems handling 100,000+ alarms and history trackers.',
-            'Engineered SQL queries to audit and sync missing histories across 100+ systems.',
-            'Rebuilt the A/C shop website with improved integration and usability.'
-        ],
-        tags: ['SQL', 'Full-Stack', 'Tridium Niagara', 'HVAC Systems']
-    },
-    {
-        id: 'coding-instructor',
-        date: 'Feb 2026 – Present',
-        badge: 'Volunteer',
-        title: 'Coding Instructor',
-        company: 'Kids Who Code — BYU Y-Serve · Provo, UT',
-        bullets: [
-            'Teaching programming fundamentals to K–12 students through BYU\'s Y-Serve community service program, making computer science accessible to young learners.'
-        ],
-        tags: ['Teaching', 'Mentorship', 'Community Service']
-    },
-    {
-        id: 'volleyball-coach',
-        date: 'Mar – May 2026',
-        badge: 'Volunteer',
-        title: 'Assistant Volleyball Coach',
-        company: 'Middle School Boys Volleyball Camp · Provo, UT',
-        bullets: [
-            'Volunteer assistant volleyball coach for a middle school boys volleyball camp.',
-            'Led 3 hours of practice a week with tournaments every Saturday, helping organize and run practices and games.'
-        ],
-        tags: ['Coaching', 'Youth Development', 'Event Coordination']
     },
     {
         id: 'outlier-node',
         date: 'Sep 2025 – Feb 2026',
         badge: 'Startup',
-        title: 'ML Engineer & Project Lead',
+        title: 'Founder & ML Engineer',
         company: 'Outlier Node — BYU Student Innovator of the Year · Provo, UT',
+        initials: 'ON',
+        summary: 'Led a predictive maintenance sensor startup, building the full hardware-to-ML pipeline for industrial motors.',
         bullets: [
             'Led development of a predictive maintenance sensor for industrial motors as a competition and early-stage startup project.',
             'Engineered the full hardware-to-software pipeline: processed NASA bearing datasets (7M+ points) with Polars, extracted RMS/Kurtosis/Crest Factor features, and trained a Random Forest Classifier achieving 99.6% accuracy.',
             'Designed custom sensor hardware in Fusion 360 and 3D printed prototypes.'
         ],
         tags: ['Python', 'Polars', 'Random Forest', 'Fusion 360', 'Embedded Systems']
-    },
-    {
-        id: 'research-assistant',
-        date: 'Oct 2024 – May 2025',
-        badge: 'Research',
-        title: 'Research Assistant',
-        company: 'Brigham Young University · Provo, UT',
-        bullets: [
-            'Conducted statistical analysis (ANOVA, T-tests) on survey data using R and Python to build predictive models of student team dynamics.',
-            'Presented findings at UVU Conference, distilling insights into a 10-minute data story for academic peers.'
-        ],
-        tags: ['R', 'Python', 'ANOVA', 'Statistical Modeling', 'Conference Presenter']
-    },
-    {
-        id: 'stride-scheduling',
-        date: 'Jan 2025 – Apr 2025',
-        badge: 'Contract',
-        title: 'Sponsor Liaison',
-        company: 'Stride Scheduling · Provo, UT',
-        bullets: [
-            'Identified and documented 15+ UX/system vulnerabilities via structured testing.',
-            'Built a prospecting list of 1,000+ project managers for sales outreach.',
-            'Managed weekly sponsor meetings and tracked project milestones.'
-        ],
-        tags: ['UX Testing', 'Stakeholder Management', 'Sales Outreach']
-    },
-    {
-        id: 'volleyball-club',
-        date: 'Oct 2024 – Jan 2026',
-        badge: 'Leadership',
-        title: 'Club Officer',
-        company: 'BYU Volleyball Club · Provo, UT',
-        bullets: [
-            'Managed scheduling, communications, and operations for competitive club volleyball at BYU, coordinating practices, tournaments, and team logistics.'
-        ],
-        tags: []
-    },
-    {
-        id: 'lds-mission',
-        date: 'Aug 2022 – Aug 2024',
-        badge: 'Service',
-        title: 'Volunteer Representative',
-        company: 'The Church of Jesus Christ of Latter-day Saints · Rio Grande do Sul, Brazil',
-        bullets: [
-            'Two years of full-time service in Southern Brazil.',
-            'Held leadership roles as trainer (6 months), district leader (3 months), and zone leader (14 months).',
-            'Led groups of 4–20 people from eleven nationalities through goal-setting, trainings, and presentations.'
-        ],
-        tags: ['Portuguese (Fluent)', 'Zone Leader', 'Cross-cultural Leadership']
     }
 ];
 
-function renderExperienceTimeline() {
-    const timeline = document.getElementById('experience-timeline');
-    if (!timeline) return;
+function renderExperienceCards() {
+    const grid = document.getElementById('experience-grid');
+    if (!grid) return;
 
-    timeline.innerHTML = EXPERIENCES.map((exp, i) => {
-        const delayClass = i % 3 === 1 ? ' fade-up-delay-1' : i % 3 === 2 ? ' fade-up-delay-2' : '';
-        const isLast = i === EXPERIENCES.length - 1;
+    grid.innerHTML = EXPERIENCES.map((exp, i) => {
+        const delayClass = i % 2 === 1 ? ' fade-up-delay-1' : '';
+        const companyName = exp.company.split(' · ')[0];
+        const logoHTML = exp.logo
+            ? `<img src="${exp.logo}" alt="${companyName} logo" width="96" height="96" loading="lazy">`
+            : `<span aria-hidden="true">${exp.initials}</span>`;
+        const tagsHTML = exp.tags.slice(0, 3).map(t => `<span>${t}</span>`).join('');
         return `
-            <div class="timeline-item fade-up${delayClass}">
-                <div class="timeline-marker">
-                    <div class="timeline-dot"></div>
-                    ${isLast ? '' : '<div class="timeline-connector"></div>'}
-                </div>
-                <div class="timeline-content">
-                    <button type="button" class="timeline-card" data-experience-id="${exp.id}" aria-label="View details for ${exp.title} at ${exp.company.split(' · ')[0]}">
-                        <div class="timeline-meta">
-                            <span class="timeline-date">${exp.date}</span>
-                            <span class="timeline-badge">${exp.badge}</span>
-                        </div>
-                        <h3>${exp.title}</h3>
-                        <p class="timeline-company">${exp.company}</p>
-                        <span class="timeline-hint">View details</span>
-                    </button>
-                </div>
-            </div>`;
+        <div class="exp-card fade-up${delayClass}">
+            <button type="button" class="exp-card-action" data-experience-id="${exp.id}" aria-label="View details for ${exp.title} at ${companyName}"></button>
+            <div class="exp-banner">
+                <div class="exp-logo${exp.logoFill ? ' fill' : ''}">${logoHTML}</div>
+            </div>
+            <div class="timeline-meta">
+                <span class="timeline-date">${exp.date}</span>
+                <span class="timeline-badge">${exp.badge}</span>
+            </div>
+            <h3 class="exp-title">${exp.title}</h3>
+            <p class="exp-company">${exp.company}</p>
+            <p class="exp-desc">${exp.summary}</p>
+            <div class="project-tags">${tagsHTML}</div>
+            <div class="exp-footer">
+                <span class="project-link muted ml-auto">View details</span>
+            </div>
+        </div>`;
     }).join('');
 
-    timeline.querySelectorAll('.timeline-card').forEach(btn => {
+    grid.querySelectorAll('.exp-card-action').forEach(btn => {
         btn.addEventListener('click', () => openExperienceModal(btn.dataset.experienceId));
     });
 }
@@ -1496,7 +1462,7 @@ const PROJECTS = [
             { value: '36K', label: 'Games Loaded' },
             { value: 'EV+', label: 'Bet Detection' }
         ],
-        description: 'Built an automated MLB moneyline betting system that fetches schedules, odds, pitcher stats, weather, and FanGraphs data; trains a gradient-boosted model; identifies positive-expected-value bets; sizes wagers; and places Kalshi orders when live betting is enabled. The system runs on a Proxmox homelab with PostgreSQL persistence, systemd-managed services, and a password-protected FastAPI dashboard for predictions, bet logs, performance, and live-betting controls.',
+        description: 'Built an automated MLB moneyline betting system that fetches schedules, odds, pitcher stats, weather, and FanGraphs data; trains a gradient-boosted model; identifies positive-expected-value bets; sizes wagers; and places Kalshi orders when live betting is enabled. The system runs on a Proxmox homelab with PostgreSQL persistence, systemd-managed services, and a password-protected FastAPI dashboard for predictions, bet logs, performance, and live-betting controls. Trained on 37,048 games and 64 features, the model reaches a Brier score of 0.2323 and log loss of 0.6598, and the risk-managed pipeline holds a +8.79% ROI through 50% of the 2026 season across 150+ settled bets.',
         links: [
             { label: 'Live Site', href: 'https://mlb.johnreverett.com', external: true, primary: true },
             { label: 'Case Study', href: 'mlb-intelligence.html', external: false, primary: false },
@@ -2000,10 +1966,10 @@ document.addEventListener('mousemove', (e) => {
 try { localStorage.removeItem('portfolioTheme'); } catch {}
 
 /* ── Init ───────────────────────────────────────────────────── */
-renderExperienceTimeline();
+renderExperienceCards();
 renderProjects();
 // Re-observe newly rendered experience and project cards
-document.querySelectorAll('#experience-timeline .fade-up').forEach(el => fadeObserver.observe(el));
+document.querySelectorAll('#experience-grid .fade-up').forEach(el => fadeObserver.observe(el));
 document.querySelectorAll('#projects-grid .fade-up').forEach(el => fadeObserver.observe(el));
 // Re-observe skill groups now that DOM is ready
 document.querySelectorAll('.skills-grid > div').forEach(group => skillObserver.observe(group));
