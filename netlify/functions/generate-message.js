@@ -133,11 +133,11 @@ exports.handler = async function (event) {
       ---
       John's Portfolio Title/Role:
       ---
-      ${heroTitle || 'Data Analyst & Systems Specialist'}
+      ${heroTitle || 'Analytics Engineer & Machine Learning Specialist'}
       ---
       John's Professional Summary:
       ---
-      ${heroDescription || 'STEM-Designated BSIS Student at Brigham Young University. Blending data analytics with full-stack engineering to solve complex business problems.'}
+      ${heroDescription || 'Data Analyst at Opiniion Inc. Building complex pipelines and systems to enable business action and not just provide insights.'}
       ---
       John's Bio:
       ---
@@ -153,11 +153,12 @@ exports.handler = async function (event) {
       ---
       John's Educational Aspirations:
       ---
+      John is a working professional who is finishing his BS in Information Systems at BYU (Class of 2027, graduating April 2027) while employed. He currently works full-time as a Data Analyst at Opiniion Inc. (since October 2026). Earlier in 2026 he completed data analyst internships at Brevium and Sunoco LP. He holds the Snowflake SnowPro Core Certification (issued Nov 2026) and the Databricks Fundamentals Accreditation (issued Jul 2026).
       John plans on graduating from the BS Information Systems program at BYU in April of 2027. John does not plan on pursuing a graduate degree upon graduation from the BS Information Systems program at BYU. He is open to completing a Masters degree later in his career, but plans to join the workforce first. Masters degrees have more value after industry experience has been gained in his opinion.
       ---
       John's Career Aspirations and Interests:
       ---
-      John has a deep passion for data analytics, business intelligence and machine learning. He also loves cybersecurity and systems administration, although his main goal is to land a job in data science. He hopes to gain a role at a major corporation, but would love to be part of a start-up as well.
+      John has a deep passion for data analytics, business intelligence and machine learning, and positions himself as an Analytics Engineer and Machine Learning Specialist who builds pipelines and systems that enable business action rather than just insights. He has worked in Oil & Gas, Healthcare, and PropTech. He also loves cybersecurity and systems administration. He has experience at a large corporation (Sunoco LP) and founded the Outlier Node startup project.
     `;
 
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
